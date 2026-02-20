@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <script>
+        (function() {
+            const theme = localStorage.getItem('theme') || 'dark';
+            if (theme === 'light') {
+                document.documentElement.classList.add('light-mode');
+            }
+        })();
+    </script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8744342952343838"
+            crossorigin="anonymous"></script>
+    <title>My Events - Kyoto Music</title>
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #0f172a; color: #f1f5f9; margin: 0; padding: 0; }
+        nav { background: #1e293b; padding: 20px 40px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #334155; }
+        .container { max-width: 1100px; margin: 0 auto; padding: 40px 20px; }
+        .form-panel { background: #1e293b; border-radius: 16px; border: 1px solid #334155; padding: 30px; margin-bottom: 40px; }
+        .form-panel h3 { margin-top: 0; }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+        .form-row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+        label { display: block; font-size: 0.85rem; color: #94a3b8; margin-bottom: 6px; }
+        input, select, textarea { width: 100%; padding: 11px 14px; background: #0f172a; border: 1px solid #334155; border-radius: 8px; color: white; box-sizing: border-box; font-size: 0.95rem; }
+        textarea { resize: vertical; min-height: 80px; }
+        .btn { padding: 12px 24px; border-radius: 10px; font-weight: 700; cursor: pointer; border: none; font-size: 0.95rem; }
+        .btn-primary { background: linear-gradient(to right, #8b5cf6, #d946ef); color: white; }
+        .btn-danger { background: #7f1d1d; color: #fca5a5; }
+        .btn-sm { padding: 7px 14px; border-radius: 6px; font-size: 0.82rem; }
+        .event-card { background: #1e293b; border-radius: 14px; border: 1px solid #334155; padding: 24px; margin-bottom: 18px; display: flex; gap: 24px; align-items: flex-start; }
+        .event-date-box { background: #0f172a; border-radius: 12px; padding: 14px 20px; text-align: center; min-width: 72px; border: 1px solid #334155; }
+        .event-date-box .month { font-size: 0.75rem; font-weight: 700; color: #a78bfa; text-transform: uppercase; }
+        .event-date-box .day { font-size: 2rem; font-weight: 900; color: white; line-height: 1; }
+        .event-info { flex: 1; }
+        .event-info h4 { margin: 0 0 6px; font-size: 1.15rem; }
+        .event-meta { display: flex; gap: 18px; flex-wrap: wrap; font-size: 0.85rem; color: #64748b; margin-bottom: 10px; }
+        .event-meta span { display: flex; align-items: center; gap: 5px; }
+        .ticket-count { background: #0f172a; border-radius: 8px; padding: 8px 14px; font-size: 0.82rem; color: #94a3b8; border: 1px solid #334155; }
+        .ticket-sold { color: #10b981; font-weight: 700; }
+        .badge-upcoming { background: #14532d; color: #86efac; padding: 3px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; }
+        .badge-past { background: #334155; color: #94a3b8; padding: 3px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; }
+        .success-msg { background: #064e3b; border: 1px solid #10b981; color: #6ee7b7; padding: 12px 18px; border-radius: 8px; margin-bottom: 20px; }
+        .error-msg { background: #7f1d1d; border: 1px solid #ef4444; color: #fca5a5; padding: 12px 18px; border-radius: 8px; margin-bottom: 20px; }
+        .section-title { font-size: 1.5rem; font-weight: 800; margin-bottom: 20px; }
+        .orders-table { width: 100%; border-collapse: collapse; }
+        .orders-table th, .orders-table td { padding: 12px 16px; text-align: left; border-bottom: 1px solid #1e293b; font-size: 0.88rem; }
+        .orders-table th { color: #64748b; font-weight: 600; }
+        .orders-table tr:hover td { background: #1e293b; }
+        /* ========================================= */
+        /* 📱 MOBILE & ☀️ LIGHT MODE ULTIMATE CSS    */
+        /* ========================================= */
+
+        /* Mobile Squeeze Fixes */
+        @media (max-width: 768px) {
+            .container { padding: 20px 15px; }
+            nav { flex-direction: column; gap: 15px; padding: 15px; text-align: center; }
+            nav div { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; align-items: center; }
+            .form-row, .form-row-3, .card-grid, .product-grid, .event-grid { grid-template-columns: 1fr; gap: 15px; }
+            .cart-item, .event-card, .ticket-item { flex-direction: column; align-items: flex-start; }
+            .event-card img, .product-card img { width: 100%; height: auto; aspect-ratio: 16/9; }
+            .t-right { width: 100%; display: flex; justify-content: space-between; align-items: center; margin-top: 15px; }
+        }
+
+        /* Light Mode Overrides */
+        body.light-mode { background-color: #f8fafc; color: #0f172a; }
+        body.light-mode nav { background-color: #ffffff; border-bottom: 1px solid #e2e8f0; color: #0f172a; }
+        body.light-mode nav a { color: #475569; }
+        body.light-mode nav a:hover { color: #1DB954; }
+        body.light-mode .product-card, body.light-mode .event-card, body.light-mode .cart-item, body.light-mode .cart-summary,
+        body.light-mode .form-panel, body.light-mode .item-card, body.light-mode .ticket-list { background-color: #ffffff; border-color: #cbd5e1; }
+        body.light-mode input, body.light-mode select, body.light-mode textarea { background-color: #f1f5f9; border-color: #cbd5e1; color: #0f172a; }
+        body.light-mode .p-desc, body.light-mode p, body.light-mode label { color: #64748b; }
+        body.light-mode .price, body.light-mode .p-price, body.light-mode .event-title, body.light-mode .item-title, body.light-mode .day { color: #0f172a; }
+        body.light-mode .date-box, body.light-mode .qty, body.light-mode .ticket-count, body.light-mode .event-date-box { background-color: #f1f5f9; border-color: #cbd5e1; }
+        body.light-mode .ticket-item { border-bottom-color: #cbd5e1; }
+    
+        /* Extra Light Mode Overrides */
+        body.light-mode .playlist-card, body.light-mode .song-card, body.light-mode .create-section, body.light-mode .recommended-section, body.light-mode .stat-card, body.light-mode .album-card, body.light-mode .song-item, body.light-mode .settings-card { background-color: #ffffff !important; border: 1px solid #cbd5e1 !important; color: #0f172a !important; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05) !important; }
+        body.light-mode .playlist-card:hover, body.light-mode .song-card:hover, body.light-mode .album-card:hover, body.light-mode .song-item:hover { background-color: #f1f5f9 !important; }
+        body.light-mode .playlist-card a, body.light-mode .album-card, body.light-mode .btn-logout { color: #475569 !important; }
+        body.light-mode #theme-toggle { background: rgba(255,255,255,0.85) !important; border-color: rgba(15,23,42,0.15) !important; color: #0f172a !important; box-shadow: 0 4px 15px rgba(15,23,42,0.15) !important; }
+</style>
+</head>
+<body>
+<nav>
+    <div style="font-size: 1.5rem; font-weight: 900; letter-spacing: -1px;">KYOTO <span style="color:#a78bfa;">STUDIO</span></div>
+    <div style="display: flex; align-items: center;">
+        <button id="theme-toggle" onclick="toggleTheme()" style="background:none; border:none; font-size:1.2rem; cursor:pointer; margin-right:20px; outline:none; transition:transform 0.2s;">🌙</button>
+        <a th:href="@{/artistdashboard(artistId=${artistId})}" style="color:#94a3b8; margin-right: 20px; text-decoration: none;">Dashboard</a>
+        <a th:href="@{/artist/store(artistId=${artistId})}" style="color:#94a3b8; margin-right: 20px; text-decoration: none;">Store</a>
+        <a th:href="@{/artist/settings(artistId=${artistId})}" style="color:#94a3b8; margin-right: 20px; text-decoration: none;">Settings</a>
+        <a href="/artistlogin" style="color:#f87171; font-weight:bold; text-decoration:none;">Logout</a>
+    </div>
+</nav>
+
+<div class="container">
+    <h2 style="font-size: 2rem; margin-bottom: 6px;">Events & Concerts</h2>
+    <p style="color:#64748b; margin-bottom: 30px;">Post events, sell tickets, and keep your fans notified.</p>
+
+    <div th:if="${success}" class="success-msg" th:text="${success}"></div>
+    <div th:if="${error}" class="error-msg" th:text="${error}"></div>
+
+    <div class="form-panel">
+        <h3>🎉 Post New Event</h3>
+        <form th:action="@{/artist/events/add}" method="post" enctype="multipart/form-data">
+            <input type="hidden" name="artistId" th:value="${artistId}">
+            <div class="form-row">
+                <div>
+                    <label>Event Name</label>
+                    <input type="text" name="title" placeholder="e.g. Summer Night Concert" required>
+                </div>
+                <div>
+                    <label>Venue / Location</label>
+                    <input type="text" name="venue" placeholder="e.g. Madison Square Garden, NYC" required>
+                </div>
+            </div>
+            <div class="form-row-3">
+                <div>
+                    <label>Date</label>
+                    <input type="date" name="eventDate" required>
+                </div>
+                <div>
+                    <label>Time</label>
+                    <input type="time" name="eventTime" required>
+                </div>
+                <div>
+                    <label>Ticket Price (ZAR)</label>
+                    <input type="number" name="ticketPrice" step="0.01" min="0" placeholder="150.00" required>
+                </div>
+            </div>
+            <div class="form-row">
+                <div>
+                    <label>Total Tickets Available</label>
+                    <input type="number" name="totalTickets" min="1" placeholder="500" required>
+                </div>
+                <div>
+                    <label>Event Poster / Banner</label>
+                    <input type="file" name="eventImage" accept="image/*">
+                </div>
+            </div>
+            <div style="margin-bottom:20px;">
+                <label>Event Description</label>
+                <textarea name="description" placeholder="Tell fans what to expect..."></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">🚀 Publish Event</button>
+        </form>
+    </div>
+
+    <div class="section-title">My Events</div>
+    <div th:if="${#lists.isEmpty(events)}" style="color:#64748b; margin-bottom:40px;">No events posted yet.</div>
+
+    <div th:each="ev : ${events}" class="event-card">
+        <div class="event-date-box">
+            <div class="month" th:text="${ev['MonthStr']}">JAN</div>
+            <div class="day" th:text="${ev['DayStr']}">01</div>
+        </div>
+        <div class="event-info">
+            <div style="display:flex; align-items:center; gap:10px; margin-bottom:6px;">
+                <h4 th:text="${ev['Title']}">Event Title</h4>
+                <span class="badge-upcoming" th:if="${ev['IsPast'] == 0}">Upcoming</span>
+                <span class="badge-past" th:if="${ev['IsPast'] == 1}">Past</span>
+            </div>
+            <div class="event-meta">
+                <span>📍 <span th:text="${ev['Venue']}">Venue</span></span>
+                <span>🕒 <span th:text="${ev['EventTime']}">Time</span></span>
+                <span>🎟️ R<span th:text="${ev['TicketPrice']}">0</span></span>
+            </div>
+            <div class="ticket-count">
+                Tickets: <span class="ticket-sold" th:text="${ev['TicketsSold']}">0</span> sold
+                / <span th:text="${ev['TotalTickets']}">0</span> available
+            </div>
+            <div style="margin-top: 12px;">
+                <form th:action="@{/artist/events/delete}" method="post" style="display:inline;">
+                    <input type="hidden" name="eventId" th:value="${ev['EventID']}">
+                    <input type="hidden" name="artistId" th:value="${artistId}">
+                    <button type="submit" class="btn btn-danger btn-sm"
+                            onclick="return confirm('Cancel this event?')">Cancel Event</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="section-title" style="margin-top:40px;">Ticket Orders</div>
+    <div th:if="${#lists.isEmpty(ticketOrders)}" style="color:#64748b;">No ticket orders yet.</div>
+    <table class="orders-table" th:if="${!#lists.isEmpty(ticketOrders)}">
+        <thead>
+        <tr>
+            <th>Event</th>
+            <th>Buyer</th>
+            <th>Qty</th>
+            <th>Total</th>
+            <th>Date</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="o : ${ticketOrders}">
+            <td th:text="${o['EventTitle']}">Event</td>
+            <td th:text="${o['BuyerName']}">Buyer</td>
+            <td th:text="${o['Quantity']}">1</td>
+            <td th:text="'R' + ${o['TotalAmount']}">R0</td>
+            <td th:text="${o['PurchasedAt']}">Date</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<script>
+    function updateThemeButton() {
+        const btn = document.getElementById('theme-toggle');
+        if (!btn) return;
+        const isLight = document.documentElement.classList.contains('light-mode');
+        btn.textContent = isLight ? '☀️' : '🌙';
+    }
+
+    function toggleTheme() {
+        const isLight = document.documentElement.classList.toggle('light-mode');
+        localStorage.setItem('theme', isLight ? 'light' : 'dark');
+        if (document.body) {
+            document.body.classList.toggle('light-mode', isLight);
+        }
+        updateThemeButton();
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const theme = localStorage.getItem('theme') || 'dark';
+        const isLight = theme === 'light';
+        document.documentElement.classList.toggle('light-mode', isLight);
+        if (document.body) {
+            document.body.classList.toggle('light-mode', isLight);
+        }
+        updateThemeButton();
+    });
+</script>
+</body>
+</html>

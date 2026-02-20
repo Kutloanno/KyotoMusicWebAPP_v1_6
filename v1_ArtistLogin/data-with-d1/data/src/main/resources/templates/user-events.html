@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script>
+        (function() {
+            const theme = localStorage.getItem('theme') || 'dark';
+            if (theme === 'light') {
+                document.documentElement.classList.add('light-mode');
+            }
+        })();
+    </script>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8744342952343838"
+            crossorigin="anonymous"></script>
+    <title>Events - Kyoto Music</title>
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #121212; color: #f1f5f9; margin: 0; padding: 0; }
+        nav { background: #000; color: white; padding: 15px 30px; display: flex; justify-content: space-between; border-bottom: 1px solid #282828; }
+        nav a { color: #b3b3b3; text-decoration: none; font-weight: bold; transition: 0.3s; }
+        nav a:hover { color: white; }
+        .container { padding: 40px; max-width: 1200px; margin: 0 auto; }
+        .page-header { margin-bottom: 40px; }
+        .page-header h2 { font-size: 2.5rem; margin: 0 0 10px; }
+        .page-header p { color: #a1a1aa; margin: 0; font-size: 1.1rem; }
+
+        .section-title { font-size: 1.5rem; font-weight: 800; margin-bottom: 25px; border-bottom: 1px solid #282828; padding-bottom: 10px; }
+
+        .event-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 25px; margin-bottom: 50px; }
+
+        .event-card { background: #181818; border-radius: 16px; overflow: hidden; border: 1px solid transparent; transition: 0.3s; display: flex; flex-direction: column; }
+        .event-card:hover { transform: translateY(-5px); border-color: #1DB954; }
+        .event-card img { width: 100%; height: 180px; object-fit: cover; }
+        .event-info { padding: 25px; flex: 1; display: flex; flex-direction: column; }
+
+        .date-box { display: inline-flex; flex-direction: column; align-items: center; justify-content: center; background: #282828; border-radius: 12px; padding: 10px 15px; margin-bottom: 15px; width: max-content; }
+        .date-box .mon { font-size: 0.85rem; color: #1DB954; font-weight: 800; text-transform: uppercase; }
+        .date-box .day { font-size: 1.5rem; font-weight: 900; line-height: 1; }
+
+        .event-title { font-size: 1.3rem; font-weight: 800; margin: 0 0 5px 0; }
+        .event-artist { color: #1DB954; font-weight: 600; font-size: 0.95rem; margin-bottom: 15px; }
+
+        .event-details { display: flex; flex-direction: column; gap: 8px; color: #a1a1aa; font-size: 0.9rem; margin-bottom: 20px; }
+        .detail-row { display: flex; align-items: center; gap: 8px; }
+
+        .ticket-info { display: flex; justify-content: space-between; align-items: center; margin-top: auto; padding-top: 20px; border-top: 1px solid #282828; }
+        .price { font-size: 1.4rem; font-weight: 800; color: white; }
+        .availability { font-size: 0.8rem; font-weight: 600; padding: 4px 10px; border-radius: 20px; }
+        .avail-good { background: #064e3b; color: #34d399; }
+        .avail-low { background: #78350f; color: #fbbf24; }
+        .avail-out { background: #7f1d1d; color: #f87171; }
+
+        .success-msg { background: #064e3b; border: 1px solid #10b981; color: #34d399; padding: 15px 20px; border-radius: 10px; margin-bottom: 30px; font-weight: 600; }
+        .error-msg { background: #7f1d1d; border: 1px solid #ef4444; color: #f87171; padding: 15px 20px; border-radius: 10px; margin-bottom: 30px; font-weight: 600; }
+
+        .ticket-list { background: #181818; border-radius: 16px; border: 1px solid #282828; overflow: hidden; }
+        .ticket-item { display: flex; justify-content: space-between; align-items: center; padding: 20px 25px; border-bottom: 1px solid #282828; }
+        .ticket-item:last-child { border-bottom: none; }
+        .t-left h4 { margin: 0 0 5px 0; font-size: 1.1rem; }
+        .t-left p { margin: 0; color: #a1a1aa; font-size: 0.9rem; }
+        .t-right { text-align: right; }
+        .code-badge { background: #1DB954; color: #000; padding: 6px 12px; border-radius: 6px; font-weight: 900; font-family: monospace; font-size: 1.1rem; display: inline-block; margin-bottom: 5px; }
+        /* Light Mode Overrides */
+        body.light-mode { background-color: #f8fafc; color: #0f172a; }
+        body.light-mode nav { background-color: #ffffff; border-bottom: 1px solid #e2e8f0; color: #0f172a; }
+        body.light-mode nav a { color: #475569; }
+        body.light-mode nav a:hover { color: #1DB954; }
+        body.light-mode .product-card, body.light-mode .event-card, body.light-mode .cart-item, body.light-mode .cart-summary,
+        body.light-mode .form-panel, body.light-mode .item-card, body.light-mode .ticket-list { background-color: #ffffff; border-color: #cbd5e1; }
+        body.light-mode input, body.light-mode select, body.light-mode textarea { background-color: #f1f5f9; border-color: #cbd5e1; color: #0f172a; }
+        body.light-mode .p-desc, body.light-mode p, body.light-mode label { color: #64748b; }
+        body.light-mode .price, body.light-mode .p-price, body.light-mode .event-title, body.light-mode .item-title, body.light-mode .day { color: #0f172a; }
+        body.light-mode .date-box, body.light-mode .qty, body.light-mode .ticket-count, body.light-mode .event-date-box { background-color: #f1f5f9; border-color: #cbd5e1; }
+        body.light-mode .ticket-item { border-bottom-color: #cbd5e1; }
+        body.light-mode .avail-good { background: #d1fae5; color: #065f46; }
+        body.light-mode .avail-low { background: #fef3c7; color: #92400e; }
+        body.light-mode .avail-out { background: #fee2e2; color: #991b1b; }
+    </style>
+</head>
+<body>
+<nav>
+    <div style="font-weight: 900; font-size: 1.4rem; color: #1DB954;">KYOTO</div>
+    <div style="display: flex; align-items: center;">
+        <button id="theme-toggle" onclick="toggleTheme()" style="background:none; border:none; font-size:1.2rem; cursor:pointer; margin-right:20px; outline:none; transition:transform 0.2s;">🌙</button>
+        <a th:href="@{/userDashBoard(listenerId=${listenerId})}" style="margin-right: 20px;">Home</a>
+        <a th:href="@{/store(listenerId=${listenerId})}" style="margin-right: 20px;">Store</a>
+        <a th:href="@{/events(listenerId=${listenerId})}" style="margin-right: 20px; color: white;">Events</a>
+        <a th:href="@{/cart(listenerId=${listenerId})}" style="margin-right: 20px; color: #1DB954;">🛒 Cart</a>
+        <a th:href="@{/user/settings(listenerId=${listenerId})}" style="margin-right: 20px;">Settings</a>
+        <a href="/userLogin" style="font-size: 0.9rem; padding: 8px 16px; border: 1px solid #333; border-radius: 20px; text-decoration: none; color: #b3b3b3;">Logout</a>
+    </div>
+</nav>
+
+<div class="container">
+    <div class="page-header">
+        <h2>Live Events</h2>
+        <p>Catch your favourite artists live. Secure your tickets now.</p>
+    </div>
+
+    <div th:if="${success}" class="success-msg" th:text="${success}"></div>
+    <div th:if="${error}" class="error-msg" th:text="${error}"></div>
+
+    <div class="section-title">Upcoming Shows</div>
+
+    <div th:if="${#lists.isEmpty(events)}" style="color:#a1a1aa; margin-bottom:50px; text-align: center; padding: 40px; background: #181818; border-radius: 14px;">
+        No upcoming events at the moment.
+    </div>
+
+    <div class="event-grid">
+        <div th:each="ev : ${events}" class="event-card">
+            <img th:if="${ev['ImageURL'] != null and ev['ImageURL'] != ''}"
+                 th:src="@{'/image/' + ${ev['ImageURL']}}" alt="Event Image">
+            <img th:if="${ev['ImageURL'] == null or ev['ImageURL'] == ''}"
+                 src="https://via.placeholder.com/600x300/181818/333?text=Live+Music" alt="Placeholder">
+
+            <div class="event-info">
+                <div class="date-box">
+                    <span class="mon" th:text="${ev['MonthStr']}">MON</span>
+                    <span class="day" th:text="${ev['DayStr']}">00</span>
+                </div>
+
+                <h3 class="event-title" th:text="${ev['Title']}">Event Title</h3>
+                <div class="event-artist" th:text="'by ' + ${ev['ArtistName']}">by Artist</div>
+
+                <div class="event-details">
+                    <div class="detail-row">📍 <span th:text="${ev['Venue']}">Venue</span></div>
+                    <div class="detail-row">🕒 <span th:text="${ev['EventTime']}">Time</span></div>
+                </div>
+
+                <p style="color: #a1a1aa; font-size: 0.9rem; line-height: 1.5; margin-bottom: 20px;" th:text="${ev['Description']}"></p>
+
+                <div class="ticket-info">
+                    <div class="price" th:text="'R' + ${ev['TicketPrice']}">R0.00</div>
+                    <div th:if="${(ev['TotalTickets'] - ev['TicketsSold']) > 10}" class="availability avail-good">Tickets Available</div>
+                    <div th:if="${(ev['TotalTickets'] - ev['TicketsSold']) > 0 and (ev['TotalTickets'] - ev['TicketsSold']) <= 10}" class="availability avail-low">Selling Fast</div>
+                    <div th:if="${(ev['TotalTickets'] - ev['TicketsSold']) <= 0}" class="availability avail-out">Sold Out</div>
+                </div>
+
+                <form th:action="@{/cart/addTicket}" method="post" th:if="${(ev['TotalTickets'] - ev['TicketsSold']) > 0}">
+                    <input type="hidden" name="eventId" th:value="${ev['EventID']}">
+                    <input type="hidden" name="listenerId" th:value="${listenerId}">
+
+                    <div style="display: flex; gap: 8px; margin-top: 15px;">
+                        <input type="number" name="quantity" value="1" min="1" th:max="${ev['TotalTickets'] - ev['TicketsSold']}"
+                               style="width: 70px; padding: 10px; background: #121212; border: 1px solid #333; border-radius: 8px; color: white;">
+                        <button type="submit" style="flex: 1; padding: 10px; background: #1DB954; color: #000; border: none; border-radius: 8px; font-weight: 800; cursor: pointer;">
+                            Add to Cart
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="section-title">My Tickets</div>
+
+    <div th:if="${#lists.isEmpty(myTickets)}" style="color:#a1a1aa; background: #181818; padding: 30px; border-radius: 14px; text-align: center;">
+        You haven't purchased any tickets yet.
+    </div>
+
+    <div class="ticket-list" th:unless="${#lists.isEmpty(myTickets)}">
+        <div th:each="t : ${myTickets}" class="ticket-item">
+            <div class="t-left">
+                <h4 th:text="${t['EventTitle']}">Event Title</h4>
+                <p th:text="${t['EventDate']} + ' • ' + ${t['Venue']}">Date • Venue</p>
+                <p style="margin-top: 5px; color: #1DB954; font-weight: bold;" th:text="${t['Quantity']} + ' Ticket(s)'">1 Ticket(s)</p>
+            </div>
+
+            <div class="t-right" style="display: flex; flex-direction: column; align-items: flex-end; gap: 10px;">
+                <div style="text-align: right;">
+                    <div style="font-size: 0.8rem; color: #a1a1aa; margin-bottom: 4px;">DOOR CODE</div>
+                    <div class="code-badge" th:text="${t['TicketCode']}">CODE123</div>
+                </div>
+
+                <form th:action="@{/events/cancelTicket}" method="post" onsubmit="return confirm('Are you sure you want to cancel and refund this ticket?');" style="margin: 0;">
+                    <input type="hidden" name="orderId" th:value="${t['OrderID']}">
+                    <input type="hidden" name="listenerId" th:value="${listenerId}">
+                    <button type="submit" style="background: none; border: none; color: #ef4444; font-size: 0.85rem; font-weight: bold; cursor: pointer; padding: 0;">Cancel Ticket</button>
+                </form>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+<script>
+    function updateThemeButton() {
+        const btn = document.getElementById('theme-toggle');
+        if (!btn) return;
+        const isLight = document.documentElement.classList.contains('light-mode');
+        btn.textContent = isLight ? '☀️' : '🌙';
+    }
+
+    function toggleTheme() {
+        const isLight = document.documentElement.classList.toggle('light-mode');
+        localStorage.setItem('theme', isLight ? 'light' : 'dark');
+        if (document.body) {
+            document.body.classList.toggle('light-mode', isLight);
+        }
+        updateThemeButton();
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const theme = localStorage.getItem('theme') || 'dark';
+        const isLight = theme === 'light';
+        document.documentElement.classList.toggle('light-mode', isLight);
+        if (document.body) {
+            document.body.classList.toggle('light-mode', isLight);
+        }
+        updateThemeButton();
+    });
+</script>
+</body>
+</html>

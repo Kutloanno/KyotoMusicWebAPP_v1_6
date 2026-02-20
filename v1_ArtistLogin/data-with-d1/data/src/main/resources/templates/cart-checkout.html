@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <script>
+        (function() {
+            const theme = localStorage.getItem('theme') || 'dark';
+            if (theme === 'light') {
+                document.documentElement.classList.add('light-mode');
+            }
+        })();
+    </script>
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8744342952343838"
+          crossorigin="anonymous"></script>
+  <title>Secure Checkout - Kyoto</title>
+  <script src="https://js.paystack.co/v1/inline.js"></script>
+  <style>
+    body { font-family: 'Inter', sans-serif; background-color: #121212; color: #f1f5f9; margin: 0; padding: 0; }
+    nav { background: #000; color: white; padding: 15px 30px; display: flex; justify-content: space-between; border-bottom: 1px solid #282828; }
+    nav a { color: #b3b3b3; text-decoration: none; font-weight: bold; }
+    .container { padding: 40px; max-width: 600px; margin: 40px auto; }
+    .checkout-card { background: #181818; border-radius: 14px; padding: 30px; border: 1px solid #282828;}
+    h2 { margin-top: 0; font-size: 1.8rem; border-bottom: 1px solid #333; padding-bottom: 15px; margin-bottom: 20px;}
+
+    .order-summary { background: #222; padding: 20px; border-radius: 8px; margin-bottom: 25px; border-left: 4px solid #1DB954; }
+    .order-summary h4 { margin: 0 0 15px 0; color: #1DB954; }
+    .summary-row { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 0.95rem; }
+    .summary-row.fee { color: #b3b3b3; font-size: 0.85rem; }
+    .summary-row.total { border-top: 1px solid #444; padding-top: 12px; margin-top: 12px; font-size: 1.2rem; font-weight: 800; color: white; }
+
+    .form-group { margin-bottom: 18px; }
+    label { display: block; font-size: 0.85rem; color: #b3b3b3; margin-bottom: 6px; }
+    input { width: 100%; padding: 12px; background: #121212; border: 1px solid #333; border-radius: 8px; color: white; box-sizing: border-box; }
+    input:focus { outline: none; border-color: #1DB954; }
+
+    .btn-pay { display: block; width: 100%; padding: 14px; background: #1DB954; color: #000; border: none; border-radius: 8px; font-weight: 900; cursor: pointer; font-size: 1.1rem; margin-top: 10px; transition: 0.3s; }
+    .btn-pay:hover { background: #17a349; }
+
+    .secure-badge { text-align: center; font-size: 0.8rem; color: #a1a1aa; margin-top: 15px; display: flex; align-items: center; justify-content: center; gap: 5px; }
+    /* ========================================= */
+    /* 📱 MOBILE & ☀️ LIGHT MODE ULTIMATE CSS    */
+    /* ========================================= */
+
+    /* Mobile Squeeze Fixes */
+    @media (max-width: 768px) {
+      .container { padding: 20px 15px; }
+      nav { flex-direction: column; gap: 15px; padding: 15px; text-align: center; }
+      nav div { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; align-items: center; }
+      .form-row, .form-row-3, .card-grid, .product-grid, .event-grid { grid-template-columns: 1fr; gap: 15px; }
+      .cart-item, .event-card, .ticket-item { flex-direction: column; align-items: flex-start; }
+      .event-card img, .product-card img { width: 100%; height: auto; aspect-ratio: 16/9; }
+      .t-right { width: 100%; display: flex; justify-content: space-between; align-items: center; margin-top: 15px; }
+    }
+
+    /* Light Mode Overrides */
+    body.light-mode { background-color: #f8fafc; color: #0f172a; }
+    body.light-mode nav { background-color: #ffffff; border-bottom: 1px solid #e2e8f0; color: #0f172a; }
+    body.light-mode nav a { color: #475569; }
+    body.light-mode nav a:hover { color: #1DB954; }
+    body.light-mode .product-card, body.light-mode .event-card, body.light-mode .cart-item, body.light-mode .cart-summary,
+    body.light-mode .form-panel, body.light-mode .item-card, body.light-mode .ticket-list { background-color: #ffffff; border-color: #cbd5e1; }
+    body.light-mode input, body.light-mode select, body.light-mode textarea { background-color: #f1f5f9; border-color: #cbd5e1; color: #0f172a; }
+    body.light-mode .p-desc, body.light-mode p, body.light-mode label { color: #64748b; }
+    body.light-mode .price, body.light-mode .p-price, body.light-mode .event-title, body.light-mode .item-title, body.light-mode .day { color: #0f172a; }
+    body.light-mode .date-box, body.light-mode .qty, body.light-mode .ticket-count, body.light-mode .event-date-box { background-color: #f1f5f9; border-color: #cbd5e1; }
+    body.light-mode .ticket-item { border-bottom-color: #cbd5e1; }
+  
+        /* Extra Light Mode Overrides */
+        body.light-mode .playlist-card, body.light-mode .song-card, body.light-mode .create-section, body.light-mode .recommended-section, body.light-mode .stat-card, body.light-mode .album-card, body.light-mode .song-item, body.light-mode .settings-card { background-color: #ffffff !important; border: 1px solid #cbd5e1 !important; color: #0f172a !important; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05) !important; }
+        body.light-mode .playlist-card:hover, body.light-mode .song-card:hover, body.light-mode .album-card:hover, body.light-mode .song-item:hover { background-color: #f1f5f9 !important; }
+        body.light-mode .playlist-card a, body.light-mode .album-card, body.light-mode .btn-logout { color: #475569 !important; }
+        body.light-mode #theme-toggle { background: rgba(255,255,255,0.85) !important; border-color: rgba(15,23,42,0.15) !important; color: #0f172a !important; box-shadow: 0 4px 15px rgba(15,23,42,0.15) !important; }
+</style>
+</head>
+<body>
+<nav>
+  <div style="font-weight: 900; font-size: 1.4rem; color: #1DB954;">KYOTO</div>
+  <a th:href="@{/cart(listenerId=${listenerId})}">Back to Cart</a>
+</nav>
+
+<div class="container">
+  <div class="checkout-card">
+    <h2>Secure Checkout 🔒</h2>
+
+    <div class="order-summary">
+      <h4>Order Details</h4>
+      <div style="font-size: 0.85rem; color: #a1a1aa; margin-bottom: 15px; line-height: 1.5;" th:text="${itemSummary}">Items...</div>
+      <div class="summary-row" style="display: flex; align-items: center;">
+        <button id="theme-toggle" onclick="toggleTheme()" style="background:none; border:none; font-size:1.2rem; cursor:pointer; margin-right:20px; outline:none; transition:transform 0.2s;">🌙</button>
+        <span>Subtotal</span>
+        <span th:text="'R' + ${subtotal}">R0.00</span>
+      </div>
+      <div class="summary-row fee">
+        <span>Taxes & Fees (Shipping/Booking)</span>
+        <span th:text="'R' + ${feeTotal}">R0.00</span>
+      </div>
+      <div class="summary-row total">
+        <span>Total</span>
+        <span th:text="'R' + ${finalTotal}">R0.00</span>
+      </div>
+    </div>
+
+    <form id="paymentForm" th:action="@{/cart/processPayment}" method="post">
+      <input type="hidden" name="listenerId" th:value="${listenerId}">
+      <input type="hidden" id="paystackReference" name="paystackReference" value="">
+
+      <div class="form-group">
+        <label>Email Address for Receipt & Tickets</label>
+        <input type="email" id="email-address" name="email" required>
+      </div>
+      <div class="form-group">
+        <label>Shipping Address (If ordering physical merch)</label>
+        <input type="text" name="address">
+      </div>
+
+      <button type="button" id="paystackBtn" class="btn-pay" onclick="payWithPaystack()" th:text="'Pay R' + ${finalTotal}">Pay Now</button>
+
+      <button type="submit" id="realSubmitBtn" style="display: none;"></button>
+
+      <div class="secure-badge">
+        🔒 Secured by Paystack
+      </div>
+    </form>
+  </div>
+</div>
+
+<script th:inline="javascript">
+  function payWithPaystack() {
+    const email = document.getElementById('email-address').value;
+    const payBtn = document.getElementById('paystackBtn');
+    const paymentForm = document.getElementById('paymentForm');
+
+    // Ensure they typed an email before opening the payment window
+    if (!email || !email.includes('@')) {
+      alert("Please enter a valid email address for your receipt.");
+      return;
+    }
+
+    // Grab variables injected from Spring Boot
+    const paystackAmount = [[${paystackAmount}]];
+    const publicKey = [[${paystackPublicKey}]];
+
+    let handler = PaystackPop.setup({
+      key: publicKey,
+      email: email,
+      amount: paystackAmount, // Amount is in cents
+      currency: 'ZAR',
+      ref: 'KYT_' + Math.floor((Math.random() * 1000000000) + 1), // Generate a random reference
+
+      callback: function(response) {
+        // 1. Pass the successful reference to our hidden input
+        document.getElementById('paystackReference').value = response.reference;
+
+        // 2. Give the user visual feedback that it worked
+        payBtn.innerText = "Processing Order... Please wait";
+        payBtn.style.backgroundColor = "#555";
+        payBtn.style.color = "#fff";
+        payBtn.disabled = true;
+
+        // 3. THE FIX: Programmatically "click" the hidden submit button
+        document.getElementById('paymentForm').submit();
+      },
+      onClose: function(){
+        console.log('Payment window closed by user.');
+      }
+    });
+
+    handler.openIframe();
+  }
+</script>
+<script>
+    function updateThemeButton() {
+        const btn = document.getElementById('theme-toggle');
+        if (!btn) return;
+        const isLight = document.documentElement.classList.contains('light-mode');
+        btn.textContent = isLight ? '☀️' : '🌙';
+    }
+
+    function toggleTheme() {
+        const isLight = document.documentElement.classList.toggle('light-mode');
+        localStorage.setItem('theme', isLight ? 'light' : 'dark');
+        if (document.body) {
+            document.body.classList.toggle('light-mode', isLight);
+        }
+        updateThemeButton();
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const theme = localStorage.getItem('theme') || 'dark';
+        const isLight = theme === 'light';
+        document.documentElement.classList.toggle('light-mode', isLight);
+        if (document.body) {
+            document.body.classList.toggle('light-mode', isLight);
+        }
+        updateThemeButton();
+    });
+</script>
+</body>
+</html>

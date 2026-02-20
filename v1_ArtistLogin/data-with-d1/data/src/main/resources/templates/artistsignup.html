@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8744342952343838"
+            crossorigin="anonymous"></script>
+    <title>Artist Sign Up - Kyoto Music</title>
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #121212; color: #f1f5f9; margin: 0; padding: 0; display: flex; align-items: center; justify-content: center; min-height: 100vh; }
+        .auth-card { background: #181818; border-radius: 14px; border: 1px solid #282828; padding: 40px; width: 100%; max-width: 400px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .logo { text-align: center; font-weight: 900; font-size: 2rem; color: #1DB954; letter-spacing: -1px; margin-bottom: 30px; }
+        h2 { text-align: center; margin-top: 0; margin-bottom: 25px; font-size: 1.5rem; }
+        .form-group { margin-bottom: 18px; }
+        label { display: block; font-size: 0.85rem; color: #b3b3b3; margin-bottom: 6px; }
+        input, select { width: 100%; padding: 12px; background: #121212; border: 1px solid #333; border-radius: 8px; color: white; box-sizing: border-box; font-size: 1rem; }
+        input:focus, select:focus { outline: none; border-color: #1DB954; }
+        .btn-submit { display: block; width: 100%; padding: 14px; background: #1DB954; color: #000; border: none; border-radius: 8px; font-weight: 800; cursor: pointer; font-size: 1.1rem; margin-top: 10px; transition: 0.3s; }
+        .btn-submit:hover { background: #17a349; }
+        .error-msg { background: #7f1d1d; border: 1px solid #ef4444; color: #fca5a5; padding: 10px; border-radius: 8px; margin-bottom: 20px; font-size: 0.9rem; text-align: center; }
+        .links { text-align: center; margin-top: 20px; font-size: 0.9rem; color: #b3b3b3; }
+        .links a { color: #1DB954; text-decoration: none; font-weight: bold; }
+        .links a:hover { text-decoration: underline; }
+        /* ========================================= */
+        /* 📱 MOBILE & ☀️ LIGHT MODE ULTIMATE CSS    */
+        /* ========================================= */
+
+        /* Mobile Squeeze Fixes */
+        @media (max-width: 768px) {
+            .container { padding: 20px 15px; }
+            nav { flex-direction: column; gap: 15px; padding: 15px; text-align: center; }
+            nav div { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; align-items: center; }
+            .form-row, .form-row-3, .card-grid, .product-grid, .event-grid { grid-template-columns: 1fr; gap: 15px; }
+            .cart-item, .event-card, .ticket-item { flex-direction: column; align-items: flex-start; }
+            .event-card img, .product-card img { width: 100%; height: auto; aspect-ratio: 16/9; }
+            .t-right { width: 100%; display: flex; justify-content: space-between; align-items: center; margin-top: 15px; }
+        }
+
+        /* Light Mode Overrides */
+        body.light-mode { background-color: #f8fafc; color: #0f172a; }
+        body.light-mode nav { background-color: #ffffff; border-bottom: 1px solid #e2e8f0; color: #0f172a; }
+        body.light-mode nav a { color: #475569; }
+        body.light-mode nav a:hover { color: #1DB954; }
+        body.light-mode .product-card, body.light-mode .event-card, body.light-mode .cart-item, body.light-mode .cart-summary,
+        body.light-mode .form-panel, body.light-mode .item-card, body.light-mode .ticket-list { background-color: #ffffff; border-color: #cbd5e1; }
+        body.light-mode input, body.light-mode select, body.light-mode textarea { background-color: #f1f5f9; border-color: #cbd5e1; color: #0f172a; }
+        body.light-mode .p-desc, body.light-mode p, body.light-mode label { color: #64748b; }
+        body.light-mode .price, body.light-mode .p-price, body.light-mode .event-title, body.light-mode .item-title, body.light-mode .day { color: #0f172a; }
+        body.light-mode .date-box, body.light-mode .qty, body.light-mode .ticket-count, body.light-mode .event-date-box { background-color: #f1f5f9; border-color: #cbd5e1; }
+        body.light-mode .ticket-item { border-bottom-color: #cbd5e1; }
+    </style>
+</head>
+<body>
+
+<div class="auth-card">
+    <div class="logo">KYOTO <span style="color: white;">STUDIO</span></div>
+    <h2>Join as an Artist</h2>
+
+    <div th:if="${error}" class="error-msg" th:text="${error}"></div>
+
+    <form th:action="@{/artistsignup}" method="post">
+        <div class="form-group">
+            <label>Stage Name</label>
+            <input type="text" name="name" placeholder="e.g. Kutloano" required>
+        </div>
+
+        <div class="form-group">
+            <label>Email Address</label>
+            <input type="email" name="email" placeholder="you@music.com" required>
+        </div>
+
+        <div class="form-group">
+            <label>Gender</label>
+            <!-- VALUES FIXED HERE to pass the SQL check constraint -->
+            <select name="gender" required>
+                <option value="M">Male</option>
+                <option value="F">Female</option>
+                <option value="O">Other</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Password</label>
+            <input type="password" name="password" required>
+        </div>
+
+        <div class="form-group">
+            <label>Confirm Password</label>
+            <input type="password" name="confirmPassword" required>
+        </div>
+
+        <button type="submit" class="btn-submit">Create Account</button>
+    </form>
+
+    <div class="links">
+        Already have an account? <a href="/artistlogin">Log In</a>
+    </div>
+</div>
+
+</body>
+</html>

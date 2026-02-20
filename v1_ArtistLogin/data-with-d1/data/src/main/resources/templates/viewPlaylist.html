@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <script>
+        (function() {
+            const theme = localStorage.getItem('theme') || 'dark';
+            if (theme === 'light') {
+                document.documentElement.classList.add('light-mode');
+            }
+        })();
+    </script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8744342952343838"
+            crossorigin="anonymous"></script>
+    <title>Playlist View - Kyoto Music</title>
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #121212; color: #f1f5f9; margin: 0; padding: 0; }
+        nav { background: #000; color: white; padding: 15px 30px; display: flex; justify-content: space-between; border-bottom: 1px solid #282828; }
+        nav a { color: #b3b3b3; text-decoration: none; font-weight: bold; transition: 0.3s; }
+        nav a:hover { color: white; }
+
+        .container { max-width: 1000px; margin: 40px auto; padding: 0 20px; }
+
+        /* Playlist Header Styling */
+        .header-section { display: flex; align-items: flex-end; gap: 25px; margin-bottom: 40px; }
+        .header-image { width: 220px; height: 220px; background: #282828; border-radius: 8px; box-shadow: 0 4px 60px rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; font-size: 5rem; }
+        .header-info { padding-bottom: 10px; }
+        .header-info span { font-size: 0.85rem; font-weight: bold; letter-spacing: 1px; color: #a1a1aa; }
+        .header-info h1 { font-size: 4.5rem; margin: 5px 0 15px 0; font-weight: 900; letter-spacing: -2px; line-height: 1; color: white; }
+        .header-info p { margin: 0; color: #1DB954; font-weight: bold; font-size: 1rem; }
+
+        /* Song Rows Styling */
+        .song-list { width: 100%; border-collapse: collapse; }
+        .song-row { display: flex; align-items: center; padding: 12px 15px; border-radius: 8px; transition: background 0.2s; border-bottom: 1px solid transparent; }
+        .song-row:hover { background: #2a2a2a; border-color: #333; }
+
+        .col-num { width: 40px; color: #a1a1aa; font-size: 1rem; text-align: center; font-weight: 600; }
+        .col-info { flex: 1; display: flex; align-items: center; gap: 15px; }
+        .col-info img { width: 50px; height: 50px; border-radius: 4px; object-fit: cover; }
+
+        .title { color: white; font-weight: 600; font-size: 1.05rem; margin-bottom: 3px; }
+        .artist { color: #a1a1aa; font-size: 0.85rem; }
+
+        .col-audio { width: 320px; display: flex; justify-content: flex-end; }
+        audio { height: 40px; width: 100%; outline: none; border-radius: 20px; }
+        /* Customizing the audio player slightly */
+        audio::-webkit-media-controls-panel { background-color: #1DB954; }
+        audio::-webkit-media-controls-play-button, audio::-webkit-media-controls-mute-button { filter: invert(1); }
+        audio::-webkit-media-controls-current-time-display, audio::-webkit-media-controls-time-remaining-display { color: white; font-weight: bold; }
+
+        .empty-state { text-align: center; padding: 60px; color: #a1a1aa; background: #181818; border-radius: 12px; margin-top: 20px; border: 1px dashed #333; }
+        .empty-state h3 { color: white; font-size: 1.5rem; margin-bottom: 10px; }
+        /* ========================================= */
+        /* 📱 MOBILE & ☀️ LIGHT MODE ULTIMATE CSS    */
+        /* ========================================= */
+
+        /* Mobile Squeeze Fixes */
+        @media (max-width: 768px) {
+            .container { padding: 20px 15px; }
+            nav { flex-direction: column; gap: 15px; padding: 15px; text-align: center; }
+            nav div { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; align-items: center; }
+            .form-row, .form-row-3, .card-grid, .product-grid, .event-grid { grid-template-columns: 1fr; gap: 15px; }
+            .cart-item, .event-card, .ticket-item { flex-direction: column; align-items: flex-start; }
+            .event-card img, .product-card img { width: 100%; height: auto; aspect-ratio: 16/9; }
+            .t-right { width: 100%; display: flex; justify-content: space-between; align-items: center; margin-top: 15px; }
+        }
+
+        /* Light Mode Overrides */
+        body.light-mode { background-color: #f8fafc; color: #0f172a; }
+        body.light-mode nav { background-color: #ffffff; border-bottom: 1px solid #e2e8f0; color: #0f172a; }
+        body.light-mode nav a { color: #475569; }
+        body.light-mode nav a:hover { color: #1DB954; }
+        body.light-mode .product-card, body.light-mode .event-card, body.light-mode .cart-item, body.light-mode .cart-summary,
+        body.light-mode .form-panel, body.light-mode .item-card, body.light-mode .ticket-list { background-color: #ffffff; border-color: #cbd5e1; }
+        body.light-mode input, body.light-mode select, body.light-mode textarea { background-color: #f1f5f9; border-color: #cbd5e1; color: #0f172a; }
+        body.light-mode .p-desc, body.light-mode p, body.light-mode label { color: #64748b; }
+        body.light-mode .price, body.light-mode .p-price, body.light-mode .event-title, body.light-mode .item-title, body.light-mode .day { color: #0f172a; }
+        body.light-mode .date-box, body.light-mode .qty, body.light-mode .ticket-count, body.light-mode .event-date-box { background-color: #f1f5f9; border-color: #cbd5e1; }
+        body.light-mode .ticket-item { border-bottom-color: #cbd5e1; }
+    
+        /* Extra Light Mode Overrides */
+        body.light-mode .playlist-card, body.light-mode .song-card, body.light-mode .create-section, body.light-mode .recommended-section, body.light-mode .stat-card, body.light-mode .album-card, body.light-mode .song-item, body.light-mode .settings-card { background-color: #ffffff !important; border: 1px solid #cbd5e1 !important; color: #0f172a !important; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05) !important; }
+        body.light-mode .playlist-card:hover, body.light-mode .song-card:hover, body.light-mode .album-card:hover, body.light-mode .song-item:hover { background-color: #f1f5f9 !important; }
+        body.light-mode .playlist-card a, body.light-mode .album-card, body.light-mode .btn-logout { color: #475569 !important; }
+        body.light-mode #theme-toggle { background: rgba(255,255,255,0.85) !important; border-color: rgba(15,23,42,0.15) !important; color: #0f172a !important; box-shadow: 0 4px 15px rgba(15,23,42,0.15) !important; }
+</style>
+</head>
+<body>
+
+<nav>
+    <div style="font-weight: 900; font-size: 1.4rem; color: #1DB954;">KYOTO</div>
+    <div style="display: flex; align-items: center;">
+        <button id="theme-toggle" onclick="toggleTheme()" style="background:none; border:none; font-size:1.2rem; cursor:pointer; margin-right:20px; outline:none; transition:transform 0.2s;">🌙</button>
+        <a th:href="@{/userDashBoard(listenerId=${listenerId})}">← Back to Dashboard</a>
+    </div>
+</nav>
+
+<div class="container">
+
+    <!-- Hero Header Section -->
+    <div class="header-section">
+        <div class="header-image">🎧</div>
+        <div class="header-info">
+            <span>PUBLIC PLAYLIST</span>
+            <h1 th:text="${playlistName}">Playlist Name</h1>
+            <p th:text="${#lists.size(songs)} + ' songs in this collection'">0 songs</p>
+        </div>
+    </div>
+
+    <!-- Empty State Warning -->
+    <div th:if="${#lists.isEmpty(songs)}" class="empty-state">
+        <h3>It's a bit quiet here...</h3>
+        <p>This playlist is empty. Go search for some songs to add!</p>
+    </div>
+
+    <!-- Song List (Now numbering with iterStat and showing Artist Name!) -->
+    <div class="song-list" th:unless="${#lists.isEmpty(songs)}">
+        <div th:each="song, iterStat : ${songs}" class="song-row">
+
+            <div class="col-num" th:text="${iterStat.count}">1</div>
+
+            <div class="col-info">
+                <!-- Check if cover art exists, else show a placeholder -->
+                <img th:if="${song['CoverArtURL'] != null and song['CoverArtURL'] != ''}"
+                     th:src="@{'/image/' + ${song['CoverArtURL']}}" alt="Cover">
+                <img th:if="${song['CoverArtURL'] == null or song['CoverArtURL'] == ''}"
+                     src="https://via.placeholder.com/50/282828/1DB954?text=🎶" alt="No Cover">
+
+                <div>
+                    <div class="title" th:text="${song['Title']}">Song Title</div>
+                    <div class="artist" th:text="${song['ArtistName']}">Artist Name</div>
+                </div>
+            </div>
+
+            <div class="col-audio">
+                <audio controls controlsList="nodownload">
+                    <source th:src="@{'/stream/' + ${song['AudioFileURL']}}" type="audio/mpeg">
+                </audio>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+<script>
+    function updateThemeButton() {
+        const btn = document.getElementById('theme-toggle');
+        if (!btn) return;
+        const isLight = document.documentElement.classList.contains('light-mode');
+        btn.textContent = isLight ? '☀️' : '🌙';
+    }
+
+    function toggleTheme() {
+        const isLight = document.documentElement.classList.toggle('light-mode');
+        localStorage.setItem('theme', isLight ? 'light' : 'dark');
+        if (document.body) {
+            document.body.classList.toggle('light-mode', isLight);
+        }
+        updateThemeButton();
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const theme = localStorage.getItem('theme') || 'dark';
+        const isLight = theme === 'light';
+        document.documentElement.classList.toggle('light-mode', isLight);
+        if (document.body) {
+            document.body.classList.toggle('light-mode', isLight);
+        }
+        updateThemeButton();
+    });
+</script>
+</body>
+</html>

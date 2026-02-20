@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kyoto Admin - Report Analytics</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: #f1f5f9; margin: 0; }
+        .sidebar { width: 250px; background: #1e293b; color: white; height: 100vh; position: fixed; padding: 20px; }
+        .sidebar p { margin: 10px 0; font-size: 0.95rem; }
+        .sidebar a { color: #94a3b8; text-decoration: none; font-size: 0.9rem; display: block; margin-top: 15px; }
+
+        .main { margin-left: 280px; padding: 30px; }
+
+        .form-box { background: white; padding: 25px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); margin-bottom: 20px; }
+        select { padding: 12px; border: 1px solid #e2e8f0; border-radius: 4px; font-size: 1rem; width: 100%; max-width: 500px; margin-right: 15px; background: #fafafa; }
+        optgroup { font-weight: bold; color: #1e293b; }
+
+        .btn-submit { background: #1e293b; color: white; padding: 12px 20px; border-radius: 4px; border: none; cursor: pointer; font-weight: 500; font-size: 1rem; }
+        .btn-download { text-decoration: none; display: inline-block; padding: 10px 20px; border-radius: 4px; font-weight: bold; font-size: 0.9rem; margin-left: 10px; color: white; transition: opacity 0.2s; }
+        .btn-download:hover, .btn-submit:hover { opacity: 0.9; }
+
+        .btn-pdf { background: #ef4444; }
+        .btn-docx { background: #0ea5e9; }
+
+        table { width: 100%; background: white; border-collapse: collapse; border-radius: 8px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.1); margin-top: 20px; }
+        th { background: #f8fafc; padding: 15px; text-align: left; color: #64748b; text-transform: uppercase; font-size: 0.85rem; border-bottom: 2px solid #e2e8f0; }
+        td { padding: 15px; border-top: 1px solid #e2e8f0; color: #334155; }
+        .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+    </style>
+</head>
+<body>
+
+<div class="sidebar">
+    <h2>Kyoto Admin</h2>
+    <hr style="border: 0.5px solid #334155; margin: 20px 0;">
+    <p>Logged in as: <br><strong th:text="${adminName}">Admin</strong></p>
+    <a th:href="@{/adminDashboard(adminId=${adminId})}" style="font-weight: bold; color: #ffffff; background: #334155; padding: 8px 12px; border-radius: 4px; margin-top: 25px; text-align: center;">← Back to Dashboard</a>
+    <a href="/adminLogin">Logout</a>
+</div>
+
+<div class="main">
+    <div class="section-header">
+        <h2>System Reporting Engine</h2>
+    </div>
+
+    <div class="form-box">
+        <h3 style="margin-top: 0;">Select Analytics Report</h3>
+        <form th:action="@{/admin/reports}" method="get" style="display: flex; align-items: center; flex-wrap: wrap; gap: 10px;">
+            <input type="hidden" name="adminId" th:value="${adminId}">
+
+            <select name="filterType">
+                <optgroup label="Artist Analytics">
+                    <option value="topArtists" th:selected="${filterType == 'topArtists'}">Highest Upload Volume</option>
+                    <option value="leastSongs" th:selected="${filterType == 'leastSongs'}">Smallest Catalog Size</option>
+                    <option value="maleArtists" th:selected="${filterType == 'maleArtists'}">Demographics: Male Artists</option>
+                    <option value="femaleArtists" th:selected="${filterType == 'femaleArtists'}">Demographics: Female Artists</option>
+                    <option value="recentArtists" th:selected="${filterType == 'recentArtists'}">Newest Artist Registrations</option>
+                </optgroup>
+
+                <optgroup label="Song & Streaming Metrics">
+                    <option value="mostStreams" th:selected="${filterType == 'mostStreams'}">Most Played Tracks</option>
+                    <option value="leastStreams" th:selected="${filterType == 'leastStreams'}">Cold Catalog Items (Lowest Plays)</option>
+                    <option value="mostDownloads" th:selected="${filterType == 'mostDownloads'}">Highest Download Volume</option>
+                    <option value="longestSongs" th:selected="${filterType == 'longestSongs'}">Longest Track Durations</option>
+                    <option value="popularGenres" th:selected="${filterType == 'popularGenres'}">Aggregate Streams by Genre</option>
+                </optgroup>
+
+                <optgroup label="Live Events Performance">
+                    <option value="mostPopularEvent" th:selected="${filterType == 'mostPopularEvent'}">Top Attendance & Ticket Volume</option>
+                    <option value="mostEventRevenue" th:selected="${filterType == 'mostEventRevenue'}">Gross Revenue Yield</option>
+                    <option value="highestTicketPrice" th:selected="${filterType == 'highestTicketPrice'}">Premium Pricing Models</option>
+                    <option value="unsoldEvents" th:selected="${filterType == 'unsoldEvents'}">Zero Tickets Sold Alerts</option>
+                </optgroup>
+
+                <optgroup label="Commerce & Platform Store">
+                    <option value="topSellingMerch" th:selected="${filterType == 'topSellingMerch'}">Best Performing Merch</option>
+                    <option value="lowStockAlert" th:selected="${filterType == 'lowStockAlert'}">Low Stock Alerts (&lt; 10 units)</option>
+                    <option value="topGrossingTicketOrders" th:selected="${filterType == 'topGrossingTicketOrders'}">Highest Value Ticket Transactions</option>
+                </optgroup>
+
+                <optgroup label="Listener base">
+                    <option value="allListeners" th:selected="${filterType == 'allListeners'}">General Audience Demographics</option>
+                </optgroup>
+            </select>
+
+            <button type="submit" class="btn-submit">Generate Matrix</button>
+
+            <div style="margin-left: auto;">
+                <a th:href="@{/admin/reports/download(adminId=${adminId}, filterType=${filterType}, format='pdf')}" class="btn-download btn-pdf">Export PDF</a>
+                <a th:href="@{/admin/reports/download(adminId=${adminId}, filterType=${filterType}, format='docx')}" class="btn-download btn-docx">Export Word</a>
+            </div>
+        </form>
+    </div>
+
+    <div th:if="${not #lists.isEmpty(reportData)}">
+        <table>
+            <thead>
+            <tr>
+                <th th:each="column : ${reportData[0].keySet()}" th:text="${column}">Metric Column</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="row : ${reportData}">
+                <td th:each="column : ${reportData[0].keySet()}" th:text="${row.get(column)}">Data point</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div th:if="${#lists.isEmpty(reportData)}" class="form-box" style="text-align: center; color: #64748b; padding: 40px 20px;">
+        No active data records matched the selected query parameters.
+    </div>
+</div>
+
+</body>
+</html>

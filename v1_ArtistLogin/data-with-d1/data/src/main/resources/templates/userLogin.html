@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8744342952343838"
+            crossorigin="anonymous"></script>
+    <title>Kyoto Music - Login</title>
+    <style>
+        /* 1. RESET & BASE STYLES */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #121212;
+            color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        /* 2. LOGIN CARD */
+        .login-container {
+            background-color: #181818;
+            padding: 50px 40px;
+            border-radius: 12px;
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+            border: 1px solid #282828;
+        }
+
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 8px;
+            letter-spacing: -1px;
+        }
+
+        .subtitle {
+            color: #b3b3b3;
+            margin-bottom: 35px;
+            font-size: 0.95rem;
+        }
+
+        /* 3. FORM ELEMENTS */
+        .form-group {
+            text-align: left;
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: #efefef;
+        }
+
+        input {
+            width: 100%;
+            padding: 14px;
+            background-color: #2a2a2a;
+            border: 1px solid #3e3e3e;
+            border-radius: 4px;
+            color: white;
+            font-size: 1rem;
+            transition: border-color 0.3s, background-color 0.3s;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #1DB954;
+            background-color: #333;
+        }
+
+        /* 4. BUTTON & LINKS */
+        button {
+            width: 100%;
+            padding: 14px;
+            background-color: #1DB954;
+            color: #000;
+            border: none;
+            border-radius: 500px; /* Capsule shape */
+            font-size: 1rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: transform 0.1s, background-color 0.2s;
+        }
+
+        button:hover {
+            background-color: #1ed760;
+            transform: scale(1.02);
+        }
+
+        button:active { transform: scale(0.98); }
+
+        .footer-links {
+            margin-top: 25px;
+            border-top: 1px solid #282828;
+            padding-top: 20px;
+            font-size: 0.9rem;
+            color: #b3b3b3;
+        }
+
+        .footer-links a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 700;
+        }
+
+        .footer-links a:hover { text-decoration: underline; color: #1DB954; }
+
+        /* 5. ERROR MESSAGE */
+        .error {
+            background-color: rgba(233, 30, 30, 0.1);
+            color: #ff5252;
+            padding: 12px;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            margin-bottom: 20px;
+            border: 1px solid #ff5252;
+        }
+        /* ========================================= */
+        /* 📱 MOBILE & ☀️ LIGHT MODE ULTIMATE CSS    */
+        /* ========================================= */
+
+        /* Mobile Squeeze Fixes */
+        @media (max-width: 768px) {
+            .container { padding: 20px 15px; }
+            nav { flex-direction: column; gap: 15px; padding: 15px; text-align: center; }
+            nav div { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; align-items: center; }
+            .form-row, .form-row-3, .card-grid, .product-grid, .event-grid { grid-template-columns: 1fr; gap: 15px; }
+            .cart-item, .event-card, .ticket-item { flex-direction: column; align-items: flex-start; }
+            .event-card img, .product-card img { width: 100%; height: auto; aspect-ratio: 16/9; }
+            .t-right { width: 100%; display: flex; justify-content: space-between; align-items: center; margin-top: 15px; }
+        }
+
+        /* Light Mode Overrides */
+        body.light-mode { background-color: #f8fafc; color: #0f172a; }
+        body.light-mode nav { background-color: #ffffff; border-bottom: 1px solid #e2e8f0; color: #0f172a; }
+        body.light-mode nav a { color: #475569; }
+        body.light-mode nav a:hover { color: #1DB954; }
+        body.light-mode .product-card, body.light-mode .event-card, body.light-mode .cart-item, body.light-mode .cart-summary,
+        body.light-mode .form-panel, body.light-mode .item-card, body.light-mode .ticket-list { background-color: #ffffff; border-color: #cbd5e1; }
+        body.light-mode input, body.light-mode select, body.light-mode textarea { background-color: #f1f5f9; border-color: #cbd5e1; color: #0f172a; }
+        body.light-mode .p-desc, body.light-mode p, body.light-mode label { color: #64748b; }
+        body.light-mode .price, body.light-mode .p-price, body.light-mode .event-title, body.light-mode .item-title, body.light-mode .day { color: #0f172a; }
+        body.light-mode .date-box, body.light-mode .qty, body.light-mode .ticket-count, body.light-mode .event-date-box { background-color: #f1f5f9; border-color: #cbd5e1; }
+        body.light-mode .ticket-item { border-bottom-color: #cbd5e1; }
+    </style>
+</head>
+<body>
+
+<div class="login-container">
+    <h1>Kyoto Music</h1>
+    <p class="subtitle">Log in to start listening.</p>
+
+    <div th:if="${error}" class="error" th:text="${error}"></div>
+
+    <div th:if="${param.success}" class="error" style="border-color: #1DB954; color: #1DB954; background: rgba(29,185,84,0.1);">
+        Account created! Please sign in.
+    </div>
+
+    <form method="post" action="/userLogin">
+        <div class="form-group">
+            <label for="username">Username or Email</label>
+            <input type="text" id="username" name="username" placeholder="Username" required autofocus>
+        </div>
+
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" placeholder="Password" required>
+        </div>
+
+        <button type="submit">Sign In</button>
+    </form>
+
+    <div class="footer-links">
+        Don't have an account? <a th:href="@{/userSignup}">Sign Up</a>
+    </div>
+</div>
+
+</body>
+</html>
