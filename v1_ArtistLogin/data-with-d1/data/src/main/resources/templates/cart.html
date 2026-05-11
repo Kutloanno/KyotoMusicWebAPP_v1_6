@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Your Cart - Kyoto Music</title>
+  <style>
+    body { font-family: 'Inter', sans-serif; background-color: #121212; color: #f1f5f9; margin: 0; padding: 0; }
+    nav { background: #000; color: white; padding: 15px 30px; display: flex; justify-content: space-between; border-bottom: 1px solid #282828; }
+    nav a { color: #b3b3b3; text-decoration: none; font-weight: bold; transition: 0.3s; margin-right: 20px; }
+    nav a:hover { color: white; }
+    .container { padding: 40px; max-width: 900px; margin: 0 auto; }
+
+    .cart-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #333; padding-bottom: 20px; margin-bottom: 30px; }
+    .cart-header h1 { margin: 0; font-size: 2.2rem; }
+
+    .cart-item { display: flex; align-items: center; background: #181818; padding: 20px; border-radius: 12px; margin-bottom: 15px; border: 1px solid #282828; }
+    .cart-item img { width: 80px; height: 80px; object-fit: cover; border-radius: 8px; margin-right: 20px; }
+    .item-details { flex: 1; }
+    .item-title { font-size: 1.2rem; font-weight: 800; margin: 0 0 5px 0; }
+    .item-artist { color: #1DB954; font-size: 0.9rem; margin-bottom: 5px; }
+    .item-price { font-weight: bold; color: #a1a1aa; }
+
+    .item-actions { display: flex; align-items: center; gap: 20px; }
+    .qty { background: #282828; padding: 5px 15px; border-radius: 20px; font-weight: bold; }
+    .btn-remove { background: none; border: none; color: #ef4444; cursor: pointer; font-weight: bold; font-size: 0.9rem; }
+    .btn-remove:hover { text-decoration: underline; }
+
+    .cart-summary { background: #181818; padding: 30px; border-radius: 12px; margin-top: 40px; text-align: right; border: 1px solid #282828; }
+    .cart-summary h3 { margin: 0 0 15px 0; font-size: 1.5rem; }
+    .btn-checkout { display: inline-block; padding: 15px 40px; background: #1DB954; color: #000; border: none; border-radius: 30px; font-weight: 900; font-size: 1.1rem; text-decoration: none; cursor: pointer; transition: 0.3s; }
+    .btn-checkout:hover { background: #17a349; transform: scale(1.02); }
+
+    .error-msg { background: #7f1d1d; color: #f87171; padding: 15px; border-radius: 8px; margin-bottom: 20px; font-weight: bold; }
+  </style>
+</head>
+<body>
+<nav>
+  <div style="font-weight: 900; font-size: 1.4rem; color: #1DB954;">KYOTO</div>
+  <div>
+    <a th:href="@{/store(listenerId=${listenerId})}">Store</a>
+    <a th:href="@{/events(listenerId=${listenerId})}">Events</a>
+  </div>
+</nav>
+
+<div class="container">
+  <div class="cart-header">
+    <h1>Your Shopping Cart</h1>
+  </div>
+
+  <div th:if="${error}" class="error-msg" th:text="${error}"></div>
+
+  <div th:if="${isEmpty}" style="text-align: center; padding: 60px; color: #a1a1aa; background: #181818; border-radius: 12px;">
+    <h2>Your cart is empty</h2>
+    <p>Looks like you haven't added any merch or tickets yet.</p>
+    <a th:href="@{/store(listenerId=${listenerId})}" style="color: #1DB954; font-weight: bold; text-decoration: none; display: inline-block; margin-top: 15px;">Browse Store</a>
+  </div>
+
+  <div th:unless="${isEmpty}">
+
+    <!-- MERCHANDISE SECTION -->
+    <div th:each="item : ${cartProducts}" class="cart-item">
+      <img th:if="${item['ImageURL'] != null and item['ImageURL'] != ''}" th:src="@{'/image/' + ${item['ImageURL']}}">
+      <img th:if="${item['ImageURL'] == null or item['ImageURL'] == ''}" src="https://via.placeholder.com/80/282828/1DB954?text=Merch">
+
+      <div class="item-details">
+        <h3 class="item-title" th:text="${item['Name']}">Item Name</h3>
+        <div class="item-artist" th:text="'by ' + ${item['ArtistName']}">by Artist</div>
+        <div class="item-price" th:text="'$' + ${item['Price']} + ' each'">$0.00</div>
+      </div>
+
+      <div class="item-actions">
+        <div class="qty" th:text="'Qty: ' + ${item['Quantity']}">Qty: 1</div>
+        <form th:action="@{/cart/remove}" method="post" style="margin: 0;">
+          <input type="hidden" name="cartItemId" th:value="${item['CartItemID']}">
+          <input type="hidden" name="listenerId" th:value="${listenerId}">
+          <button type="submit" class="btn-remove">Remove</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- TICKETS SECTION -->
+    <div th:each="item : ${cartTickets}" class="cart-item" style="border-left: 4px solid #1DB954;">
+      <div style="font-size: 2.5rem; margin-right: 20px; width: 80px; text-align: center;">🎟️</div>
+
+      <div class="item-details">
+        <h3 class="item-title" th:text="${item['Name']} + ' (Ticket)'">Event Name</h3>
+        <div class="item-artist" th:text="'Live • ' + ${item['EventDate']}">Date</div>
+        <div class="item-price" th:text="'$' + ${item['Price']} + ' each'">$0.00</div>
+      </div>
+
+      <div class="item-actions">
+        <div class="qty" th:text="'Qty: ' + ${item['Quantity']}">Qty: 1</div>
+        <form th:action="@{/cart/remove}" method="post" style="margin: 0;">
+          <input type="hidden" name="cartItemId" th:value="${item['CartItemID']}">
+          <input type="hidden" name="listenerId" th:value="${listenerId}">
+          <button type="submit" class="btn-remove">Remove</button>
+        </form>
+      </div>
+    </div>
+
+    <div class="cart-summary">
+      <h3 th:text="'Subtotal: $' + ${subtotal}">Subtotal: $0.00</h3>
+      <p style="color: #a1a1aa; font-size: 0.9rem; margin-bottom: 20px;">Taxes and fees calculated at checkout</p>
+      <a th:href="@{/cart/checkout(listenerId=${listenerId})}" class="btn-checkout">Proceed to Checkout</a>
+    </div>
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Kyoto Music - Dashboard</title>
+    <style>
+        /* 1. DARK THEME BASE */
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            background-color: #121212;
+            color: white;
+        }
+
+        nav {
+            background: #000;
+            color: white;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px solid #282828;
+        }
+        nav a { color: #b3b3b3; text-decoration: none; font-weight: bold; transition: 0.3s; }
+        nav a:hover { color: white; }
+
+        .container { padding: 40px; max-width: 1200px; margin: 0 auto; }
+
+        /* 2. PLAYLIST SECTION */
+        .playlist-card {
+            border: none;
+            padding: 20px;
+            border-radius: 8px;
+            width: 180px;
+            background: #181818;
+            color: white;
+            transition: 0.3s;
+        }
+        .playlist-card:hover { background: #282828; }
+        .playlist-card strong { color: #1DB954; }
+        .playlist-card a { color: #b3b3b3; text-decoration: none; display: block; margin-top: 10px; }
+
+        .create-section {
+            background: #181818;
+            padding: 25px;
+            border-radius: 12px;
+            margin-top: 40px;
+            border: 1px solid #333;
+        }
+        input, select { background: #282828; border: 1px solid #444; color: white; border-radius: 4px; padding: 10px; }
+
+        /* 3. RECOMMENDED SECTION - CENTERED */
+        .recommended-section {
+            margin-top: 50px;
+            padding: 40px 20px;
+            background: #000000;
+            border-radius: 20px;
+        }
+        .recommended-section h2 { text-align: center; margin-bottom: 30px; letter-spacing: -1px; }
+
+        .song-grid {
+            display: flex;
+            gap: 25px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .song-card {
+            background: #181818;
+            padding: 20px;
+            border-radius: 12px;
+            width: 220px;
+            text-align: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        .song-card:hover { transform: translateY(-8px); background: #282828; }
+        .song-card img { width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 8px; margin-bottom: 15px; }
+        .song-card h4 { margin: 10px 0 5px 0; font-size: 1.1rem; }
+        .song-card p { color: #1DB954; font-size: 0.9rem; margin-bottom: 15px; font-weight: 600; }
+
+        .mini-player {
+            width: 100%;
+            height: 35px;
+            filter: invert(100%) hue-rotate(180deg) brightness(1.5);
+            margin-bottom: 10px;
+        }
+
+        .btn-logout { font-size: 0.9rem; padding: 8px 16px; border: 1px solid #333; border-radius: 20px; }
+        .btn-primary { background: #1DB954; color: #000; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+<nav>
+    <div style="font-weight: 900; font-size: 1.4rem; color: #1DB954;">KYOTO</div>
+    <div>
+        <a th:href="@{/store(listenerId=${listenerId})}" style="margin-right: 20px;">🛍️ Store</a>
+        <a th:href="@{/events(listenerId=${listenerId})}" style="margin-right: 20px;">🎤 Events</a>
+        <a th:href="@{/user/settings(listenerId=${listenerId})}" style="margin-right: 20px;">Settings</a>
+        <a href="/userLogin" class="btn-logout">Logout</a>
+    </div>
+</nav>
+
+<div class="container">
+    <h2>Welcome back, <span th:text="${listener.Name}" style="color: #1DB954;">User</span></h2>
+
+    <div style="margin: 30px 0;">
+        <form action="/search" method="get">
+            <input type="hidden" name="listenerId" th:value="${listenerId}">
+            <input type="text" name="query" placeholder="Search for music..." required style="width:400px;">
+            <button type="submit" class="btn-primary" style="padding:12px 25px;">Search</button>
+        </form>
+    </div>
+
+    <h3>My Playlists</h3>
+    <div class="playlist-grid">
+        <div th:each="pl : ${playlists}" class="playlist-card">
+            <strong th:text="${pl.Name}">Playlist Name</strong><br>
+            <small th:text="${pl.isPublic == 1 ? 'Public' : 'Private'}" style="color: #888;"></small>
+            <a th:href="@{/viewPlaylist(playlistId=${pl.PlaylistID}, listenerId=${listenerId})}">Open</a>
+        </div>
+        <p th:if="${#lists.isEmpty(playlists)}" style="color: #888;">No playlists yet. Start your collection below.</p>
+    </div>
+
+    <div class="create-section">
+        <h4 style="margin-top:0;">Create New Playlist</h4>
+        <form action="/createPlaylist" method="post" style="display:flex; gap:10px;">
+            <input type="hidden" name="listenerId" th:value="${listenerId}">
+            <input type="text" name="name" placeholder="Playlist Name" required style="flex-grow:1;">
+            <select name="isPublic">
+                <option value="1">Public</option>
+                <option value="0">Private</option>
+            </select>
+            <button type="submit" style="padding:10px 20px; background: #fff; color: #000; border: none; border-radius:4px; font-weight:bold; cursor:pointer;">Create</button>
+        </form>
+    </div>
+
+    <div class="recommended-section">
+        <h2>Recommended for You</h2>
+        <div class="song-grid">
+            <div th:each="song : ${randomSongs}" class="song-card">
+                <img th:src="@{'/image/' + ${song['CoverArtURL']}}" alt="CoverArt"
+                     th:if="${song['CoverArtURL'] != null}">
+
+                <h4 th:text="${song['Title']}">Song Title</h4>
+                <p th:text="${song['ArtistName']}">Artist Name</p>
+
+                <audio controls class="mini-player" th:if="${song['AudioFileURL'] != null}">
+                    <source th:src="@{'/stream/' + ${song['AudioFileURL']}}" type="audio/mpeg">
+                </audio>
+
+                <div style="margin-top: 10px;">
+                    <a th:href="@{/playSong(songId=${song['SongID']})}"
+                       style="color: #888; font-size: 0.75rem; text-decoration: none; border-bottom: 1px solid #333;">View Full Details</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

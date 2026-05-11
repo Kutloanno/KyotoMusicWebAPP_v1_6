@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Store - Kyoto Music</title>
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #121212; color: #f1f5f9; margin: 0; padding: 0; }
+        nav { background: #000; color: white; padding: 15px 30px; display: flex; justify-content: space-between; border-bottom: 1px solid #282828; }
+        nav a { color: #b3b3b3; text-decoration: none; font-weight: bold; transition: 0.3s; margin-right: 20px; }
+        nav a:hover { color: white; }
+
+        .container { padding: 40px; max-width: 1200px; margin: 0 auto; }
+        .page-header { margin-bottom: 40px; display: flex; justify-content: space-between; align-items: center; }
+        .page-header h2 { font-size: 2.5rem; margin: 0 0 10px; }
+        .page-header p { color: #a1a1aa; margin: 0; font-size: 1.1rem; }
+
+        .category-nav { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 30px; }
+        .cat-btn { padding: 8px 20px; background: #181818; border: 1px solid #333; border-radius: 20px; color: white; text-decoration: none; font-weight: bold; transition: 0.2s; white-space: nowrap; }
+        .cat-btn:hover, .cat-btn.active { background: #1DB954; color: black; border-color: #1DB954; }
+
+        .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px; }
+        .product-card { background: #181818; border-radius: 12px; overflow: hidden; border: 1px solid #282828; display: flex; flex-direction: column; transition: 0.3s; }
+        .product-card:hover { transform: translateY(-5px); border-color: #333; }
+        .product-card img { width: 100%; height: 250px; object-fit: cover; }
+
+        .product-info { padding: 20px; display: flex; flex-direction: column; flex: 1; }
+        .p-category { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; color: #1DB954; font-weight: bold; margin-bottom: 5px; }
+        .p-title { font-size: 1.2rem; font-weight: 800; margin: 0 0 5px 0; }
+        .p-artist { color: #a1a1aa; font-size: 0.9rem; margin-bottom: 15px; }
+        .p-desc { font-size: 0.9rem; color: #888; margin-bottom: 20px; line-height: 1.4; flex: 1; }
+
+        .p-footer { display: flex; justify-content: space-between; align-items: center; margin-top: auto; padding-top: 15px; border-top: 1px solid #282828; }
+        .p-price { font-size: 1.3rem; font-weight: 900; }
+
+        .success-msg { background: #064e3b; color: #34d399; padding: 15px; border-radius: 8px; margin-bottom: 30px; font-weight: bold; }
+        .error-msg { background: #7f1d1d; color: #f87171; padding: 15px; border-radius: 8px; margin-bottom: 30px; font-weight: bold; }
+    </style>
+</head>
+<body>
+<nav>
+    <div style="font-weight: 900; font-size: 1.4rem; color: #1DB954;">KYOTO</div>
+    <div>
+        <a th:href="@{/userDashBoard(listenerId=${listenerId})}">Home</a>
+        <a th:href="@{/store(listenerId=${listenerId})}" style="color: white;">Store</a>
+        <a th:href="@{/events(listenerId=${listenerId})}">Events</a>
+        <a th:href="@{/cart(listenerId=${listenerId})}" style="color: #1DB954;">🛒 Cart</a>
+        <a th:href="@{/user/settings(listenerId=${listenerId})}">Settings</a>
+        <a href="/userLogin" style="font-size: 0.9rem; padding: 8px 16px; border: 1px solid #333; border-radius: 20px; margin-right: 0;">Logout</a>
+    </div>
+</nav>
+
+<div class="container">
+    <div class="page-header">
+        <div>
+            <h2>Official Merch Store</h2>
+            <p>Support your favourite artists directly.</p>
+        </div>
+    </div>
+
+    <div th:if="${success}" class="success-msg" th:text="${success}"></div>
+    <div th:if="${error}" class="error-msg" th:text="${error}"></div>
+
+    <!-- UPDATED CATEGORY NAVIGATION -->
+    <div class="category-nav">
+        <a th:href="@{/store(listenerId=${listenerId})}" th:classappend="${category == null} ? 'active' : ''" class="cat-btn">All</a>
+        <a th:href="@{/store(listenerId=${listenerId}, category='Clothing')}" th:classappend="${category == 'Clothing'} ? 'active' : ''" class="cat-btn">Clothing</a>
+        <a th:href="@{/store(listenerId=${listenerId}, category='Physical Music')}" th:classappend="${category == 'Physical Music'} ? 'active' : ''" class="cat-btn">Physical Music</a>
+        <a th:href="@{/store(listenerId=${listenerId}, category='Instruments')}" th:classappend="${category == 'Instruments'} ? 'active' : ''" class="cat-btn">Instruments</a>
+        <a th:href="@{/store(listenerId=${listenerId}, category='Equipment')}" th:classappend="${category == 'Equipment'} ? 'active' : ''" class="cat-btn">Equipment</a>
+        <a th:href="@{/store(listenerId=${listenerId}, category='Accessories')}" th:classappend="${category == 'Accessories'} ? 'active' : ''" class="cat-btn">Accessories</a>
+    </div>
+
+    <div th:if="${#lists.isEmpty(products)}" style="color:#a1a1aa; margin-top:50px; text-align: center; padding: 40px; background: #181818; border-radius: 12px;">
+        No products available in this category.
+    </div>
+
+    <div class="product-grid">
+        <div th:each="p : ${products}" class="product-card">
+            <img th:if="${p['ImageURL'] != null and p['ImageURL'] != ''}" th:src="@{'/image/' + ${p['ImageURL']}}">
+            <img th:if="${p['ImageURL'] == null or p['ImageURL'] == ''}" src="https://via.placeholder.com/400x300/282828/1DB954?text=Merch">
+
+            <div class="product-info">
+                <div class="p-category" th:text="${p['Category']}">CATEGORY</div>
+                <h3 class="p-title" th:text="${p['Name']}">Product Name</h3>
+                <div class="p-artist" th:text="'by ' + ${p['ArtistName']}">by Artist</div>
+                <div class="p-desc" th:text="${p['Description']}">Description...</div>
+
+                <div class="p-footer">
+                    <div class="p-price" th:text="'$' + ${p['Price']}">$0.00</div>
+                    <div style="font-size: 0.8rem; color: #a1a1aa;" th:text="${p['Stock']} + ' left'"></div>
+                </div>
+
+                <div style="margin-top: 15px;">
+                    <form th:action="@{/cart/add}" method="post" style="margin: 0; width: 100%;">
+                        <input type="hidden" name="productId" th:value="${p['ProductID']}">
+                        <input type="hidden" name="listenerId" th:value="${listenerId}">
+                        <button type="submit" style="width: 100%; padding: 12px; background: #1DB954; color: #000; border: none; border-radius: 8px; font-weight: 800; cursor: pointer; transition: 0.2s;">
+                            Add to Cart
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

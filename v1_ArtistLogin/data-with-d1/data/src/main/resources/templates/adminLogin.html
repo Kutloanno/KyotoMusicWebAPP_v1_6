@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Admin Login - Kyoto</title>
+    <style>
+        body { background: #0f172a; color: white; font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .login-box { background: #1e293b; padding: 40px; border-radius: 12px; width: 350px; border: 1px solid #334155; }
+        input { width: 100%; padding: 12px; margin: 10px 0; background: #0f172a; border: 1px solid #334155; color: white; border-radius: 4px; box-sizing: border-box;}
+        button { width: 100%; padding: 12px; background: #3b82f6; border: none; color: white; font-weight: bold; border-radius: 4px; cursor: pointer; margin-top: 10px; }
+        .error { color: #f87171; font-size: 0.8rem; margin-bottom: 10px; }
+    </style>
+</head>
+<body>
+<div class="login-box">
+    <h2>Admin Portal</h2>
+    <div th:if="${error}" class="error" th:text="${error}"></div>
+    <form action="/adminLogin" method="post">
+        <input type="text" name="username" placeholder="Admin Name" required>
+        <input type="password" name="password" placeholder="Password" required>
+        <button type="submit">Access Dashboard</button>
+    </form>
+</div>
+</body>
+</html>

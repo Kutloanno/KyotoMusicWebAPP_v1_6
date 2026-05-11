@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Artist Studio - Upload</title>
+    <style>
+        /* STUDIO THEME */
+        body { font-family: 'Inter', sans-serif; background: #0f172a; color: #f1f5f9; margin: 0; padding: 40px 20px; }
+        .studio-container { max-width: 700px; margin: 0 auto; background: rgba(30, 41, 59, 0.5); padding: 40px; border-radius: 16px; border: 1px solid #334155; box-shadow: 0 20px 50px rgba(0,0,0,0.3); }
+        h1 { font-size: 2rem; margin-bottom: 30px; color: #a78bfa; border-bottom: 2px solid #334155; padding-bottom: 10px; }
+        h3 { color: #f472b6; margin-top: 30px; font-size: 1.1rem; text-transform: uppercase; letter-spacing: 1px; }
+        .form-section { background: rgba(15, 23, 42, 0.4); padding: 20px; border-radius: 12px; margin-bottom: 25px; border: 1px solid #1e293b; transition: 0.3s ease; }
+        .form-section:focus-within { border-color: #8b5cf6; background: rgba(30, 41, 59, 0.6); }
+        .input-group { margin-bottom: 20px; }
+        label { display: block; font-size: 0.85rem; font-weight: 600; color: #94a3b8; margin-bottom: 8px; }
+        input[type="text"], input[type="number"], select { width: 100%; padding: 12px; background: #0f172a; border: 1px solid #334155; color: white; border-radius: 8px; font-size: 1rem; }
+        input[type="file"] { background: #1e293b; padding: 10px; border-radius: 8px; width: 100%; cursor: pointer; }
+        .btn { padding: 14px 28px; border-radius: 8px; font-weight: 700; cursor: pointer; border: none; transition: all 0.2s; font-size: 1rem; text-align: center; }
+        .btn-primary { background: linear-gradient(to right, #8b5cf6, #d946ef); color: white; width: 100%; margin-top: 20px; }
+        .btn-secondary { background: #334155; color: white; margin-top: 10px; width: 100%; }
+        .alert { padding: 15px; border-radius: 8px; margin-bottom: 20px; font-weight: 600; display: none; } /* Hidden by default */
+        .success { background: rgba(34, 197, 94, 0.2); color: #4ade80; border: 1px solid #4ade80; }
+        .error { background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid #f87171; }
+        .album-option { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 15px; padding: 10px; border-radius: 8px; }
+        .active-choice { background: rgba(139, 92, 246, 0.1); border: 1px solid #8b5cf6; }
+        .disabled-field { opacity: 0.3; pointer-events: none; }
+    </style>
+</head>
+<body>
+
+<div class="studio-container">
+    <h1>Upload New Track</h1>
+
+    <div id="js-success" class="alert success"></div>
+    <div id="js-error" class="alert error"></div>
+
+    <div class="form-section">
+        <h3>1. Quick Genre Setup</h3>
+        <p style="font-size: 0.8rem; color: #64748b; margin-bottom: 10px;">Missing a genre? Add it here first without losing your progress.</p>
+        <div style="display: flex; gap: 10px;">
+            <input type="text" id="newGenreInput" placeholder="New Genre (e.g. 20HotHit)" style="flex-grow: 1;">
+            <button type="button" class="btn btn-secondary" style="width: auto; margin: 0; padding: 0 20px;" onclick="addGenreAsync()">Add</button>
+        </div>
+    </div>
+
+    <form action="/uploadSong" method="post" enctype="multipart/form-data" id="uploadForm">
+        <input type="hidden" name="artistId" id="artistId" th:value="${artistId}">
+
+        <div class="form-section">
+            <h3>2. Track Information</h3>
+            <div class="input-group">
+                <label>Song Title</label>
+                <input type="text" name="title" placeholder="What's the track called?" required>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div class="input-group">
+                    <label>Duration (Seconds)</label>
+                    <input type="number" name="duration" placeholder="180" min="1" required>
+                </div>
+                <div class="input-group">
+                    <label>Genre</label>
+                    <select name="genreId" id="genreSelect" required>
+                        <option value="">Select Genre</option>
+                        <option th:each="genre : ${genres}"
+                                th:value="${genre['GenreID']}"
+                                th:text="${genre['GenreName']}"></option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-section">
+            <h3>3. Media Assets</h3>
+            <div class="input-group">
+                <label>Audio File (MP3/WAV)</label>
+                <input type="file" name="audioFile" accept="audio/*" required>
+            </div>
+            <div class="input-group">
+                <label>Cover Art (JPG/PNG)</label>
+                <input type="file" name="coverArt" accept="image/*" required>
+            </div>
+        </div>
+
+        <div class="form-section">
+            <h3>4. Release Type</h3>
+            <div class="album-option" id="opt-none">
+                <input type="radio" id="noAlbum" name="albumOption" value="none" checked onchange="handleAlbumToggle()">
+                <div class="album-input-area"><label for="noAlbum">Single Release</label></div>
+            </div>
+
+            <div class="album-option" id="opt-existing">
+                <input type="radio" id="existingAlbum" name="albumOption" value="existing" onchange="handleAlbumToggle()">
+                <div class="album-input-area">
+                    <label for="existingAlbum">Add to Existing Album</label>
+                    <select name="existingAlbumId" id="existingAlbumSelect" class="disabled-field">
+                        <option value="">-- Choose Album --</option>
+                        <option th:each="album : ${albums}" th:value="${album['AlbumID']}" th:text="${album['Title']}"></option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="album-option" id="opt-new">
+                <input type="radio" id="newAlbum" name="albumOption" value="new" onchange="handleAlbumToggle()">
+                <div class="album-input-area">
+                    <label for="newAlbum">Start New Album</label>
+                    <input type="text" name="newAlbumTitle" id="newAlbumInput" placeholder="Enter New Album Title" class="disabled-field">
+                </div>
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary" id="publishBtn">Publish Track 🚀</button>
+        <a th:href="@{/artistdashboard(artistId=${artistId})}" style="text-decoration: none;">
+            <div class="btn btn-secondary">Cancel</div>
+        </a>
+    </form>
+</div>
+
+<script>
+    // ASYNC GENRE ADDITION (Fixes the refresh issue)
+    function addGenreAsync() {
+        const genreName = document.getElementById('newGenreInput').value;
+        const artistId = document.getElementById('artistId').value;
+        const successAlert = document.getElementById('js-success');
+        const errorAlert = document.getElementById('js-error');
+
+        if (!genreName) return;
+
+        // Note: Using the URL you defined in your controller logic
+        fetch(`/addSong?artistId=${artistId}&newGenre=${encodeURIComponent(genreName)}`)
+            .then(response => {
+                if (response.ok) {
+                    // Update the dropdown list dynamically
+                    const select = document.getElementById('genreSelect');
+                    const option = document.createElement('option');
+                    option.text = genreName;
+                    option.value = genreName; // Or the newly generated ID if available
+                    select.add(option);
+                    select.value = option.value; // Auto-select it
+
+                    // Show success
+                    successAlert.innerText = `Genre "${genreName}" added!`;
+                    successAlert.style.display = 'block';
+                    errorAlert.style.display = 'none';
+                    document.getElementById('newGenreInput').value = '';
+                } else {
+                    throw new Error();
+                }
+            })
+            .catch(err => {
+                errorAlert.innerText = "Error adding genre. Try again.";
+                errorAlert.style.display = 'block';
+            });
+    }
+
+    function handleAlbumToggle() {
+        const isExisting = document.getElementById('existingAlbum').checked;
+        const isNew = document.getElementById('newAlbum').checked;
+        const isNone = document.getElementById('noAlbum').checked;
+
+        document.getElementById('existingAlbumSelect').disabled = !isExisting;
+        document.getElementById('newAlbumInput').disabled = !isNew;
+
+        document.getElementById('existingAlbumSelect').classList.toggle('disabled-field', !isExisting);
+        document.getElementById('newAlbumInput').classList.toggle('disabled-field', !isNew);
+
+        document.getElementById('opt-none').classList.toggle('active-choice', isNone);
+        document.getElementById('opt-existing').classList.toggle('active-choice', isExisting);
+        document.getElementById('opt-new').classList.toggle('active-choice', isNew);
+    }
+
+    window.onload = handleAlbumToggle;
+
+    document.getElementById('uploadForm').onsubmit = function() {
+        const btn = document.getElementById('publishBtn');
+        btn.innerHTML = "Uploading Track... Please wait ";
+        btn.disabled = true;
+    };
+</script>
+</body>
+</html>

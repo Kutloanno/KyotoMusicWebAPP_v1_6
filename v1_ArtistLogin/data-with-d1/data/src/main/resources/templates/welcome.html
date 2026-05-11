@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Kyoto Music | Welcome</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #121212;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            text-align: center;
+            background: #1e1e1e;
+            padding: 3rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        h1 { color: #1DB954; margin-bottom: 0.5rem; }
+        p { color: #b3b3b3; margin-bottom: 2rem; }
+
+        .section {
+            margin-bottom: 2rem;
+            padding: 1rem;
+            border: 1px solid #333;
+            border-radius: 8px;
+        }
+        .btn {
+            display: inline-block;
+            padding: 10px 25px;
+            margin: 10px;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+        .btn-primary { background-color: #1DB954; color: black; }
+        .btn-primary:hover { background-color: #1ed760; transform: scale(1.05); }
+
+        .btn-outline { border: 2px solid #555; color: white; }
+        .btn-outline:hover { border-color: white; background: #333; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Welcome to Kyoto Music</h1>
+    <p>The rhythm of your world starts here.</p>
+
+    <div class="section">
+        <h3>For Creators</h3>
+        <a th:href="@{/artistlogin}" class="btn btn-primary">Artist Login</a>
+        <a th:href="@{/artistsignup}" class="btn btn-outline">Artist Sign Up</a>
+    </div>
+
+    <div class="section">
+        <h3>For Listeners</h3>
+        <a th:href="@{/userLogin}" class="btn btn-primary">User Login</a>
+        <a th:href="@{/userSignup}" class="btn btn-outline">User Sign Up</a>
+    </div>
+</div>
+
+</body>
+</html>

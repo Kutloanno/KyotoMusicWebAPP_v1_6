@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kyoto Music - Artist Portal</title>
+    <style>
+        /* 1. RESET & BASE */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Inter', -apple-system, system-ui, sans-serif;
+            background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+            color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* 2. ARTIST LOGIN CARD */
+        .login-container {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px); /* Glassmorphism effect */
+            padding: 50px 40px;
+            border-radius: 16px;
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        h1 {
+            font-size: 2.2rem;
+            margin-bottom: 8px;
+            font-weight: 800;
+            background: linear-gradient(to right, #a78bfa, #f472b6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .subtitle {
+            color: #94a3b8;
+            margin-bottom: 35px;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        /* 3. INPUT FIELDS */
+        .form-group {
+            text-align: left;
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-size: 0.75rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: #cbd5e1;
+            text-transform: uppercase;
+        }
+
+        input {
+            width: 100%;
+            padding: 14px;
+            background-color: rgba(15, 23, 42, 0.6);
+            border: 1px solid #475569;
+            border-radius: 8px;
+            color: white;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #a78bfa;
+            background-color: rgba(15, 23, 42, 0.9);
+            box-shadow: 0 0 10px rgba(167, 139, 250, 0.3);
+        }
+
+        /* 4. ARTIST BUTTON */
+        button {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(to right, #8b5cf6, #d946ef);
+            color: #ffffff;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(139, 92, 246, 0.4);
+        }
+
+        button:active { transform: translateY(0); }
+
+        /* 5. ERROR */
+        .error {
+            background-color: rgba(248, 113, 113, 0.2);
+            color: #f87171;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            margin-bottom: 20px;
+            border: 1px solid #f87171;
+        }
+
+        .footer {
+            margin-top: 25px;
+            font-size: 0.8rem;
+            color: #64748b;
+        }
+
+        .footer a { color: #a78bfa; text-decoration: none; }
+    </style>
+</head>
+<body>
+
+<div class="login-container">
+    <h1>Artist Lab</h1>
+    <p class="subtitle">Upload & Manage</p>
+
+    <div th:if="${error}" class="error" th:text="${error}"></div>
+
+    <form method="post" action="/artistlogin">
+        <div class="form-group">
+            <label for="username">Artist Name / ID</label>
+            <input type="text" id="username" name="username" placeholder="Enter your name" required autofocus>
+        </div>
+
+        <div class="form-group">
+            <label for="password">Security Key</label>
+            <input type="password" id="password" name="password" placeholder="••••••••" required>
+        </div>
+
+        <button type="submit">Enter Studio</button>
+    </form>
+
+    <div class="footer">
+        Kyoto Artist Management v2.0<br>
+        <a href="/">← Back to Listener Login</a>
+    </div>
+</div>
+
+</body>
+</html>

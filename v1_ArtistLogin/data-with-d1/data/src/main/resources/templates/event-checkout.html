@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Event Checkout - Kyoto Music</title>
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #121212; color: #f1f5f9; margin: 0; padding: 0; }
+        nav { background: #000; color: white; padding: 15px 30px; display: flex; justify-content: space-between; border-bottom: 1px solid #282828; }
+        nav a { color: #b3b3b3; text-decoration: none; font-weight: bold; transition: 0.3s; }
+        nav a:hover { color: white; }
+        .container { padding: 40px; max-width: 600px; margin: 40px auto; }
+        .checkout-card { background: #181818; border-radius: 14px; border: 1px solid #282828; padding: 30px; }
+        h2 { margin-top: 0; font-size: 1.8rem; border-bottom: 1px solid #333; padding-bottom: 15px; margin-bottom: 20px;}
+
+        .order-summary { background: #222; padding: 20px; border-radius: 8px; margin-bottom: 25px; border-left: 4px solid #1DB954; }
+        .order-summary h4 { margin: 0 0 15px 0; color: #1DB954; }
+        .summary-row { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 0.95rem; }
+        .summary-row.fee { color: #b3b3b3; font-size: 0.85rem; }
+        .summary-row.total { border-top: 1px solid #444; padding-top: 12px; margin-top: 12px; font-size: 1.2rem; font-weight: 800; color: white; }
+
+        .form-group { margin-bottom: 18px; }
+        label { display: block; font-size: 0.85rem; color: #b3b3b3; margin-bottom: 6px; }
+        input { width: 100%; padding: 12px; background: #121212; border: 1px solid #333; border-radius: 8px; color: white; box-sizing: border-box; font-size: 1rem; }
+        input:focus { outline: none; border-color: #1DB954; }
+        .row { display: flex; gap: 15px; }
+        .row .form-group { flex: 1; }
+        .btn-pay { display: block; width: 100%; padding: 14px; background: #1DB954; color: #000; border: none; border-radius: 8px; font-weight: 800; cursor: pointer; font-size: 1.1rem; margin-top: 10px; transition: 0.3s; }
+        .btn-pay:hover { background: #17a349; }
+    </style>
+</head>
+<body>
+<nav>
+    <div style="font-weight: 900; font-size: 1.4rem; color: #1DB954;">KYOTO</div>
+    <div>
+        <a th:href="@{/events(listenerId=${listenerId})}">Back to Events</a>
+    </div>
+</nav>
+
+<div class="container">
+    <div class="checkout-card">
+        <h2>Secure Ticket Checkout 🔒</h2>
+
+        <div class="order-summary">
+            <h4>Ticket Summary</h4>
+            <div class="summary-row">
+                <span th:text="${event['Title']} + ' (x' + ${quantity} + ')'">Event Title (x1)</span>
+                <span th:text="'$' + ${subtotal}">$0.00</span>
+            </div>
+            <div class="summary-row fee">
+                <span>Booking Fee</span>
+                <span th:text="'$' + ${bookingFee}">$2.50</span>
+            </div>
+            <div class="summary-row total">
+                <span>Total</span>
+                <span th:text="'$' + ${finalTotal}">$0.00</span>
+            </div>
+        </div>
+
+        <form th:action="@{/events/processPayment}" method="post">
+            <input type="hidden" name="eventId" th:value="${eventId}">
+            <input type="hidden" name="listenerId" th:value="${listenerId}">
+            <input type="hidden" name="quantity" th:value="${quantity}">
+
+            <div class="form-group">
+                <label>Email Address (For your Ticket Code)</label>
+                <input type="email" name="email" placeholder="you@example.com" required>
+            </div>
+
+            <div class="form-group">
+                <label>Name on Card</label>
+                <input type="text" name="cardName" placeholder="Kutloano" required>
+            </div>
+
+            <div class="form-group">
+                <label>Card Number</label>
+                <input type="text" name="cardNumber" placeholder="0000 0000 0000 0000" maxlength="16" required>
+            </div>
+
+            <div class="row">
+                <div class="form-group">
+                    <label>Expiry (MM/YY)</label>
+                    <input type="text" name="expiry" placeholder="12/26" maxlength="5" required>
+                </div>
+                <div class="form-group">
+                    <label>CVV</label>
+                    <input type="text" name="cvv" placeholder="123" maxlength="3" required>
+                </div>
+            </div>
+
+            <button type="submit" class="btn-pay" th:text="'Pay $' + ${finalTotal}">Pay Now</button>
+        </form>
+    </div>
+</div>
+</body>
+</html>

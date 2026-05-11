@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Search Results - Kyoto Music</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #121212; color: white; margin: 0; padding: 20px; }
+        .nav-header { margin-bottom: 30px; display: flex; justify-content: space-between; align-items: center; }
+        .nav-header a { color: #1DB954; text-decoration: none; font-weight: bold; }
+
+        h2 { border-bottom: 1px solid #333; padding-bottom: 10px; margin-top: 40px; color: #1DB954; }
+
+        .results-grid { display: flex; flex-wrap: wrap; gap: 25px; justify-content: flex-start; margin-top: 20px; }
+
+        /* SONG & PLAYLIST CARDS */
+        .card {
+            background: #181818;
+            width: 220px;
+            padding: 15px;
+            border-radius: 10px;
+            transition: background 0.3s;
+            border: 1px solid #282828;
+        }
+        .card:hover { background: #282828; }
+
+        .card img, .playlist-placeholder {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 6px;
+            margin-bottom: 10px;
+            background-color: #333;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+        }
+
+        .info h3 { margin: 10px 0 5px 0; font-size: 1.1rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .info p { margin: 0; color: #b3b3b3; font-size: 0.9rem; }
+
+        .audio-player { width: 100%; margin: 15px 0; height: 35px; }
+
+        /* BUTTONS & FORMS */
+        .action-form { margin-top: 15px; border-top: 1px solid #333; padding-top: 15px; }
+        .styled-select {
+            width: 100%;
+            padding: 8px;
+            background: #333;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            margin-bottom: 8px;
+        }
+        .btn-green {
+            width: 100%;
+            padding: 8px;
+            background: #1DB954;
+            color: black;
+            border: none;
+            border-radius: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+        .btn-green:hover { background: #1ed760; }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid #555;
+            color: white;
+            margin-top: 5px;
+        }
+        .btn-outline:hover { border-color: white; }
+
+        .no-results { text-align: center; margin-top: 100px; color: #b3b3b3; }
+    </style>
+</head>
+<body>
+
+<div class="nav-header">
+    <h1>Results for "<span th:text="${query}">query</span>"</h1>
+    <a th:href="@{/userDashBoard(listenerId=${listenerId})}">← Back to Dashboard</a>
+</div>
+
+<div th:if="${!#lists.isEmpty(songs)}">
+    <h2>Songs</h2>
+    <div class="results-grid">
+        <div th:each="song : ${songs}" class="card">
+            <img th:src="@{'/image/' + ${song['CoverArtURL']}}" alt="Cover Art">
+            <div class="info">
+                <h3 th:text="${song['Title']}">Song Title</h3>
+                <p>Artist: <span th:text="${song['ArtistName']}">Artist</span></p>
+            </div>
+            <audio controls class="audio-player">
+                <source th:src="@{'/stream/' + ${song['AudioFileURL']}}" type="audio/mpeg">
+            </audio>
+            <div class="action-form">
+                <form action="/addToPlaylist" method="post">
+                    <input type="hidden" name="songId" th:value="${song['SongID']}">
+                    <input type="hidden" name="listenerId" th:value="${listenerId}">
+                    <select name="playlistId" required class="styled-select">
+                        <option value="">+ Add to My Playlist...</option>
+                        <option th:each="pl : ${playlists}" th:value="${pl['PlaylistID']}" th:text="${pl['Name']}"></option>
+                    </select>
+                    <button type="submit" class="btn-green">Add ➕</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div th:if="${!#lists.isEmpty(publicPlaylists)}">
+    <h2>Public Playlists</h2>
+    <div class="results-grid">
+        <div th:each="pl : ${publicPlaylists}" class="card">
+            <div class="playlist-placeholder">📁</div>
+            <div class="info">
+                <h3 th:text="${pl['Name']}">Playlist Name</h3>
+                <p>Created by: <span th:text="${pl['ListenerID']}">Owner</span></p>
+            </div>
+            <div class="action-form">
+                <a th:href="@{/viewPlaylist(playlistId=${pl['PlaylistID']}, listenerId=${listenerId})}" class="btn-green">View Tracks</a>
+
+                <form action="/followPlaylist" method="post">
+                    <input type="hidden" name="playlistId" th:value="${pl['PlaylistID']}">
+                    <input type="hidden" name="listenerId" th:value="${listenerId}">
+                    <button type="submit" class="btn-green btn-outline">Follow Playlist ❤️</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div th:if="${#lists.isEmpty(songs)} and ${#lists.isEmpty(publicPlaylists)}" class="no-results">
+    <h3>Nothing found for "<span th:text="${query}"></span>"</h3>
+    <p>Try searching for a different song, artist, or playlist name.</p>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Album Details - Kyoto Music</title>
+    <style>
+        body { font-family: 'Inter', sans-serif; background: #0f172a; color: white; margin: 0; padding: 40px; }
+        .header { display: flex; gap: 30px; align-items: flex-end; margin-bottom: 50px; }
+        .header img { width: 200px; height: 200px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+
+        .song-grid {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            justify-content: flex-start;
+        }
+
+        .song-card {
+            background: #1e293b;
+            padding: 15px;
+            border-radius: 12px;
+            width: 200px;
+            text-align: center;
+            border: 1px solid #334155;
+        }
+        .song-card img { width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 8px; }
+
+        .mini-player {
+            width: 100%;
+            height: 30px;
+            margin-top: 10px;
+            filter: invert(100%) hue-rotate(180deg) brightness(1.5);
+        }
+        .back-link { color: #8b5cf6; text-decoration: none; font-weight: bold; margin-bottom: 20px; display: inline-block; }
+    </style>
+</head>
+<body>
+
+<a href="javascript:history.back()" class="back-link">← Back to Dashboard</a>
+
+<div class="header">
+    <img th:src="@{'/image/' + ${album['CoverArtURL']}}" alt="Album Art">
+    <div>
+        <h4 style="color: #f472b6; margin: 0; text-transform: uppercase; font-size: 0.8rem;">Album</h4>
+        <h1 th:text="${album['Title']}" style="font-size: 3rem; margin: 0;">Album Title</h1>
+        <p style="color: #94a3b8;">Created by <span th:text="${album['ArtistName']}">Artist</span></p>
+    </div>
+</div>
+
+<h3>Album Tracks</h3>
+<div class="song-grid">
+    <div th:each="song : ${songs}" class="song-card">
+        <img th:src="@{'/image/' + ${song['CoverArtURL']}}" alt="Track Cover">
+        <h4 th:text="${song['Title']}" style="margin: 10px 0 5px;">Song Title</h4>
+        <p style="font-size: 0.8rem; color: #1DB954; margin: 0;">Track <span th:text="${song['TrackNumber']}">1</span></p>
+
+        <audio controls class="mini-player">
+            <source th:src="@{'/stream/' + ${song['AudioFileURL']}}" type="audio/mpeg">
+        </audio>
+
+        <a th:href="@{'/download/' + ${song['AudioFileURL']}}"
+           style="display: block; margin-top: 10px; font-size: 0.7rem; color: #888; text-decoration: none;">Download Track</a>
+    </div>
+</div>
+
+</body>
+</html>

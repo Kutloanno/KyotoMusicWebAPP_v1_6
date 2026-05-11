@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Kyoto Music - Sign Up</title>
+    <style>
+        body { font-family: sans-serif; background: #121212; color: white; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .signup-container { background: #181818; padding: 40px; border-radius: 10px; width: 300px; border: 1px solid #282828; }
+        .form-group { margin-bottom: 15px; }
+        input { width: 100%; padding: 10px; margin-top: 5px; background: #333; border: 1px solid #444; color: white; border-radius: 4px; box-sizing: border-box; }
+        button { width: 100%; padding: 10px; background: #1DB954; border: none; color: white; font-weight: bold; cursor: pointer; border-radius: 20px; margin-top: 10px; }
+        .error { color: #ff4444; font-size: 0.8rem; margin-bottom: 10px; }
+    </style>
+</head>
+<body>
+
+<div class="signup-container">
+    <h1>Join Kyoto</h1>
+    <p>Create your listener account</p>
+
+    <div th:if="${error}" class="error" th:text="${error}"></div>
+
+    <form method="post" action="/registerUser">
+        <div class="form-group">
+            <label>Full Name</label>
+            <input type="text" name="name" placeholder="John Doe" required>
+        </div>
+
+        <div class="form-group">
+            <label>Username (Login ID)</label>
+            <input type="text" name="username" placeholder="johndoe123" required>
+        </div>
+
+        <div class="form-group">
+            <label for="gender">Gender Identity</label>
+            <select id="gender" name="gender" required>
+                <option value="" disabled selected>Select Gender</option>
+                <option value="M">Male</option>
+                <option value="F">Female</option>
+                <option value="O">Other</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Password</label>
+            <input type="password" name="password" required>
+        </div>
+
+        <button type="submit">Create Account</button>
+    </form>
+
+    <p style="margin-top: 15px; font-size: 0.8rem; text-align: center;">
+        Already have an account? <a th:href="@{/userLogin}" style="color: #1DB954;">Login</a>
+    </p>
+</div>
+
+</body>
+</html>
