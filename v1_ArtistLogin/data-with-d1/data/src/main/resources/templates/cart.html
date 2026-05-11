@@ -57,7 +57,6 @@
 
   <div th:unless="${isEmpty}">
 
-    <!-- MERCHANDISE SECTION -->
     <div th:each="item : ${cartProducts}" class="cart-item">
       <img th:if="${item['ImageURL'] != null and item['ImageURL'] != ''}" th:src="@{'/image/' + ${item['ImageURL']}}">
       <img th:if="${item['ImageURL'] == null or item['ImageURL'] == ''}" src="https://via.placeholder.com/80/282828/1DB954?text=Merch">
@@ -65,7 +64,7 @@
       <div class="item-details">
         <h3 class="item-title" th:text="${item['Name']}">Item Name</h3>
         <div class="item-artist" th:text="'by ' + ${item['ArtistName']}">by Artist</div>
-        <div class="item-price" th:text="'$' + ${item['Price']} + ' each'">$0.00</div>
+        <div class="item-price" th:text="'R' + ${item['Price']} + ' each'">R0.00</div>
       </div>
 
       <div class="item-actions">
@@ -78,14 +77,13 @@
       </div>
     </div>
 
-    <!-- TICKETS SECTION -->
     <div th:each="item : ${cartTickets}" class="cart-item" style="border-left: 4px solid #1DB954;">
       <div style="font-size: 2.5rem; margin-right: 20px; width: 80px; text-align: center;">🎟️</div>
 
       <div class="item-details">
         <h3 class="item-title" th:text="${item['Name']} + ' (Ticket)'">Event Name</h3>
         <div class="item-artist" th:text="'Live • ' + ${item['EventDate']}">Date</div>
-        <div class="item-price" th:text="'$' + ${item['Price']} + ' each'">$0.00</div>
+        <div class="item-price" th:text="'R' + ${item['Price']} + ' each'">R0.00</div>
       </div>
 
       <div class="item-actions">
@@ -99,7 +97,7 @@
     </div>
 
     <div class="cart-summary">
-      <h3 th:text="'Subtotal: $' + ${subtotal}">Subtotal: $0.00</h3>
+      <h3 th:text="'Subtotal: R' + ${subtotal}">Subtotal: R0.00</h3>
       <p style="color: #a1a1aa; font-size: 0.9rem; margin-bottom: 20px;">Taxes and fees calculated at checkout</p>
       <a th:href="@{/cart/checkout(listenerId=${listenerId})}" class="btn-checkout">Proceed to Checkout</a>
     </div>
