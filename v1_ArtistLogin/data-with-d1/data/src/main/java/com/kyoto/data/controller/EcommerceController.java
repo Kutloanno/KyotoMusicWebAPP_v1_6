@@ -5,6 +5,7 @@ import com.kyoto.data.service.D1Service;
 import com.kyoto.data.service.R2Service;
 import com.kyoto.data.service.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -24,6 +25,10 @@ public class EcommerceController {
 
     @Autowired
     private EmailService emailService;
+
+    // Grab the Paystack key from your application.properties / Render environment variables
+    @Value("${paystack.public.key:}")
+    private String paystackPublicKey;
 
     // ─────────────────────────────────────────────────────────────────────────
     // ARTIST STORE ENDPOINTS
@@ -166,26 +171,18 @@ public class EcommerceController {
         return "user-events";
     }
 
-    // --- NEW: CANCEL TICKET ENDPOINT ---
     @PostMapping("/events/cancelTicket")
     public String cancelTicket(@RequestParam String orderId, @RequestParam String listenerId) {
-        // 1. Find the ticket order to get the EventID and Quantity
         String checkSql = "SELECT EventID, Quantity FROM TICKET_ORDER WHERE OrderID = ? AND ListenerID = ?";
         List<Map<String, Object>> orderDetails = d1Service.getResults(d1Service.executeQueryWithParams(checkSql, List.of(orderId, listenerId)));
 
         if (!orderDetails.isEmpty()) {
             String eventId = (String) orderDetails.get(0).get("EventID");
             int quantity = ((Number) orderDetails.get(0).get("Quantity")).intValue();
-
-            // 2. Delete the ticket order
             d1Service.executeUpdateWithParams("DELETE FROM TICKET_ORDER WHERE OrderID = ?", List.of(orderId));
-
-            // 3. Restore the tickets back to the event's available pool
             d1Service.executeUpdateWithParams("UPDATE EVENT SET TicketsSold = TicketsSold - ? WHERE EventID = ?", List.of(quantity, eventId));
-
             return "redirect:/events?listenerId=" + listenerId + "&success=Ticket+successfully+cancelled+and+refunded.";
         }
-
         return "redirect:/events?listenerId=" + listenerId + "&error=Ticket+not+found+or+unauthorized.";
     }
 
@@ -243,12 +240,6 @@ public class EcommerceController {
         return "cart";
     }
 
-    @PostMapping("/cart/remove")
-    public String removeFromCart(@RequestParam String cartItemId, @RequestParam String listenerId) {
-        d1Service.executeUpdateWithParams("DELETE FROM CART_ITEM WHERE CartItemID = ?", List.of(cartItemId));
-        return "redirect:/cart?listenerId=" + listenerId;
-    }
-
     @GetMapping("/cart/checkout")
     public String showCartCheckout(@RequestParam String listenerId, Model model) {
         String pSql = "SELECT c.Quantity, p.Price, p.Name FROM CART_ITEM c JOIN PRODUCT p ON c.ProductID = p.ProductID WHERE c.ListenerID = ?";
@@ -273,12 +264,15 @@ public class EcommerceController {
         }
 
         double feeTotal = 0;
-        if (!pItems.isEmpty()) feeTotal += 5.00; // Merch Shipping
-        if (!tItems.isEmpty()) feeTotal += 2.50; // Ticket Booking Fee
+        if (!pItems.isEmpty()) feeTotal += 5.00;
+        if (!tItems.isEmpty()) feeTotal += 2.50;
 
         double finalTotal = subtotal + feeTotal;
         String itemSummary = itemList.toString();
         if(itemSummary.endsWith(", ")) itemSummary = itemSummary.substring(0, itemSummary.length() - 2);
+
+        // Convert final total to smallest currency unit (cents) for Paystack
+        long paystackAmountInCents = Math.round(finalTotal * 100);
 
         model.addAttribute("listenerId", listenerId);
         model.addAttribute("itemSummary", itemSummary);
@@ -286,11 +280,16 @@ public class EcommerceController {
         model.addAttribute("feeTotal", String.format("%.2f", feeTotal));
         model.addAttribute("finalTotal", String.format("%.2f", finalTotal));
 
+        // Pass Paystack details to the frontend
+        model.addAttribute("paystackPublicKey", paystackPublicKey);
+        model.addAttribute("paystackAmount", paystackAmountInCents);
+
         return "cart-checkout";
     }
 
+    // Notice we added @RequestParam String paystackReference to grab the success ID!
     @PostMapping("/cart/processPayment")
-    public String processCartPayment(@RequestParam String listenerId, @RequestParam String email) {
+    public String processCartPayment(@RequestParam String listenerId, @RequestParam String email, @RequestParam(required = false) String paystackReference) {
 
         // 1. Fetch & Verify Merch Stock
         String pSql = "SELECT c.Quantity as CartQty, p.ProductID, p.Name, p.Price, p.Stock, a.Email AS ArtistEmail FROM CART_ITEM c JOIN PRODUCT p ON c.ProductID = p.ProductID JOIN ARTIST a ON p.ArtistID = a.ArtistID WHERE c.ListenerID = ?";
@@ -313,6 +312,11 @@ public class EcommerceController {
         String receiptId = "RCPT" + UUID.randomUUID().toString().substring(0, 7).toUpperCase();
         double subtotal = 0;
         StringBuilder receiptItems = new StringBuilder();
+
+        // Optional: Append the Paystack Reference to the receipt if it exists
+        if (paystackReference != null && !paystackReference.isEmpty()) {
+            receiptItems.append("Payment Ref: ").append(paystackReference).append("\n\n");
+        }
 
         // 3. Process Merch
         for(Map<String, Object> item : pItems) {
