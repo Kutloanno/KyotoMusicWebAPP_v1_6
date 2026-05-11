@@ -205,6 +205,15 @@ public class EcommerceController {
         return "redirect:/store?listenerId=" + listenerId + "&success=Added+to+cart!";
     }
 
+    @PostMapping("/cart/remove")
+    public String removeFromCart(@RequestParam String cartItemId, @RequestParam String listenerId) {
+        // Find the exact cart item and delete it from the Cloudflare database
+        d1Service.executeUpdateWithParams("DELETE FROM CART_ITEM WHERE CartItemID = ?", List.of(cartItemId));
+
+        // Refresh the cart page automatically
+        return "redirect:/cart?listenerId=" + listenerId + "&success=Item+removed";
+    }
+
     @PostMapping("/cart/addTicket")
     public String addTicketToCart(@RequestParam String eventId, @RequestParam String listenerId, @RequestParam int quantity) {
         String checkSql = "SELECT CartItemID, Quantity FROM CART_ITEM WHERE ListenerID = ? AND EventID = ?";
