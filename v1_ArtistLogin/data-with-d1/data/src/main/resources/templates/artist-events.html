@@ -2,6 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Events - Kyoto Music</title>
     <style>
         body { font-family: 'Inter', sans-serif; background-color: #0f172a; color: #f1f5f9; margin: 0; padding: 0; }
@@ -37,6 +38,33 @@
         .orders-table th, .orders-table td { padding: 12px 16px; text-align: left; border-bottom: 1px solid #1e293b; font-size: 0.88rem; }
         .orders-table th { color: #64748b; font-weight: 600; }
         .orders-table tr:hover td { background: #1e293b; }
+        /* ========================================= */
+        /* 📱 MOBILE & ☀️ LIGHT MODE ULTIMATE CSS    */
+        /* ========================================= */
+
+        /* Mobile Squeeze Fixes */
+        @media (max-width: 768px) {
+            .container { padding: 20px 15px; }
+            nav { flex-direction: column; gap: 15px; padding: 15px; text-align: center; }
+            nav div { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; align-items: center; }
+            .form-row, .form-row-3, .card-grid, .product-grid, .event-grid { grid-template-columns: 1fr; gap: 15px; }
+            .cart-item, .event-card, .ticket-item { flex-direction: column; align-items: flex-start; }
+            .event-card img, .product-card img { width: 100%; height: auto; aspect-ratio: 16/9; }
+            .t-right { width: 100%; display: flex; justify-content: space-between; align-items: center; margin-top: 15px; }
+        }
+
+        /* Light Mode Overrides */
+        body.light-mode { background-color: #f8fafc; color: #0f172a; }
+        body.light-mode nav { background-color: #ffffff; border-bottom: 1px solid #e2e8f0; color: #0f172a; }
+        body.light-mode nav a { color: #475569; }
+        body.light-mode nav a:hover { color: #1DB954; }
+        body.light-mode .product-card, body.light-mode .event-card, body.light-mode .cart-item, body.light-mode .cart-summary,
+        body.light-mode .form-panel, body.light-mode .item-card, body.light-mode .ticket-list { background-color: #ffffff; border-color: #cbd5e1; }
+        body.light-mode input, body.light-mode select, body.light-mode textarea { background-color: #f1f5f9; border-color: #cbd5e1; color: #0f172a; }
+        body.light-mode .p-desc, body.light-mode p, body.light-mode label { color: #64748b; }
+        body.light-mode .price, body.light-mode .p-price, body.light-mode .event-title, body.light-mode .item-title, body.light-mode .day { color: #0f172a; }
+        body.light-mode .date-box, body.light-mode .qty, body.light-mode .ticket-count, body.light-mode .event-date-box { background-color: #f1f5f9; border-color: #cbd5e1; }
+        body.light-mode .ticket-item { border-bottom-color: #cbd5e1; }
     </style>
 </head>
 <body>
