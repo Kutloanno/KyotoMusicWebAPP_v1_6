@@ -72,7 +72,7 @@
             </thead>
             <tbody>
             <tr th:each="row : ${reportData}">
-                <td th:each="column : ${reportData[0].keySet()}" th:text="${row[column] ?: 'N/A'}">Data point</td>
+                <td th:each="column : ${reportData[0].keySet()}" th:text="${row.get(column)}">Data point</td>
             </tr>
             </tbody>
         </table>
