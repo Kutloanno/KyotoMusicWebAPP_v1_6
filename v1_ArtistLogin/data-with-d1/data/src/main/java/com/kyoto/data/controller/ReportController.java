@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -26,19 +25,16 @@ public class ReportController {
     @Autowired
     private D1Service d1Service;
 
-    private List<Map<String, Object>> fetchReportData(String filterType, String customTable, String customMetric, String customOrder) throws Exception {
+    private List<Map<String, Object>> fetchReportData(String filterType) throws Exception {
         String sql;
 
         switch (filterType != null ? filterType : "topArtists") {
+            // ARTIST METRICS
             case "topArtists":
-                sql = "SELECT a.ArtistID, a.Name, a.Gender, COUNT(s.SongID) as TotalSongs, COALESCE(SUM(s.PlayCount), 0) as CumulativeStreams " +
-                        "FROM ARTIST a LEFT JOIN SONG s ON a.ArtistID = s.ArtistID " +
-                        "GROUP BY a.ArtistID, a.Name, a.Gender ORDER BY TotalSongs DESC";
+                sql = "SELECT a.ArtistID, a.Name, a.Gender, COUNT(s.SongID) as TotalSongs, COALESCE(SUM(s.PlayCount), 0) as CumulativeStreams FROM ARTIST a LEFT JOIN SONG s ON a.ArtistID = s.ArtistID GROUP BY a.ArtistID, a.Name, a.Gender ORDER BY TotalSongs DESC";
                 break;
             case "leastSongs":
-                sql = "SELECT a.ArtistID, a.Name, a.Gender, COUNT(s.SongID) as TotalSongs " +
-                        "FROM ARTIST a LEFT JOIN SONG s ON a.ArtistID = s.ArtistID " +
-                        "GROUP BY a.ArtistID, a.Name, a.Gender ORDER BY TotalSongs ASC";
+                sql = "SELECT a.ArtistID, a.Name, a.Gender, COUNT(s.SongID) as TotalSongs FROM ARTIST a LEFT JOIN SONG s ON a.ArtistID = s.ArtistID GROUP BY a.ArtistID, a.Name, a.Gender ORDER BY TotalSongs ASC";
                 break;
             case "maleArtists":
                 sql = "SELECT ArtistID, Name, DateAccountCreated, Email FROM ARTIST WHERE Gender = 'M' ORDER BY Name ASC";
@@ -46,18 +42,30 @@ public class ReportController {
             case "femaleArtists":
                 sql = "SELECT ArtistID, Name, DateAccountCreated, Email FROM ARTIST WHERE Gender = 'F' ORDER BY Name ASC";
                 break;
+            case "recentArtists":
+                sql = "SELECT ArtistID, Name, Gender, DateAccountCreated FROM ARTIST ORDER BY DateAccountCreated DESC";
+                break;
+
+            // SONG & CATALOG METRICS
             case "mostStreams":
-                sql = "SELECT s.SongID, s.Title, a.Name as Artist, g.GenreName, s.PlayCount " +
-                        "FROM SONG s LEFT JOIN ARTIST a ON s.ArtistID = a.ArtistID LEFT JOIN GENRE g ON s.GenreID = g.GenreID " +
-                        "ORDER BY s.PlayCount DESC";
+                sql = "SELECT s.SongID, s.Title, a.Name as Artist, g.GenreName, s.PlayCount FROM SONG s LEFT JOIN ARTIST a ON s.ArtistID = a.ArtistID LEFT JOIN GENRE g ON s.GenreID = g.GenreID ORDER BY s.PlayCount DESC";
                 break;
             case "leastStreams":
-                sql = "SELECT s.SongID, s.Title, a.Name as Artist, s.PlayCount FROM SONG s " +
-                        "LEFT JOIN ARTIST a ON s.ArtistID = a.ArtistID ORDER BY s.PlayCount ASC";
+                sql = "SELECT s.SongID, s.Title, a.Name as Artist, s.PlayCount FROM SONG s LEFT JOIN ARTIST a ON s.ArtistID = a.ArtistID ORDER BY s.PlayCount ASC";
                 break;
+            case "mostDownloads":
+                sql = "SELECT s.SongID, s.Title, a.Name as Artist, s.DownloadCount FROM SONG s LEFT JOIN ARTIST a ON s.ArtistID = a.ArtistID ORDER BY s.DownloadCount DESC";
+                break;
+            case "longestSongs":
+                sql = "SELECT s.SongID, s.Title, a.Name as Artist, s.Duration, g.GenreName FROM SONG s LEFT JOIN ARTIST a ON s.ArtistID = a.ArtistID LEFT JOIN GENRE g ON s.GenreID = g.GenreID ORDER BY s.Duration DESC";
+                break;
+            case "popularGenres":
+                sql = "SELECT g.GenreName, COUNT(s.SongID) as TotalTracks, COALESCE(SUM(s.PlayCount), 0) as AggregatePlays FROM GENRE g LEFT JOIN SONG s ON g.GenreID = s.GenreID GROUP BY g.GenreID, g.GenreName ORDER BY AggregatePlays DESC";
+                break;
+
+            // EVENT METRICS
             case "mostPopularEvent":
-                sql = "SELECT e.EventID, e.Title, a.Name as Headliner, e.Venue, e.TicketsSold, e.TotalTickets " +
-                        "FROM EVENT e LEFT JOIN ARTIST a ON e.ArtistID = a.ArtistID ORDER BY e.TicketsSold DESC";
+                sql = "SELECT e.EventID, e.Title, a.Name as Headliner, e.Venue, e.TicketsSold, e.TotalTickets FROM EVENT e LEFT JOIN ARTIST a ON e.ArtistID = a.ArtistID ORDER BY e.TicketsSold DESC";
                 break;
             case "mostEventRevenue":
                 sql = "SELECT Title, Venue, EventDate, TicketPrice, TicketsSold, (TicketsSold * TicketPrice) as GrossRevenue FROM EVENT ORDER BY GrossRevenue DESC";
@@ -65,43 +73,24 @@ public class ReportController {
             case "highestTicketPrice":
                 sql = "SELECT Title, Venue, EventDate, TicketPrice, TotalTickets FROM EVENT ORDER BY TicketPrice DESC";
                 break;
-            case "topSellingMerch":
-                sql = "SELECT p.ProductID, p.Name, a.Name as Artist, p.Price, SUM(o.Quantity) as UnitsSold, SUM(o.TotalAmount) as TotalRevenue " +
-                        "FROM PRODUCT_ORDER o LEFT JOIN PRODUCT p ON o.ProductID = p.ProductID LEFT JOIN ARTIST a ON p.ArtistID = a.ArtistID " +
-                        "GROUP BY p.ProductID, p.Name, a.Name, p.Price ORDER BY UnitsSold DESC";
-                break;
-            case "lowStockAlert":
-                sql = "SELECT p.ProductID, p.Name, a.Name as Artist, p.Category, p.Stock FROM PRODUCT p " +
-                        "LEFT JOIN ARTIST a ON p.ArtistID = a.ArtistID WHERE p.Stock < 10 ORDER BY p.Stock ASC";
-                break;
-            case "popularGenres":
-                sql = "SELECT g.GenreName, COUNT(s.SongID) as TotalTracks, COALESCE(SUM(s.PlayCount), 0) as AggregatePlays " +
-                        "FROM GENRE g LEFT JOIN SONG s ON g.GenreID = s.GenreID GROUP BY g.GenreID, g.GenreName ORDER BY AggregatePlays DESC";
+            case "unsoldEvents":
+                sql = "SELECT EventID, Title, Venue, TicketsSold, TotalTickets, TicketPrice FROM EVENT WHERE TicketsSold = 0 ORDER BY Title ASC";
                 break;
 
-            case "customBuilder":
-                // Completely safe mapping controls to handle the expressive query matrix configurations
-                if ("ARTIST".equalsIgnoreCase(customTable)) {
-                    sql = "SELECT ArtistID, Name, Gender, DateAccountCreated, Email FROM ARTIST ORDER BY " +
-                            ("DateAccountCreated".equalsIgnoreCase(customMetric) ? "DateAccountCreated " : "Name ") + customOrder;
-                } else if ("SONG".equalsIgnoreCase(customTable)) {
-                    String sortCol = "DownloadCount".equalsIgnoreCase(customMetric) ? "DownloadCount" :
-                            "Duration".equalsIgnoreCase(customMetric) ? "Duration" : "PlayCount";
-                    sql = "SELECT SongID, Title, Duration, PlayCount, DownloadCount FROM SONG ORDER BY " + sortCol + " " + customOrder;
-                } else if ("EVENT".equalsIgnoreCase(customTable)) {
-                    String sortCol = "TicketPrice".equalsIgnoreCase(customMetric) ? "TicketPrice" :
-                            "TotalTickets".equalsIgnoreCase(customMetric) ? "TotalTickets" : "TicketsSold";
-                    sql = "SELECT EventID, Title, Venue, EventDate, TicketPrice, TotalTickets, TicketsSold FROM EVENT ORDER BY " + sortCol + " " + customOrder;
-                } else if ("PRODUCT".equalsIgnoreCase(customTable)) {
-                    String sortCol = "Stock".equalsIgnoreCase(customMetric) ? "Stock" : "Price";
-                    sql = "SELECT ProductID, Name, Category, Price, Stock FROM PRODUCT ORDER BY " + sortCol + " " + customOrder;
-                } else if ("LISTENER".equalsIgnoreCase(customTable)) {
-                    sql = "SELECT ListenerID, Name, Gender FROM LISTENER ORDER BY Name " + customOrder;
-                } else if ("TICKET_ORDER".equalsIgnoreCase(customTable)) {
-                    sql = "SELECT OrderID, EventID, ListenerID, Quantity, TotalAmount FROM TICKET_ORDER ORDER BY TotalAmount " + customOrder;
-                } else {
-                    sql = "SELECT OrderID, ProductID, ListenerID, Quantity, TotalAmount FROM PRODUCT_ORDER ORDER BY TotalAmount " + customOrder;
-                }
+            // MERCH & COMMERCE METRICS
+            case "topSellingMerch":
+                sql = "SELECT p.ProductID, p.Name, a.Name as Artist, p.Price, SUM(o.Quantity) as UnitsSold, SUM(o.TotalAmount) as TotalRevenue FROM PRODUCT_ORDER o LEFT JOIN PRODUCT p ON o.ProductID = p.ProductID LEFT JOIN ARTIST a ON p.ArtistID = a.ArtistID GROUP BY p.ProductID, p.Name, a.Name, p.Price ORDER BY UnitsSold DESC";
+                break;
+            case "lowStockAlert":
+                sql = "SELECT p.ProductID, p.Name, a.Name as Artist, p.Category, p.Stock FROM PRODUCT p LEFT JOIN ARTIST a ON p.ArtistID = a.ArtistID WHERE p.Stock < 10 ORDER BY p.Stock ASC";
+                break;
+            case "topGrossingTicketOrders":
+                sql = "SELECT t.OrderID, e.Title as Event, l.Name as Listener, t.Quantity, t.TotalAmount, t.PurchasedAt FROM TICKET_ORDER t LEFT JOIN EVENT e ON t.EventID = e.EventID LEFT JOIN LISTENER l ON t.ListenerID = l.ListenerID ORDER BY t.TotalAmount DESC";
+                break;
+
+            // LISTENER METRICS
+            case "allListeners":
+                sql = "SELECT ListenerID, Name, Gender FROM LISTENER ORDER BY Name ASC";
                 break;
 
             default:
@@ -113,24 +102,18 @@ public class ReportController {
     @GetMapping("/admin/reports")
     public String reportPage(@RequestParam String adminId,
                              @RequestParam(defaultValue = "topArtists") String filterType,
-                             @RequestParam(required = false, defaultValue = "SONG") String customTable,
-                             @RequestParam(required = false, defaultValue = "PlayCount") String customMetric,
-                             @RequestParam(required = false, defaultValue = "DESC") String customOrder,
                              Model model) {
         model.addAttribute("adminId", adminId);
         try {
             var admin = d1Service.getResults(d1Service.executeQueryWithParams("SELECT Name FROM ADMIN WHERE AdminID = ?", List.of(adminId)));
             model.addAttribute("adminName", admin.isEmpty() ? "Admin" : admin.get(0).get("Name"));
 
-            List<Map<String, Object>> reportData = fetchReportData(filterType, customTable, customMetric, customOrder);
+            List<Map<String, Object>> reportData = fetchReportData(filterType);
             model.addAttribute("filterType", filterType);
-            model.addAttribute("customTable", customTable);
-            model.addAttribute("customMetric", customMetric);
-            model.addAttribute("customOrder", customOrder);
             model.addAttribute("reportData", reportData);
             return "adminReports";
         } catch (Exception e) {
-            model.addAttribute("errorMessage", "Error evaluating table target matrix column pairing: " + e.getMessage());
+            model.addAttribute("errorMessage", "Error fetching report: " + e.getMessage());
             return "adminReportError";
         }
     }
@@ -138,13 +121,10 @@ public class ReportController {
     @GetMapping("/admin/reports/download")
     public ResponseEntity<?> downloadReport(@RequestParam String adminId,
                                             @RequestParam String filterType,
-                                            @RequestParam String format,
-                                            @RequestParam(required = false) String customTable,
-                                            @RequestParam(required = false) String customMetric,
-                                            @RequestParam(required = false) String customOrder) throws IOException {
+                                            @RequestParam String format) throws IOException {
         List<Map<String, Object>> data;
         try {
-            data = fetchReportData(filterType, customTable, customMetric, customOrder);
+            data = fetchReportData(filterType);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Engine configuration error: " + e.getMessage());
         }
