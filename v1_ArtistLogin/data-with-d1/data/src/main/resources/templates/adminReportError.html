@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Kyoto Reports - Engine Exception</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: #f1f5f9; margin: 0; display: flex; align-items: center; justify-content: center; height: 100vh; }
+        .error-card { background: white; padding: 40px; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); max-width: 550px; text-align: center; border-top: 4px solid #ef4444; }
+        h1 { color: #1e293b; margin-top: 0; font-size: 1.8rem; }
+        p { color: #64748b; font-size: 1rem; line-height: 1.6; }
+        .code-box { background: #f8fafc; border: 1px solid #e2e8f0; padding: 12px; border-radius: 6px; font-family: monospace; font-size: 0.85rem; color: #ef4444; text-align: left; margin: 20px 0; overflow-x: auto; }
+        .btn-back { display: inline-block; background: #1e293b; color: white; text-decoration: none; padding: 10px 20px; border-radius: 6px; font-weight: bold; font-size: 0.9rem; transition: opacity 0.2s; }
+        .btn-back:hover { opacity: 0.9; }
+    </style>
+</head>
+<body>
+
+<div class="error-card">
+    <div style="font-size: 3rem; margin-bottom: 10px;">⚠️</div>
+    <h1>Invalid Report Combination</h1>
+    <p>The system could not compile your custom layout. This happens when a selected metric does not exist inside your chosen target database table.</p>
+
+    <div class="code-box">
+        <strong>Engine Diagnostics:</strong><br>
+        <span th:text="${errorMessage}">Error description details here.</span>
+    </div>
+
+    <a th:href="@{/admin/reports(adminId=${adminId})}" class="btn-back">← Return to Reporting Center</a>
+</div>
+
+</body>
+</html>

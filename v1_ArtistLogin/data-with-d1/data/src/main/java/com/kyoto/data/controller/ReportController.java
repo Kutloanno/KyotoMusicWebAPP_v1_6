@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -25,7 +26,7 @@ public class ReportController {
     @Autowired
     private D1Service d1Service;
 
-    private List<Map<String, Object>> fetchReportData(String filterType, String customTable, String customMetric, String customOrder) {
+    private List<Map<String, Object>> fetchReportData(String filterType, String customTable, String customMetric, String customOrder) throws Exception {
         String sql;
 
         switch (filterType != null ? filterType : "topArtists") {
@@ -79,26 +80,27 @@ public class ReportController {
                 break;
 
             case "customBuilder":
-                // Sanitize and guard manual SQL building vectors cleanly
-                String target = "ARTIST".equalsIgnoreCase(customTable) ? "ARTIST" :
-                        "SONG".equalsIgnoreCase(customTable) ? "SONG" :
-                                "EVENT".equalsIgnoreCase(customTable) ? "EVENT" : "PRODUCT";
-
-                String metric = "PlayCount".equalsIgnoreCase(customMetric) ? "PlayCount" :
-                        "DownloadCount".equalsIgnoreCase(customMetric) ? "DownloadCount" :
-                                "TicketsSold".equalsIgnoreCase(customMetric) ? "TicketsSold" :
-                                        "Stock".equalsIgnoreCase(customMetric) ? "Stock" : "Price";
-
-                String ordering = "ASC".equalsIgnoreCase(customOrder) ? "ASC" : "DESC";
-
-                if ("ARTIST".equals(target)) {
-                    sql = "SELECT ArtistID, Name, Gender, DateAccountCreated FROM ARTIST ORDER BY Name " + ordering;
-                } else if ("SONG".equals(target)) {
-                    sql = "SELECT SongID, Title, PlayCount, DownloadCount, Duration FROM SONG ORDER BY " + metric + " " + ordering;
-                } else if ("EVENT".equals(target)) {
-                    sql = "SELECT EventID, Title, Venue, EventDate, TicketsSold, TicketPrice FROM EVENT ORDER BY " + metric + " " + ordering;
+                // Completely safe mapping controls to handle the expressive query matrix configurations
+                if ("ARTIST".equalsIgnoreCase(customTable)) {
+                    sql = "SELECT ArtistID, Name, Gender, DateAccountCreated, Email FROM ARTIST ORDER BY " +
+                            ("DateAccountCreated".equalsIgnoreCase(customMetric) ? "DateAccountCreated " : "Name ") + customOrder;
+                } else if ("SONG".equalsIgnoreCase(customTable)) {
+                    String sortCol = "DownloadCount".equalsIgnoreCase(customMetric) ? "DownloadCount" :
+                            "Duration".equalsIgnoreCase(customMetric) ? "Duration" : "PlayCount";
+                    sql = "SELECT SongID, Title, Duration, PlayCount, DownloadCount FROM SONG ORDER BY " + sortCol + " " + customOrder;
+                } else if ("EVENT".equalsIgnoreCase(customTable)) {
+                    String sortCol = "TicketPrice".equalsIgnoreCase(customMetric) ? "TicketPrice" :
+                            "TotalTickets".equalsIgnoreCase(customMetric) ? "TotalTickets" : "TicketsSold";
+                    sql = "SELECT EventID, Title, Venue, EventDate, TicketPrice, TotalTickets, TicketsSold FROM EVENT ORDER BY " + sortCol + " " + customOrder;
+                } else if ("PRODUCT".equalsIgnoreCase(customTable)) {
+                    String sortCol = "Stock".equalsIgnoreCase(customMetric) ? "Stock" : "Price";
+                    sql = "SELECT ProductID, Name, Category, Price, Stock FROM PRODUCT ORDER BY " + sortCol + " " + customOrder;
+                } else if ("LISTENER".equalsIgnoreCase(customTable)) {
+                    sql = "SELECT ListenerID, Name, Gender FROM LISTENER ORDER BY Name " + customOrder;
+                } else if ("TICKET_ORDER".equalsIgnoreCase(customTable)) {
+                    sql = "SELECT OrderID, EventID, ListenerID, Quantity, TotalAmount FROM TICKET_ORDER ORDER BY TotalAmount " + customOrder;
                 } else {
-                    sql = "SELECT ProductID, Name, Category, Price, Stock FROM PRODUCT ORDER BY " + metric + " " + ordering;
+                    sql = "SELECT OrderID, ProductID, ListenerID, Quantity, TotalAmount FROM PRODUCT_ORDER ORDER BY TotalAmount " + customOrder;
                 }
                 break;
 
@@ -115,36 +117,47 @@ public class ReportController {
                              @RequestParam(required = false, defaultValue = "PlayCount") String customMetric,
                              @RequestParam(required = false, defaultValue = "DESC") String customOrder,
                              Model model) {
-        var admin = d1Service.getResults(d1Service.executeQueryWithParams("SELECT Name FROM ADMIN WHERE AdminID = ?", List.of(adminId)));
-        List<Map<String, Object>> reportData = fetchReportData(filterType, customTable, customMetric, customOrder);
-
-        model.addAttribute("adminName", admin.get(0).get("Name"));
         model.addAttribute("adminId", adminId);
-        model.addAttribute("filterType", filterType);
-        model.addAttribute("customTable", customTable);
-        model.addAttribute("customMetric", customMetric);
-        model.addAttribute("customOrder", customOrder);
-        model.addAttribute("reportData", reportData);
+        try {
+            var admin = d1Service.getResults(d1Service.executeQueryWithParams("SELECT Name FROM ADMIN WHERE AdminID = ?", List.of(adminId)));
+            model.addAttribute("adminName", admin.isEmpty() ? "Admin" : admin.get(0).get("Name"));
 
-        return "adminReports";
+            List<Map<String, Object>> reportData = fetchReportData(filterType, customTable, customMetric, customOrder);
+            model.addAttribute("filterType", filterType);
+            model.addAttribute("customTable", customTable);
+            model.addAttribute("customMetric", customMetric);
+            model.addAttribute("customOrder", customOrder);
+            model.addAttribute("reportData", reportData);
+            return "adminReports";
+        } catch (Exception e) {
+            model.addAttribute("errorMessage", "Error evaluating table target matrix column pairing: " + e.getMessage());
+            return "adminReportError";
+        }
     }
 
     @GetMapping("/admin/reports/download")
-    public ResponseEntity<byte[]> downloadReport(@RequestParam String filterType,
-                                                 @RequestParam String format,
-                                                 @RequestParam(required = false) String customTable,
-                                                 @RequestParam(required = false) String customMetric,
-                                                 @RequestParam(required = false) String customOrder) throws IOException {
-        List<Map<String, Object>> data = fetchReportData(filterType, customTable, customMetric, customOrder);
+    public ResponseEntity<?> downloadReport(@RequestParam String adminId,
+                                            @RequestParam String filterType,
+                                            @RequestParam String format,
+                                            @RequestParam(required = false) String customTable,
+                                            @RequestParam(required = false) String customMetric,
+                                            @RequestParam(required = false) String customOrder) throws IOException {
+        List<Map<String, Object>> data;
+        try {
+            data = fetchReportData(filterType, customTable, customMetric, customOrder);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Engine configuration error: " + e.getMessage());
+        }
+
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         String filename = "Kyoto_" + filterType + "_Report";
 
         if ("pdf".equalsIgnoreCase(format)) {
-            com.lowagie.text.Document document = new com.lowagie.text.Document(com.lowagie.text.PageSize.A4);
+            com.lowagie.text.Document document = new com.lowagie.text.Document(com.lowagie.text.PageSize.A4.rotate());
             com.lowagie.text.pdf.PdfWriter.getInstance(document, out);
             document.open();
-            document.add(new Paragraph("Kyoto Music Platform - Management Report", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 18)));
-            document.add(new Paragraph("Filter Scope: " + filterType));
+            document.add(new Paragraph("Kyoto Music Platform - Management Report", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 16)));
+            document.add(new Paragraph("Filter Configuration Type: " + filterType));
             document.add(new Paragraph(" "));
 
             if (!data.isEmpty()) {
@@ -163,7 +176,7 @@ public class ReportController {
             XWPFDocument document = new XWPFDocument();
             XWPFParagraph title = document.createParagraph();
             XWPFRun run = title.createRun();
-            run.setText("Kyoto Music Platform - Management Report: " + filterType);
+            run.setText("Kyoto Music Platform - Management Report Summary: " + filterType);
             run.setBold(true);
 
             if (!data.isEmpty()) {
