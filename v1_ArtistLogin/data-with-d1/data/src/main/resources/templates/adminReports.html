@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kyoto Admin - Report Analytics</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: #f1f5f9; margin: 0; }
+        .sidebar { width: 250px; background: #1e293b; color: white; height: 100vh; position: fixed; padding: 20px; }
+        .sidebar p { margin: 10px 0; font-size: 0.95rem; }
+        .sidebar a { color: #94a3b8; text-decoration: none; font-size: 0.9rem; display: block; margin-top: 15px; }
+
+        .main { margin-left: 280px; padding: 30px; }
+
+        .form-box { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); margin-bottom: 20px; }
+        select { padding: 8px; border: 1px solid #e2e8f0; border-radius: 4px; font-size: 0.95rem; }
+
+        .btn-submit { background: #1e293b; color: white; padding: 8px 15px; border-radius: 4px; border: none; cursor: pointer; font-weight: 500; }
+        .btn-download { text-decoration: none; display: inline-block; padding: 8px 15px; border-radius: 4px; font-weight: bold; font-size: 0.9rem; margin-left: 10px; color: white; transition: opacity 0.2s; }
+        .btn-download:hover, .btn-submit:hover { opacity: 0.9; }
+
+        .btn-pdf { background: #ef4444; }
+        .btn-docx { background: #0ea5e9; }
+
+        table { width: 100%; background: white; border-collapse: collapse; border-radius: 8px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.1); margin-top: 20px; }
+        th { background: #f8fafc; padding: 15px; text-align: left; color: #64748b; text-transform: capitalize; border-bottom: 2px solid #e2e8f0; }
+        td { padding: 15px; border-top: 1px solid #e2e8f0; color: #334155; }
+        .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+    </style>
+</head>
+<body>
+
+<div class="sidebar">
+    <h2>Kyoto Admin</h2>
+    <hr style="border: 0.5px solid #334155; margin: 20px 0;">
+    <p>Logged in as: <br><strong th:text="${adminName}">Admin</strong></p>
+    <a th:href="@{/adminDashboard(adminId=${adminId})}" style="font-weight: bold; color: #ffffff; background: #334155; padding: 8px 12px; border-radius: 4px; margin-top: 25px; text-align: center;">← Back to Dashboard</a>
+    <a href="/adminLogin">Logout</a>
+</div>
+
+<div class="main">
+    <div class="section-header">
+        <h2>System Reporting Engine</h2>
+    </div>
+
+    <div class="form-box">
+        <h3>Filter & Export Criteria</h3>
+        <form th:action="@{/admin/reports}" method="get" style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
+            <input type="hidden" name="adminId" th:value="${adminId}">
+
+            <select name="filterType">
+                <option value="topArtists" th:selected="${filterType == 'topArtists'}">Artists by Upload Volume</option>
+                <option value="premiumListeners" th:selected="${filterType == 'premiumListeners'}">Active Premium Subscriptions</option>
+                <option value="songCatalog" th:selected="${filterType == 'songCatalog'}">Songs Catalog by Stream Ranking</option>
+            </select>
+
+            <button type="submit" class="btn-submit">Generate Preview</button>
+
+            <div style="margin-left: auto;">
+                <a th:href="@{/admin/reports/download(filterType=${filterType}, format='pdf')}" class="btn-download btn-pdf">Download PDF</a>
+                <a th:href="@{/admin/reports/download(filterType=${filterType}, format='docx')}" class="btn-download btn-docx">Download Word</a>
+            </div>
+        </form>
+    </div>
+
+    <div th:if="${not #lists.isEmpty(reportData)}">
+        <table>
+            <thead>
+            <tr>
+                <th th:each="column : ${reportData[0].keySet()}" th:text="${column}">Metric Column</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="row : ${reportData}">
+                <td th:each="column : ${reportData[0].keySet()}" th:text="${row[column] ?: 'N/A'}">Data point</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div th:if="${#lists.isEmpty(reportData)}" class="form-box" style="text-align: center; color: #64748b; padding: 40px 20px;">
+        No active data records matched the selected query parameters.
+    </div>
+</div>
+
+</body>
+</html>

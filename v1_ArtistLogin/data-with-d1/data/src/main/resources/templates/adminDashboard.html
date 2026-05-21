@@ -63,6 +63,12 @@
     <h2>Kyoto Admin</h2>
     <hr style="border: 0.5px solid #334155; margin: 20px 0;">
     <p>Logged in as: <br><strong th:text="${adminName}">Admin</strong></p>
+
+    <a th:href="@{/admin/reports(adminId=${adminId})}"
+       style="color: #ffffff; text-decoration: none; font-size: 0.95rem; font-weight: bold; background: #334155; padding: 10px; border-radius: 4px; display: block; text-align: center; margin-top: 20px; margin-bottom: 10px; border: 1px solid #475569;">
+        📊 Open Report Center
+    </a>
+
     <a href="/adminLogin" style="color: #94a3b8; text-decoration: none; font-size: 0.9rem;">Logout</a>
 </div>
 
