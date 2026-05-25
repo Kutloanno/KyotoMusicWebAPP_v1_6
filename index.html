@@ -1,0 +1,915 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Moletse K. | Software Architect</title>
+  <meta name="description" content="Portfolio of Moletse K., Software Architect. Minimalist engineering and platform design.">
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><circle cx=%2252%22 cy=%2252%22 r=%2240%22 fill=%22%233b82f6%22 opacity=%220.15%22/><circle cx=%2250%22 cy=%2250%22 r=%2240%22 fill=%22none%22 stroke=%22%233b82f6%22 stroke-width=%228%22/></svg>">
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="src/style.css">
+  <!-- Custom Logic (optional, lightweight load animations) -->
+  <script defer src="src/main.js"></script>
+</head>
+<body>
+
+  <!-- Sleek Minimalist Theme Toggle Button -->
+  <button class="theme-toggle" id="theme-toggle" aria-label="Toggle Theme">
+    <svg class="sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="4"/>
+      <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>
+    </svg>
+    <svg class="moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>
+    </svg>
+  </button>
+
+  <!-- Subtle Dotted Grid Background -->
+  <div class="dotted-background"></div>
+  <div class="radial-overlay"></div>
+
+  <!-- Main Responsive Container -->
+  <main class="main-container">
+    
+    <!-- Centered friendly heading above the icons -->
+    <h2 class="workshop-heading">Welcome to my digital workshop :)</h2>
+
+    <!-- Row of 3 sleek modern rounded square App Icons -->
+    <div class="icon-row">
+      
+      <!-- Icon 1: Fret.io (Blue-Violet) -->
+      <div class="app-icon icon-arch" aria-label="Fret.io">
+        <!-- 3D Stage Cards Stacked Behind -->
+        <div class="placeholder-card fret-card fret-card-1">
+          <img src="assests/fret-screen1.jpg" alt="Fret.io Screenshot 1" class="fret-screen-img">
+        </div>
+        <div class="placeholder-card fret-card fret-card-2">
+          <img src="assests/fret-screen2.jpg" alt="Fret.io Screenshot 2" class="fret-screen-img">
+        </div>
+
+        <img src="assests/fret-icon.png" alt="Fret.io" class="fret-icon-img">
+
+        <!-- Hover Reveal Info Container -->
+        <div class="hover-info">
+          <h3 class="hover-title">Fret.io</h3>
+          <p class="hover-desc">A sleek toolkit for the modern guitarist. An android application engineered for interactive scale analysis and dynamic chord mapping.</p>
+          <a href="#" class="hover-button" id="fret-trigger">View Project</a>
+        </div>
+        <span class="icon-label">Fret.io</span>
+      </div>
+
+      <!-- Icon 2: Kyoto Music (Emerald-Cyan) -->
+      <div class="app-icon icon-mobile" aria-label="Kyoto Music">
+        <!-- 3D Stage Cards Stacked Behind -->
+        <div class="placeholder-card kyoto-card kyoto-card-1">
+          <img src="assests/kyoto-screen1.jpg" alt="Kyoto Music Screenshot 1" class="kyoto-screen-img">
+        </div>
+        <div class="placeholder-card kyoto-card kyoto-card-2">
+          <img src="assests/kyoto-screen2.jpg" alt="Kyoto Music Screenshot 2" class="kyoto-screen-img">
+        </div>
+
+        <img src="assests/kyoto-icon.jpg" alt="Kyoto Music" class="kyoto-icon-img">
+
+        <!-- Hover Reveal Info Container -->
+        <div class="hover-info">
+          <h3 class="hover-title">Kyoto Music</h3>
+          <p class="hover-desc">A full-stack audio experience. Seamless streaming, dynamic routing, and a front-end that looks as crisp as a freshly tuned Stratocaster.</p>
+          <a href="#" class="hover-button" id="kyoto-trigger">View Project</a>
+        </div>
+        <span class="icon-label">Kyoto Music</span>
+      </div>
+
+      <!-- Icon 3: About Me (Pink-Violet) -->
+      <div class="app-icon icon-firmware" aria-label="About Me Profile Pop-out">
+        <!-- 3D Media Pop-out (acting as a free-floating cutout sticker) -->
+        <div class="placeholder-card card-aboutme">
+          <div class="about-me-media-sticker">
+            <div class="sticker-badge top-left">↑ Export SVG</div>
+            <div class="sticker-badge top-right">Should designers code?</div>
+            <div class="sticker-badge smiley">😊</div>
+            <div class="sticker-badge bottom-left">Detach component</div>
+            <video class="about-me-video-sticker" autoplay loop muted playsinline>
+              <source src="assests/me-popout.mp4" type="video/mp4">
+              <img src="assests/me-popout.jpg" alt="Kutloano Popout">
+            </video>
+          </div>
+        </div>
+
+        <img src="assests/me-icon-transparent.jpg" alt="About Me" class="about-me-icon-img">
+
+        <!-- Hover Reveal Info Container -->
+        <div class="hover-info">
+          <h3 class="hover-title">Kutloano</h3>
+          <p class="bio-text-handwritten">Crafting seamless Web and Android apps is my bread and butter. When I'm not deep in Kotlin or Java, I'm usually dialing in the hours on my guitar. I'm here to build cool stuff.</p>
+          <a href="#" class="hover-button">Read about me</a>
+        </div>
+        <span class="icon-label">About Me</span>
+      </div>
+
+    </div>
+
+    <!-- Intro Text Paragraph -->
+    <div class="intro-container">
+      <p class="intro-text">
+        Hello! I'm Kutloano, a Computer Science student specializing in native Android experiences and robust full-stack web platforms. I spend my time optimizing system topologies, writing complex object-oriented logic, and pretending my code compiles on the first try.
+      </p>
+    </div>
+
+  </main>
+
+  <!-- Expanding Interactive Footer -->
+  <footer class="expanding-footer" aria-label="Interactive Directory Panel">
+    <!-- The 3 dots shown in default state -->
+    <div class="footer-trigger">
+      <span class="dot"></span>
+      <span class="dot"></span>
+      <span class="dot"></span>
+    </div>
+    
+    <!-- The expanded content shown on hover -->
+    <div class="footer-content">
+      <div class="social-row">
+        <a href="mailto:hello@domain.com" class="social-item">
+          <div class="social-icon reach-out">
+            <!-- Chat bubble SVG -->
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 9h12v2H6V9zm8 5H6v-2h8v2zm4-6H6V6h12v2z"/>
+            </svg>
+          </div>
+          <span class="social-label">Reach out</span>
+        </a>
+        
+        <a href="https://wa.me/" target="_blank" rel="noopener" class="social-item">
+          <div class="social-icon whatsapp">
+            <!-- WhatsApp SVG -->
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12.012 2c-5.506 0-9.989 4.478-9.99 9.984a9.96 9.96 0 0 0 1.333 4.982L2 22l5.233-1.371a9.936 9.936 0 0 0 4.779 1.22h.005c5.505 0 9.988-4.478 9.989-9.985C22.007 6.476 17.519 2 12.012 2zm5.727 13.916c-.237.669-1.385 1.282-1.902 1.353-.457.063-.95.102-2.928-.682-2.528-1.002-4.148-3.578-4.274-3.744-.127-.166-1.03-1.369-1.03-2.613 0-1.243.65-1.854.88-2.102.23-.248.503-.31.67-.31h.478c.153 0 .362-.058.567.447.21.517.718 1.75.78 1.884.062.134.103.29.01.478-.093.188-.14.306-.28.468-.14.162-.294.362-.42.486-.14.138-.287.288-.124.568.162.28 1.085 1.791 2.327 2.894 1.597 1.42 2.942 1.863 3.357 2.035.414.172.656.14.9-.14.244-.28 1.04-1.207 1.317-1.62.277-.414.553-.344.93-.204.378.14 2.392 1.127 2.494 1.178.102.052.17.25.127.464z"/>
+            </svg>
+          </div>
+          <span class="social-label">WhatsApp</span>
+        </a>
+        
+        <a href="https://instagram.com" target="_blank" rel="noopener" class="social-item">
+          <div class="social-icon instagram">
+            <!-- Instagram SVG -->
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+              <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+              <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+            </svg>
+          </div>
+          <span class="social-label">Instagram</span>
+        </a>
+      </div>
+      <div class="footer-copyright">All Right Reserved</div>
+    </div>
+  </footer>
+
+  <!-- Dedicated Fret.io Showcase Modal Overlay -->
+  <div class="project-modal" id="fret-modal">
+    <!-- Close Button -->
+    <button class="back-button" id="fret-modal-close" aria-label="Close Modal">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="18" y1="6" x2="6" y2="18"></line>
+        <line x1="6" y1="6" x2="18" y2="18"></line>
+      </svg>
+    </button>
+
+    <!-- Showcase Centered Layout Wrapper -->
+    <div class="showcase-container">
+      <!-- Top Horizontally Scrolling Gallery -->
+      <section class="gallery-scroll-viewport" aria-label="Fret.io Screenshot Gallery">
+        <div class="gallery-scroll">
+          <img src="assests/fret-screen1.jpg" alt="Fret.io Android Application Screenshot 1">
+          <img src="assests/fret-screen2.jpg" alt="Fret.io Android Application Screenshot 2">
+          <img src="assests/fret-screen1.jpg" alt="Fret.io Chord Analyzer Interface" style="filter: hue-rotate(30deg);">
+          <img src="assests/fret-screen2.jpg" alt="Fret.io Fretboard Speedrun Game" style="filter: hue-rotate(60deg);">
+          <img src="assests/fret-screen1.jpg" alt="Fret.io Theory Arcade mode" style="filter: hue-rotate(90deg);">
+          <img src="assests/fret-screen2.jpg" alt="Fret.io Scale Analysis tool" style="filter: hue-rotate(120deg);">
+          <img src="assests/fret-screen1.jpg" alt="Fret.io Practice Session UI" style="filter: hue-rotate(150deg);">
+        </div>
+      </section>
+
+      <!-- Skeletal Scroll Indicator / Progress Track -->
+      <div class="gallery-progress-track">
+        <div class="gallery-progress-bar"></div>
+      </div>
+
+      <!-- Project Header Block -->
+      <header class="showcase-header">
+        <div class="showcase-header-left">
+          <!-- App Icon -->
+          <img src="assests/fret-icon.png" alt="Fret.io App Icon" class="showcase-icon">
+          <h2 class="showcase-title">Fret.io</h2>
+        </div>
+        <!-- Pill shaped outline project launch button -->
+        <a href="https://github.com/Kutloanno/Fret.io" target="_blank" rel="noopener noreferrer" class="showcase-button">
+          <span>View Source</span>
+          <!-- GitHub SVG Link icon -->
+          <svg viewBox="0 0 24 24" style="fill: currentColor; stroke: none; width: 14px; height: 14px;">
+            <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/>
+          </svg>
+        </a>
+      </header>
+
+      <!-- App Description Text -->
+      <article class="showcase-desc">
+        <p>
+          Fret.io is an interactive, low-latency utility designed specifically for modern stringed instrumentalists. Built to decode complex fingerings, map out alternative modal scales, and provide dynamic chord visualization, the platform helps musicians explore system topologies of the fretboard directly on their Android devices. Focused on high-performance rendering and a minimal cognitive load user interface.
+        </p>
+      </article>
+
+      <!-- Tech Stack Pills container -->
+      <footer class="tech-container">
+        <span class="tech-pill">
+          <img src="https://cdn.simpleicons.org/kotlin/7F52FF" alt="Kotlin logo">
+          <span>Kotlin</span>
+        </span>
+        <span class="tech-pill">
+          <img src="https://cdn.simpleicons.org/jetpackcompose/4285F4" alt="Jetpack Compose logo">
+          <span>Jetpack Compose</span>
+        </span>
+        <span class="tech-pill">
+          <img src="https://cdn.simpleicons.org/android/3DDC84" alt="Android logo">
+          <span>Android SDK</span>
+        </span>
+        <span class="tech-pill">
+          <img src="https://cdn.simpleicons.org/android/3DDC84" alt="Android logo">
+          <span>AudioTrack API</span>
+        </span>
+        <span class="tech-pill">
+          <img src="https://cdn.simpleicons.org/android/3DDC84" alt="Android logo">
+          <span>AudioRecord API</span>
+        </span>
+        <span class="tech-pill">
+          <img src="https://cdn.simpleicons.org/android/3DDC84" alt="Android logo">
+          <span>YIN Pitch Detection</span>
+        </span>
+      </footer>
+
+      <!-- Massive Bottom Showcase Video Demo -->
+      <section class="massive-video-container">
+        <video class="massive-showcase-video" autoplay loop muted playsinline>
+          <source src="assests/Fret.io hand.mp4" type="video/mp4">
+          Your browser does not support the video tag.
+        </video>
+      </section>
+
+      <!-- Interview Q&A Sections -->
+      <div class="qna-container">
+        <!-- Section 1: What is it? -->
+        <div class="qna-section">
+          <div class="qna-row question">
+            <img src="assests/fret-icon.png" alt="Fret.io App Icon" class="qna-avatar app-logo">
+            <div class="qna-content">
+              <h4>What's Fret.io and what's so cool about it?</h4>
+            </div>
+          </div>
+          <div class="qna-row answer">
+            <img src="assests/me-icon-transparent.jpg" alt="About Me Profile Icon" class="qna-avatar profile-pic">
+            <div class="qna-content">
+              <p>Fret.io is a native Android utility for stringed instrumentalists. It sits somewhere between a real-time analyzer and a digital practice room.</p>
+              <p>I wanted a tool that didn't just spit out static tabs, but actually decoded complex fingerings and mapped out modal scales interactively. It's focused heavily on high-performance rendering and keeping cognitive load to an absolute minimum while you're holding an instrument.</p>
+              <p>Everything runs locally on the device to ensure zero-latency feedback. No servers, no lag. Just you, the fretboard, and immediate pitch detection.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 2: Under the Hood -->
+        <div class="qna-section">
+          <div class="qna-row question">
+            <img src="assests/fret-icon.png" alt="Fret.io App Icon" class="qna-avatar app-logo">
+            <div class="qna-content">
+              <h4>What's under Fret.io's hood? Which technologies were used and why?</h4>
+            </div>
+          </div>
+          <div class="qna-row answer">
+            <img src="assests/me-icon-transparent.jpg" alt="About Me Profile Icon" class="qna-avatar profile-pic">
+            <div class="qna-content">
+              <p>It’s built entirely in Kotlin. The UI is driven by Jetpack Compose for that crisp, declarative state management. For the real-time audio processing, I had to drop down into the native Android SDK to interface directly with the device's hardware.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Vertical Tool Stack -->
+      <div class="tool-cards-list">
+        <!-- Card 1: Kotlin -->
+        <div class="tool-card">
+          <div class="tool-card-icon">
+            <img src="https://cdn.simpleicons.org/kotlin/7F52FF" alt="Kotlin logo">
+          </div>
+          <div class="tool-card-info">
+            <span class="tool-card-name">Kotlin</span>
+            <span class="tool-card-desc">Primary programming language</span>
+          </div>
+        </div>
+
+        <!-- Card 2: Jetpack Compose -->
+        <div class="tool-card">
+          <div class="tool-card-icon">
+            <img src="https://cdn.simpleicons.org/jetpackcompose/4285F4" alt="Jetpack Compose logo">
+          </div>
+          <div class="tool-card-info">
+            <span class="tool-card-name">Jetpack Compose</span>
+            <span class="tool-card-desc">Declarative UI framework</span>
+          </div>
+        </div>
+
+        <!-- Card 3: Android SDK -->
+        <div class="tool-card">
+          <div class="tool-card-icon">
+            <img src="https://cdn.simpleicons.org/android/3DDC84" alt="Android logo">
+          </div>
+          <div class="tool-card-info">
+            <span class="tool-card-name">Android SDK</span>
+            <span class="tool-card-desc">Native mobile engine</span>
+          </div>
+        </div>
+
+        <!-- Card 4: AudioTrack API -->
+        <div class="tool-card">
+          <div class="tool-card-icon">
+            <img src="https://cdn.simpleicons.org/android/3DDC84" alt="Android logo">
+          </div>
+          <div class="tool-card-info">
+            <span class="tool-card-name">AudioTrack API</span>
+            <span class="tool-card-desc">Real-time waveform & sound synthesis</span>
+          </div>
+        </div>
+
+        <!-- Card 5: AudioRecord API -->
+        <div class="tool-card">
+          <div class="tool-card-icon">
+            <img src="https://cdn.simpleicons.org/android/3DDC84" alt="Android logo">
+          </div>
+          <div class="tool-card-info">
+            <span class="tool-card-name">AudioRecord API</span>
+            <span class="tool-card-desc">Low-latency microphone capture</span>
+          </div>
+        </div>
+
+        <!-- Card 6: YIN Pitch Detection -->
+        <div class="tool-card">
+          <div class="tool-card-icon">
+            <img src="https://cdn.simpleicons.org/android/3DDC84" alt="Android logo">
+          </div>
+          <div class="tool-card-info">
+            <span class="tool-card-name">YIN Pitch Detection</span>
+            <span class="tool-card-desc">Core frequency tracking algorithm</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Dedicated Kyoto Music Showcase Modal Overlay -->
+  <div class="project-modal" id="kyoto-modal">
+    <!-- Close Button -->
+    <button class="back-button" id="kyoto-modal-close" aria-label="Close Modal">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="18" y1="6" x2="6" y2="18"></line>
+        <line x1="6" y1="6" x2="18" y2="18"></line>
+      </svg>
+    </button>
+
+    <!-- Showcase Centered Layout Wrapper -->
+    <div class="showcase-container">
+      <!-- Top Horizontally Scrolling Gallery -->
+      <section class="gallery-scroll-viewport" aria-label="Kyoto Music Screenshot Gallery">
+        <div class="gallery-scroll">
+          <img src="assests/Kyoto Music screenshots/Screenshot 2026-05-28 171639.png" alt="Kyoto Music Player Interface">
+          <img src="assests/Kyoto Music screenshots/Screenshot 2026-05-28 171739.png" alt="Kyoto Music Streaming Queue">
+          <img src="assests/Kyoto Music screenshots/Screenshot 2026-05-28 171824.png" alt="Kyoto Music Album Art Display">
+          <img src="assests/Kyoto Music screenshots/Screenshot 2026-05-28 171843.png" alt="Kyoto Music Artist Dashboard">
+          <img src="assests/Kyoto Music screenshots/Screenshot 2026-05-28 171920.png" alt="Kyoto Music Merch Checkout">
+          <img src="assests/Kyoto Music screenshots/Screenshot 2026-05-28 171931.png" alt="Kyoto Music Responsive Ticket Sales">
+        </div>
+      </section>
+
+      <!-- Skeletal Scroll Indicator / Progress Track -->
+      <div class="gallery-progress-track">
+        <div class="gallery-progress-bar"></div>
+      </div>
+
+      <!-- Project Header Block -->
+      <header class="showcase-header">
+        <div class="showcase-header-left">
+          <!-- App Icon -->
+          <img src="assests/kyoto-icon.jpg" alt="Kyoto Music App Icon" class="showcase-icon">
+          <h2 class="showcase-title">Kyoto Music</h2>
+        </div>
+        <!-- Pill shaped outline project launch button -->
+        <a href="https://kyotomusic.app" target="_blank" rel="noopener noreferrer" class="showcase-button">
+          <span>Visit</span>
+          <!-- Globe SVG Link icon -->
+          <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="2" y1="12" x2="22" y2="12"></line>
+            <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+          </svg>
+        </a>
+      </header>
+
+      <!-- App Description Text -->
+      <article class="showcase-desc">
+        <p>
+          Kyoto Music is a high-fidelity web application built on Spring Boot and Java. The backend handles all routing, security interceptors, controller mappings, and transactional mailing, while the frontend is dynamically rendered server-side using Thymeleaf coupled with modern, responsive vanilla CSS. Engineered to support secure merchandise payment processing and high-volume media streaming at serverless edge speeds.
+        </p>
+      </article>
+
+      <!-- Tech Stack Pills container -->
+      <footer class="tech-container">
+        <span class="tech-pill">
+          <img src="https://cdn.simpleicons.org/springboot/6DB33F" alt="Spring Boot logo">
+          <span>Spring Boot</span>
+        </span>
+        <span class="tech-pill">
+          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/java/java-original.svg" alt="Java logo">
+          <span>Thymeleaf</span>
+        </span>
+        <span class="tech-pill">
+          <img src="https://cdn.simpleicons.org/cloudflare/F38020" alt="Cloudflare logo">
+          <span>Cloudflare D1</span>
+        </span>
+        <span class="tech-pill">
+          <img src="https://cdn.simpleicons.org/cloudflare/F38020" alt="Cloudflare logo">
+          <span>Cloudflare R2</span>
+        </span>
+        <span class="tech-pill">
+          <img src="assests/paystack.svg" alt="Paystack logo">
+          <span>Paystack</span>
+        </span>
+        <span class="tech-pill">
+          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/java/java-original.svg" alt="Java logo">
+          <span>JavaMailSender</span>
+        </span>
+        <span class="tech-pill">
+          <img src="https://cdn.simpleicons.org/apachemaven/C3022F" alt="Apache Maven logo">
+          <span>Maven</span>
+        </span>
+        <span class="tech-pill">
+          <img src="https://cdn.simpleicons.org/render/46E3B7" alt="Render logo">
+          <span>Render</span>
+        </span>
+      </footer>
+
+      <!-- Massive Bottom Showcase Video Demo -->
+      <section class="massive-video-container">
+        <video class="massive-showcase-video" autoplay loop muted playsinline>
+          <source src="assests/Kyoto Music screenshots/Kyoto Music video.mp4" type="video/mp4">
+          Your browser does not support the video tag.
+        </video>
+      </section>
+
+      <!-- Interview Q&A Sections -->
+      <div class="qna-container">
+        <!-- Section 1: What's under Kyoto Music's hood? -->
+        <div class="qna-section">
+          <div class="qna-row question">
+            <img src="assests/kyoto-icon.jpg" alt="Kyoto Music App Icon" class="qna-avatar app-logo">
+            <div class="qna-content">
+              <h4>What’s under Kyoto Music’s hood? Which technologies were used and why did you choose them?</h4>
+            </div>
+          </div>
+          <div class="qna-row answer">
+            <img src="assests/me-icon-transparent.jpg" alt="About Me Profile Icon" class="qna-avatar profile-pic">
+            <div class="qna-content">
+              <p>Kyoto Music is a high-fidelity web application built on <strong>Spring Boot</strong> and <strong>Java</strong>. The backend handles all routing, security interceptors, controller mappings, and transactional mailing, while the frontend is dynamically rendered server-side using <strong>Thymeleaf</strong> coupled with modern, responsive vanilla CSS.</p>
+              <p>We wanted an architecture that was robust enough for secure payment processing and high-volume media streaming, yet lightweight and fast to scale globally. By choosing to build Kyoto Music around <strong>Cloudflare's</strong> modern serverless edge architecture, we avoided bloated database servers and high hosting overhead.</p>
+              <p>All transactional and catalog data (including listener profiles, playlists, artist statistics, merchandise stock, and ticket transactions) is stored in <strong>Cloudflare D1</strong>—a serverless edge database built on SQLite. For media, instead of storing heavy audio files and high-res cover art on the web server, everything is hosted on <strong>Cloudflare R2</strong> object storage. This ensures lightning-fast streaming speeds for listeners, zero egress fee expenses, and seamless uploads for artists.</p>
+              <p>Payments for merchandise and show tickets are handled safely via <strong>Paystack</strong>, and transactional receipts are delivered securely via <strong>JavaMailSender</strong>. The entire setup compiles with <strong>Maven</strong> and deploys automatically to <strong>Render</strong> directly from Git.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Vertical Tool Stack -->
+      <div class="tool-cards-list">
+        <!-- Card 1: Spring Boot -->
+        <div class="tool-card">
+          <div class="tool-card-icon">
+            <img src="https://cdn.simpleicons.org/springboot/6DB33F" alt="Spring Boot logo">
+          </div>
+          <div class="tool-card-info">
+            <span class="tool-card-name">Spring Boot</span>
+            <span class="tool-card-desc">Enterprise Java framework powering the core server, routing, and APIs</span>
+          </div>
+        </div>
+
+        <!-- Card 2: Thymeleaf -->
+        <div class="tool-card">
+          <div class="tool-card-icon">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/java/java-original.svg" alt="Java logo">
+          </div>
+          <div class="tool-card-info">
+            <span class="tool-card-name">Thymeleaf</span>
+            <span class="tool-card-desc">Modern server-side Java template engine used to dynamically render the user interface</span>
+          </div>
+        </div>
+
+        <!-- Card 3: Cloudflare D1 -->
+        <div class="tool-card">
+          <div class="tool-card-icon">
+            <img src="https://cdn.simpleicons.org/cloudflare/F38020" alt="Cloudflare logo">
+          </div>
+          <div class="tool-card-info">
+            <span class="tool-card-name">Cloudflare D1</span>
+            <span class="tool-card-desc">Serverless edge SQL database running on SQLite for ultra-fast, globally distributed data storage</span>
+          </div>
+        </div>
+
+        <!-- Card 4: Cloudflare R2 -->
+        <div class="tool-card">
+          <div class="tool-card-icon">
+            <img src="https://cdn.simpleicons.org/cloudflare/F38020" alt="Cloudflare logo">
+          </div>
+          <div class="tool-card-info">
+            <span class="tool-card-name">Cloudflare R2</span>
+            <span class="tool-card-desc">Fully S3-compatible serverless object storage for hosting audio files and graphics with zero egress fees</span>
+          </div>
+        </div>
+
+        <!-- Card 5: Paystack -->
+        <div class="tool-card">
+          <div class="tool-card-icon">
+            <img src="assests/paystack.svg" alt="Paystack logo">
+          </div>
+          <div class="tool-card-info">
+            <span class="tool-card-name">Paystack</span>
+            <span class="tool-card-desc">Secure, modern payment gateway integration for buying merchandise and concert tickets</span>
+          </div>
+        </div>
+
+        <!-- Card 6: JavaMailSender -->
+        <div class="tool-card">
+          <div class="tool-card-icon">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/java/java-original.svg" alt="Java logo">
+          </div>
+          <div class="tool-card-info">
+            <span class="tool-card-name">JavaMailSender</span>
+            <span class="tool-card-desc">Transactional email service for delivering purchase receipts, sales notifications, and door tickets</span>
+          </div>
+        </div>
+
+        <!-- Card 7: Maven -->
+        <div class="tool-card">
+          <div class="tool-card-icon">
+            <img src="https://cdn.simpleicons.org/apachemaven/C3022F" alt="Apache Maven logo">
+          </div>
+          <div class="tool-card-info">
+            <span class="tool-card-name">Maven</span>
+            <span class="tool-card-desc">Build automation and dependency management tool for clean, reproducible compilations</span>
+          </div>
+        </div>
+
+        <!-- Card 8: Render -->
+        <div class="tool-card">
+          <div class="tool-card-icon">
+            <img src="https://cdn.simpleicons.org/render/46E3B7" alt="Render logo">
+          </div>
+          <div class="tool-card-info">
+            <span class="tool-card-name">Render</span>
+            <span class="tool-card-desc">Cloud hosting platform used for automated Git deployments, environment management, and scale</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Dedicated Kyoto Music Showcase Modal Overlay -->
+  <div class="project-modal" id="kyoto-modal">
+    <!-- Close Button -->
+    <button class="back-button" id="kyoto-modal-close" aria-label="Close Modal">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="18" y1="6" x2="6" y2="18"></line>
+        <line x1="6" y1="6" x2="18" y2="18"></line>
+      </svg>
+    </button>
+
+    <!-- Showcase Centered Layout Wrapper -->
+    <div class="showcase-container">
+      <!-- Top Horizontally Scrolling Gallery -->
+      <section class="gallery-scroll-viewport" aria-label="Kyoto Music Screenshot Gallery">
+        <div class="gallery-scroll">
+          <img src="assests/Kyoto Music screenshots/Screenshot 2026-05-28 171639.png" alt="Kyoto Music Dashboard Screenshot">
+          <img src="assests/Kyoto Music screenshots/Screenshot 2026-05-28 171739.png" alt="Kyoto Music Artist Dashboard Screenshot">
+          <img src="assests/Kyoto Music screenshots/Screenshot 2026-05-28 171824.png" alt="Kyoto Music Web Player Screenshot">
+          <img src="assests/Kyoto Music screenshots/Screenshot 2026-05-28 171843.png" alt="Kyoto Music Album Details Screenshot">
+          <img src="assests/Kyoto Music screenshots/Screenshot 2026-05-28 171920.png" alt="Kyoto Music Store & Merch Screenshot">
+          <img src="assests/Kyoto Music screenshots/Screenshot 2026-05-28 171931.png" alt="Kyoto Music Ticket Checkout Screenshot">
+        </div>
+      </section>
+
+      <!-- Skeletal Scroll Indicator / Progress Track -->
+      <div class="gallery-progress-track">
+        <div class="gallery-progress-bar"></div>
+      </div>
+
+      <!-- Project Header Block -->
+      <header class="showcase-header">
+        <div class="showcase-header-left">
+          <!-- App Icon -->
+          <img src="assests/kyoto-icon.jpg" alt="Kyoto Music App Icon" class="showcase-icon">
+          <h2 class="showcase-title">Kyoto Music</h2>
+        </div>
+        <!-- Pill shaped outline project launch button -->
+        <a href="#" target="_blank" rel="noopener" class="showcase-button">
+          <span>View Project</span>
+          <!-- Globe SVG Link icon -->
+          <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="2" y1="12" x2="22" y2="12"></line>
+            <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+          </svg>
+        </a>
+      </header>
+
+      <!-- App Description Text -->
+      <article class="showcase-desc">
+        <p>
+          Kyoto Music is a high-fidelity web application engineered for both independent artists and listeners. The platform handles heavy, high-volume media streaming, custom merchandise storefronts, and secure real-time concert ticket transactions all within a single unified space. Optimized for rapid global scaling, payments are handled using secure, modernized payment gateway flows, and receipts are instantly pushed out to users.
+        </p>
+      </article>
+
+      <!-- Tech Stack Pills container -->
+      <footer class="tech-container">
+        <span class="tech-pill">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 3c-4.97 0-9 4.03-9 9 0 2.12.74 4.07 1.97 5.61L4.35 19.4c-.39.39-.39 1.02 0 1.41.39.39 1.02.39 1.41 0l1.79-1.79C9.09 19.64 10.5 20 12 20c4.97 0 9-4.03 9-9 0-4.97-4.03-9-9-9zm3 8c0 1.66-1.34 3-3 3s-3-1.34-3-3 1.34-3 3-3 3 1.34 3 3z" fill="url(#spring-grad-pill)"/>
+            <defs>
+              <linearGradient id="spring-grad-pill" x1="2" y1="22" x2="22" y2="2" gradientUnits="userSpaceOnUse">
+                <stop stop-color="#10B981"/>
+                <stop offset="0.5" stop-color="#059669"/>
+                <stop offset="1" stop-color="#34D399"/>
+              </linearGradient>
+            </defs>
+          </svg>
+          <span>Spring Boot</span>
+        </span>
+        <span class="tech-pill">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12.89 2.1c-.24-.13-.54-.13-.78 0C10.15 3.2 4 7 4 13c0 4.42 3.58 8 8 8s8-3.58 8-8c0-6-6.15-9.8-8.11-10.9zM12 19c-3.31 0-6-2.69-6-6 0-3.3 3.65-6.27 6-7.53V19z" fill="url(#thym-grad-pill)"/>
+            <defs>
+              <linearGradient id="thym-grad-pill" x1="2" y1="22" x2="22" y2="2" gradientUnits="userSpaceOnUse">
+                <stop stop-color="#10B981"/>
+                <stop offset="1" stop-color="#34D399"/>
+              </linearGradient>
+            </defs>
+          </svg>
+          <span>Thymeleaf</span>
+        </span>
+        <span class="tech-pill">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 3C7.58 3 4 4.79 4 7s3.58 4 8 4 8-1.79 8-4-3.58-4-8-4zm0 6c-4.42 0-8-1.79-8-4V13c0 2.21 3.58 4 8 4s8-1.79 8-4V9c0 2.21-3.58 4-8 4zm-8 8c0 2.21 3.58 4 8 4s8-1.79 8-4v-4c0 2.21-3.58 4-8 4s-8-1.79-8-4v4z" fill="url(#d1-grad-pill)"/>
+            <defs>
+              <linearGradient id="d1-grad-pill" x1="2" y1="22" x2="22" y2="2" gradientUnits="userSpaceOnUse">
+                <stop stop-color="#F97316"/>
+                <stop offset="1" stop-color="#FBBF24"/>
+              </linearGradient>
+            </defs>
+          </svg>
+          <span>Cloudflare D1</span>
+        </span>
+        <span class="tech-pill">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM17 13l-5-5-5 5h3v4h4v-4h3z" fill="url(#r2-grad-pill)"/>
+            <defs>
+              <linearGradient id="r2-grad-pill" x1="2" y1="22" x2="22" y2="2" gradientUnits="userSpaceOnUse">
+                <stop stop-color="#F59E0B"/>
+                <stop offset="1" stop-color="#EF4444"/>
+              </linearGradient>
+            </defs>
+          </svg>
+          <span>Cloudflare R2</span>
+        </span>
+        <span class="tech-pill">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M20 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z" fill="url(#pay-grad-pill)"/>
+            <defs>
+              <linearGradient id="pay-grad-pill" x1="2" y1="22" x2="22" y2="2" gradientUnits="userSpaceOnUse">
+                <stop stop-color="#06B6D4"/>
+                <stop offset="1" stop-color="#3B82F6"/>
+              </linearGradient>
+            </defs>
+          </svg>
+          <span>Paystack</span>
+        </span>
+        <span class="tech-pill">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M22 6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6zm-2 0l-8 5-8-5h16zm0 12H4V8l8 5 8-5v10z" fill="url(#mail-grad-pill)"/>
+            <defs>
+              <linearGradient id="mail-grad-pill" x1="2" y1="22" x2="22" y2="2" gradientUnits="userSpaceOnUse">
+                <stop stop-color="#2563EB"/>
+                <stop offset="1" stop-color="#60A5FA"/>
+              </linearGradient>
+            </defs>
+          </svg>
+          <span>JavaMail</span>
+        </span>
+      </footer>
+
+      <!-- Massive Bottom Showcase Video Demo -->
+      <section class="massive-video-container">
+        <video class="massive-showcase-video" autoplay loop muted playsinline>
+          <source src="assests/Kyoto Music screenshots/Kyoto Music video.mp4" type="video/mp4">
+          Your browser does not support the video tag.
+        </video>
+      </section>
+
+      <!-- Interview Q&A Sections -->
+      <div class="qna-container">
+        <!-- Section 1: What is it? -->
+        <div class="qna-section">
+          <div class="qna-row question">
+            <img src="assests/kyoto-icon.jpg" alt="Kyoto Music App Icon" class="qna-avatar app-logo">
+            <div class="qna-content">
+              <h4>What’s Kyoto Music and what's so cool about it?</h4>
+            </div>
+          </div>
+          <div class="qna-row answer">
+            <img src="assests/me-icon-transparent.jpg" alt="About Me Profile Icon" class="qna-avatar profile-pic">
+            <div class="qna-content">
+              <p>Kyoto Music is a high-fidelity web application built for artists and listeners. It handles high-volume media streaming, merchandise sales, and secure ticket transactions all in one place. We wanted an architecture that was robust enough for secure payment processing, yet lightweight and fast to scale globally without bloated database servers.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 2: Under the Hood -->
+        <div class="qna-section">
+          <div class="qna-row question">
+            <img src="assests/kyoto-icon.jpg" alt="Kyoto Music App Icon" class="qna-avatar app-logo">
+            <div class="qna-content">
+              <h4>What’s under Kyoto Music’s hood? Which technologies were used and why did you choose them?</h4>
+            </div>
+          </div>
+          <div class="qna-row answer">
+            <img src="assests/me-icon-transparent.jpg" alt="About Me Profile Icon" class="qna-avatar profile-pic">
+            <div class="qna-content">
+              <p>Kyoto Music is built on Spring Boot and Java. The backend handles routing, security, and transactional mailing, while the frontend is server-side rendered using Thymeleaf and vanilla CSS. All transactional data is stored in Cloudflare D1 (serverless edge SQLite), and heavy media (audio/cover art) is hosted on Cloudflare R2 for lightning-fast, zero-egress streaming. Payments are securely routed through Paystack, and receipts deploy via JavaMailSender.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Vertical Tool Stack -->
+      <div class="tool-cards-list">
+        <!-- Card 1: Spring Boot -->
+        <div class="tool-card">
+          <div class="tool-card-icon">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 3c-4.97 0-9 4.03-9 9 0 2.12.74 4.07 1.97 5.61L4.35 19.4c-.39.39-.39 1.02 0 1.41.39.39 1.02.39 1.41 0l1.79-1.79C9.09 19.64 10.5 20 12 20c4.97 0 9-4.03 9-9 0-4.97-4.03-9-9-9zm3 8c0 1.66-1.34 3-3 3s-3-1.34-3-3 1.34-3 3-3 3 1.34 3 3z" fill="url(#spring-grad-card)"/>
+              <defs>
+                <linearGradient id="spring-grad-card" x1="2" y1="22" x2="22" y2="2" gradientUnits="userSpaceOnUse">
+                  <stop stop-color="#10B981"/>
+                  <stop offset="0.5" stop-color="#059669"/>
+                  <stop offset="1" stop-color="#34D399"/>
+                </linearGradient>
+              </defs>
+            </svg>
+          </div>
+          <div class="tool-card-info">
+            <span class="tool-card-name">Spring Boot</span>
+            <span class="tool-card-desc">Enterprise Java framework powering the core server, routing, and APIs</span>
+          </div>
+        </div>
+
+        <!-- Card 2: Thymeleaf -->
+        <div class="tool-card">
+          <div class="tool-card-icon">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12.89 2.1c-.24-.13-.54-.13-.78 0C10.15 3.2 4 7 4 13c0 4.42 3.58 8 8 8s8-3.58 8-8c0-6-6.15-9.8-8.11-10.9zM12 19c-3.31 0-6-2.69-6-6 0-3.3 3.65-6.27 6-7.53V19z" fill="url(#thym-grad-card)"/>
+              <defs>
+                <linearGradient id="thym-grad-card" x1="2" y1="22" x2="22" y2="2" gradientUnits="userSpaceOnUse">
+                  <stop stop-color="#10B981"/>
+                  <stop offset="1" stop-color="#34D399"/>
+                </linearGradient>
+              </defs>
+            </svg>
+          </div>
+          <div class="tool-card-info">
+            <span class="tool-card-name">Thymeleaf</span>
+            <span class="tool-card-desc">Modern server-side Java template engine used to dynamically render the user interface</span>
+          </div>
+        </div>
+
+        <!-- Card 3: Cloudflare D1 -->
+        <div class="tool-card">
+          <div class="tool-card-icon">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 3C7.58 3 4 4.79 4 7s3.58 4 8 4 8-1.79 8-4-3.58-4-8-4zm0 6c-4.42 0-8-1.79-8-4V13c0 2.21 3.58 4 8 4s8-1.79 8-4V9c0 2.21-3.58 4-8 4zm-8 8c0 2.21 3.58 4 8 4s8-1.79 8-4v-4c0 2.21-3.58 4-8 4s-8-1.79-8-4v4z" fill="url(#d1-grad-card)"/>
+              <defs>
+                <linearGradient id="d1-grad-card" x1="2" y1="22" x2="22" y2="2" gradientUnits="userSpaceOnUse">
+                  <stop stop-color="#F97316"/>
+                  <stop offset="1" stop-color="#FBBF24"/>
+                </linearGradient>
+              </defs>
+            </svg>
+          </div>
+          <div class="tool-card-info">
+            <span class="tool-card-name">Cloudflare D1</span>
+            <span class="tool-card-desc">Serverless edge SQL database running on SQLite for ultra-fast, globally distributed data storage</span>
+          </div>
+        </div>
+
+        <!-- Card 4: Cloudflare R2 -->
+        <div class="tool-card">
+          <div class="tool-card-icon">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM17 13l-5-5-5 5h3v4h4v-4h3z" fill="url(#r2-grad-card)"/>
+              <defs>
+                <linearGradient id="r2-grad-card" x1="2" y1="22" x2="22" y2="2" gradientUnits="userSpaceOnUse">
+                  <stop stop-color="#F59E0B"/>
+                  <stop offset="1" stop-color="#EF4444"/>
+                </linearGradient>
+              </defs>
+            </svg>
+          </div>
+          <div class="tool-card-info">
+            <span class="tool-card-name">Cloudflare R2</span>
+            <span class="tool-card-desc">Fully S3-compatible serverless object storage for hosting audio files and graphics with zero egress fees</span>
+          </div>
+        </div>
+
+        <!-- Card 5: Paystack -->
+        <div class="tool-card">
+          <div class="tool-card-icon">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M20 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z" fill="url(#pay-grad-card)"/>
+              <defs>
+                <linearGradient id="pay-grad-card" x1="2" y1="22" x2="22" y2="2" gradientUnits="userSpaceOnUse">
+                  <stop stop-color="#06B6D4"/>
+                  <stop offset="1" stop-color="#3B82F6"/>
+                </linearGradient>
+              </defs>
+            </svg>
+          </div>
+          <div class="tool-card-info">
+            <span class="tool-card-name">Paystack</span>
+            <span class="tool-card-desc">Secure, modern payment gateway integration for buying merchandise and concert tickets</span>
+          </div>
+        </div>
+
+        <!-- Card 6: JavaMailSender -->
+        <div class="tool-card">
+          <div class="tool-card-icon">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M22 6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6zm-2 0l-8 5-8-5h16zm0 12H4V8l8 5 8-5v10z" fill="url(#mail-grad-card)"/>
+              <defs>
+                <linearGradient id="mail-grad-card" x1="2" y1="22" x2="22" y2="2" gradientUnits="userSpaceOnUse">
+                  <stop stop-color="#2563EB"/>
+                  <stop offset="1" stop-color="#60A5FA"/>
+                </linearGradient>
+              </defs>
+            </svg>
+          </div>
+          <div class="tool-card-info">
+            <span class="tool-card-name">JavaMailSender</span>
+            <span class="tool-card-desc">Transactional email service for delivering purchase receipts, sales notifications, and door tickets</span>
+          </div>
+        </div>
+
+        <!-- Card 7: Maven -->
+        <div class="tool-card">
+          <div class="tool-card-icon">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="url(#mvn-grad-card)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <defs>
+                <linearGradient id="mvn-grad-card" x1="2" y1="22" x2="22" y2="2" gradientUnits="userSpaceOnUse">
+                  <stop stop-color="#EF4444"/>
+                  <stop offset="1" stop-color="#F97316"/>
+                </linearGradient>
+              </defs>
+            </svg>
+          </div>
+          <div class="tool-card-info">
+            <span class="tool-card-name">Maven</span>
+            <span class="tool-card-desc">Build automation and project dependency management tool for clean, reproducible compilations</span>
+          </div>
+        </div>
+
+        <!-- Card 8: Render -->
+        <div class="tool-card">
+          <div class="tool-card-icon">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 15H6v-2h6v2zm6-4H6v-2h12v2zm0-4H6V8h12v2z" fill="url(#rnd-grad-card)"/>
+              <defs>
+                <linearGradient id="rnd-grad-card" x1="2" y1="22" x2="22" y2="2" gradientUnits="userSpaceOnUse">
+                  <stop stop-color="#8B5CF6"/>
+                  <stop offset="1" stop-color="#6366F1"/>
+                </linearGradient>
+              </defs>
+            </svg>
+          </div>
+          <div class="tool-card-info">
+            <span class="tool-card-name">Render</span>
+            <span class="tool-card-desc">Cloud hosting platform used for automated Git deployments, environment management, and scale</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>

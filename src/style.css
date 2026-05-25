@@ -1,0 +1,1467 @@
+/* Clean, Minimalist Web Page Stylesheet */
+
+@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&family=Inter:wght@400;500&family=Outfit:wght@400;600;700&display=swap');
+
+:root {
+  --bg-color: #060609;
+  --text-primary: #f3f4f6;
+  --text-muted: #8e919a;
+  --copyright-color: rgba(255, 255, 255, 0.25);
+  --dot-color: rgba(255, 255, 255, 0.07);
+  --border-color: rgba(255, 255, 255, 0.08);
+  
+  /* Glassmorphic variables */
+  --card-bg: rgba(10, 10, 15, 0.7);
+  --card-border: rgba(255, 255, 255, 0.06);
+  --card-line: rgba(255, 255, 255, 0.05);
+  --card-header-bg: rgba(255, 255, 255, 0.02);
+  --footer-bg: rgba(255, 255, 255, 0.05);
+  --footer-border: rgba(255, 255, 255, 0.06);
+  --footer-expanded-bg: rgba(12, 12, 18, 0.85);
+  --button-bg: #f3f4f6;
+  --button-text: #060609;
+  --button-shadow: rgba(255, 255, 255, 0.1);
+  --workshop-heading-color: #a5b4fc;
+  
+  /* Icon Gradient Colors */
+  --grad-1-start: #3b82f6;
+  --grad-1-end: #8b5cf6;
+  --grad-2-start: #10b981;
+  --grad-2-end: #06b6d4;
+  --grad-3-start: #f59e0b;
+  --grad-3-end: #ef4444;
+  --grad-4-start: #ec4899;
+  --grad-4-end: #8b5cf6;
+}
+
+body.light-theme {
+  --bg-color: #f7f7fa; /* off-white canvas */
+  --text-primary: #000000; /* exactly #000000 (pure black) */
+  --text-muted: #000000; /* exactly #000000 (pure black) */
+  --copyright-color: #000000; /* exactly #000000 (pure black) */
+  --dot-color: rgba(15, 23, 42, 0.06); /* subtle dark dots */
+  --border-color: rgba(15, 23, 42, 0.08);
+  
+  /* Glassmorphic overrides */
+  --card-bg: rgba(255, 255, 255, 0.75);
+  --card-border: rgba(15, 23, 42, 0.07);
+  --card-line: rgba(15, 23, 42, 0.04);
+  --card-header-bg: rgba(0, 0, 0, 0.02);
+  --footer-bg: rgba(15, 23, 42, 0.04);
+  --footer-border: rgba(15, 23, 42, 0.06);
+  --footer-expanded-bg: rgba(255, 255, 255, 0.85);
+  --button-bg: #000000; /* pure black button */
+  --button-text: #ffffff;
+  --button-shadow: rgba(0, 0, 0, 0.08);
+  --workshop-heading-color: #4f46e5; /* rich indigo */
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-primary);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  overflow-x: hidden;
+  position: relative;
+  
+  /* Buttery Smooth Theme Transition */
+  transition: background-color 0.5s cubic-bezier(0.25, 1, 0.5, 1),
+              color 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+/* Minimalist Top Left Theme Toggle Switch */
+.theme-toggle {
+  position: fixed;
+  top: 2rem;
+  left: 2rem;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: var(--footer-bg);
+  border: 1px solid var(--footer-border);
+  color: var(--text-primary);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  z-index: 2000;
+  transition: background-color 0.3s ease, border-color 0.3s ease, transform 0.3s cubic-bezier(0.25, 1, 0.5, 1), color 0.3s ease;
+  outline: none;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.theme-toggle:hover {
+  transform: scale(1.06);
+  background: var(--card-header-bg);
+}
+
+.theme-toggle svg {
+  width: 18px;
+  height: 18px;
+  stroke: currentColor;
+  fill: none;
+}
+
+/* Toggle icon states */
+.theme-toggle .moon-icon { display: none; }
+.theme-toggle .sun-icon { display: block; }
+
+body.light-theme .theme-toggle .moon-icon { display: block; }
+body.light-theme .theme-toggle .sun-icon { display: none; }
+
+/* Subtle Dotted Grid Background */
+.dotted-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: radial-gradient(var(--dot-color) 1.2px, transparent 1.2px);
+  background-size: 28px 28px;
+  z-index: -2;
+}
+
+/* Radial Vignette Overlay for Depth */
+.radial-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at center, transparent 10%, var(--bg-color) 85%);
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* Elegant 2D Fade-In Animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Core Container */
+.main-container {
+  width: 100%;
+  max-width: 600px;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  position: relative;
+  z-index: 10;
+  animation: fadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* Workshop Heading */
+.workshop-heading {
+  font-family: 'Caveat', cursive;
+  font-size: 2.16rem;
+  font-weight: 500;
+  color: var(--workshop-heading-color); /* Adaptive lavender in dark mode / indigo in light mode */
+  margin-bottom: 1.45rem;
+  text-align: center;
+  letter-spacing: 0.02em;
+  opacity: 0.85;
+}
+
+/* Row of Circular App Icons with 3D Stage Perspective */
+.icon-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2.2rem; /* Spacious mobile default gap */
+  margin-bottom: 2.9rem;
+  width: 100%;
+  perspective: 1000px; /* Enable 3D stage projection */
+  position: relative;
+  z-index: 10;
+}
+
+/* Sibling Blur Effect: Blur all icons when row is hovered */
+.icon-row:hover .app-icon {
+  filter: blur(3px);
+  opacity: 0.45;
+  transform: scale(0.92);
+}
+
+/* Except the one currently hovered! Bring it forward and focus */
+.icon-row:hover .app-icon:hover {
+  filter: blur(0);
+  opacity: 1;
+  transform: scale(1.08);
+}
+
+/* Sleek Modern Rounded Square App Icon Outer */
+.app-icon {
+  width: 86.4px;
+  height: 86.4px;
+  border-radius: 28.8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  border: 1px solid var(--border-color);
+  background: rgba(255, 255, 255, 0.02);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3), inset 0 1px 1px rgba(255, 255, 255, 0.05);
+  transform-style: preserve-3d; /* Support nested 3D elements */
+  transition: filter 0.5s cubic-bezier(0.25, 1, 0.5, 1), 
+              opacity 0.5s cubic-bezier(0.25, 1, 0.5, 1), 
+              transform 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+  cursor: pointer;
+  z-index: 10;
+}
+
+.app-icon::before {
+  content: '';
+  position: absolute;
+  inset: 2px;
+  border-radius: 26.4px;
+  background: var(--bg-gradient);
+  opacity: 0.15;
+  z-index: 1;
+}
+
+/* 3D Stage Placeholder Cards Stacked Behind */
+.placeholder-card {
+  position: absolute;
+  width: 288px;   /* Goldilocks Size */
+  height: 216px;  /* Goldilocks Size */
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) translateZ(-50px) scale(0.8);
+  opacity: 0;
+  pointer-events: none;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 19.2px;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+  z-index: -1; /* Stack behind standard icon content */
+  transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1),
+              background-color 0.5s ease,
+              border-color 0.5s ease,
+              box-shadow 0.5s ease; /* Jack-in-the-box spring transition with smooth theme transitions */
+  overflow: hidden;
+  text-align: left;
+}
+
+/* Card Header simulation (Browser Dots) */
+.placeholder-card .card-header {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--card-border);
+  background: var(--card-header-bg);
+  transition: background-color 0.5s ease, border-color 0.5s ease;
+}
+
+.placeholder-card .dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: rgba(120, 120, 130, 0.25);
+}
+
+.placeholder-card .dot.red { background: rgba(239, 68, 68, 0.5); }
+.placeholder-card .dot.yellow { background: rgba(245, 158, 11, 0.5); }
+.placeholder-card .dot.green { background: rgba(16, 185, 129, 0.5); }
+
+/* Card Content simulation (Wireframe lines) */
+.placeholder-card .card-content {
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.placeholder-card .line {
+  height: 5px;
+  border-radius: 3px;
+  background: var(--card-line);
+  transition: background-color 0.5s ease;
+}
+
+.placeholder-card .line.short { width: 45%; }
+.placeholder-card .line.medium { width: 75%; }
+.placeholder-card .line.long { width: 85%; }
+
+/* --- 3D Hover Fanning States (Spring Launch) --- */
+
+/* Card 1: Fly out top-left, tilt back-left */
+.app-icon:hover .card-1 {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translate3d(-105%, -135%, -60px) rotateX(20deg) rotateY(18deg) rotateZ(-10deg) scale(0.95);
+}
+
+/* Card 2: Fly out top-center, stack deep back */
+.app-icon:hover .card-2 {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translate3d(-50%, -155%, -110px) rotateX(25deg) rotateY(0deg) rotateZ(0deg) scale(0.9);
+}
+
+/* Card 3: Fly out top-right, tilt back-right (overlaps on top) */
+.app-icon:hover .card-3 {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translate3d(5%, -125%, -30px) rotateX(15deg) rotateY(-18deg) rotateZ(8deg) scale(1);
+}
+
+/* Card 4 (About Me): Dedicated Pop-Out fanning */
+.card-aboutme {
+  background: none !important;
+  border: none !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  overflow: visible !important;
+  width: 288px !important;
+  height: 288px !important;
+  pointer-events: none;
+}
+
+.app-icon:hover .card-aboutme {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translate3d(-50%, -130%, -30px) rotateX(15deg) rotateY(-10deg) rotateZ(3deg) scale(1.1);
+}
+
+/* Fret.io Custom Vertical fanning screens */
+.fret-card {
+  width: 156px !important;
+  height: 312px !important;
+  border-radius: 21.6px !important;
+  background: none !important;
+  border: 1px solid var(--card-border) !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  box-shadow: 0 10px 35px rgba(0, 0, 0, 0.45) !important;
+}
+
+.fret-screen-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Fret.io Hover Fanning Coordinates */
+.app-icon:hover .fret-card-1 {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translate3d(-110%, -110%, -50px) rotateX(15deg) rotateY(15deg) rotateZ(-8deg) scale(0.95);
+}
+
+.app-icon:hover .fret-card-2 {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translate3d(10%, -100%, -30px) rotateX(12deg) rotateY(-15deg) rotateZ(6deg) scale(1);
+}
+
+/* Kyoto Music Custom Vertical fanning screens */
+.kyoto-card {
+  width: 156px !important;
+  height: 312px !important;
+  border-radius: 21.6px !important;
+  background: none !important;
+  border: 1px solid var(--card-border) !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  box-shadow: 0 10px 35px rgba(0, 0, 0, 0.45) !important;
+}
+
+.kyoto-screen-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Kyoto Music Hover Fanning Coordinates */
+.app-icon:hover .kyoto-card-1 {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translate3d(-110%, -110%, -50px) rotateX(15deg) rotateY(15deg) rotateZ(-8deg) scale(0.95);
+}
+
+.app-icon:hover .kyoto-card-2 {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translate3d(10%, -100%, -30px) rotateX(12deg) rotateY(-15deg) rotateZ(6deg) scale(1);
+}
+
+/* Static Center-Aligned Icon Labels Badges (Always Visible) */
+.icon-label {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-top: 14px;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.864rem;
+  font-weight: 500;
+  color: var(--text-primary);
+  background: var(--footer-bg);
+  border: 1px solid var(--footer-border);
+  padding: 5px 14px;
+  border-radius: 12px;
+  white-space: nowrap;
+  transition: background-color 0.5s ease, border-color 0.5s ease, color 0.5s ease;
+  z-index: 10;
+  pointer-events: none; /* Click-through active */
+}
+
+/* About Me Custom Sticker Pop-Out Media Container */
+.about-me-media-sticker {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: visible;
+}
+
+.about-me-media-sticker img,
+.about-me-media-sticker video {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 15px 30px rgba(0, 0, 0, 0.45));
+  z-index: 2;
+}
+
+/* Sticker Badges exactly like screenshots */
+.sticker-badge {
+  position: absolute;
+  padding: 4px 10px;
+  border-radius: 8px;
+  font-size: 0.65rem;
+  font-weight: 600;
+  white-space: nowrap;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  z-index: 5;
+  transition: color 0.5s ease, background-color 0.5s ease;
+}
+
+.sticker-badge.top-left {
+  background: #6366f1;
+  color: #fff;
+  top: -10px;
+  left: -10px;
+  transform: rotate(-8deg);
+}
+
+.sticker-badge.top-right {
+  background: #ec4899;
+  color: #fff;
+  top: -15px;
+  right: -15px;
+  transform: rotate(6deg);
+}
+
+.sticker-badge.smiley {
+  background: #eab308;
+  color: #000;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 0.85rem;
+  right: -10px;
+  bottom: 20px;
+  transform: rotate(15deg);
+}
+
+.sticker-badge.bottom-left {
+  background: #10b981;
+  color: #fff;
+  bottom: -10px;
+  left: -5px;
+  transform: rotate(-4deg);
+}
+
+/* Kutloano's Handwritten Bio Styling */
+.bio-text-handwritten {
+  font-family: 'Caveat', cursive;
+  font-size: 1.32rem; /* Drastically reduced to elegant 1.1rem */
+  line-height: 1.35; /* Sit closer together */
+  color: var(--text-primary);
+  margin: 0 auto 0.75rem auto; /* Center alignment with sensible bottom spacing */
+  max-width: 360px; /* Constrained width wraps text neatly */
+  text-align: center;
+  transition: color 0.5s ease;
+}
+
+/* Glow Borders on Hover matching Icon color themes */
+.icon-arch:hover .placeholder-card {
+  border-color: rgba(59, 130, 246, 0.25);
+  box-shadow: 0 15px 45px rgba(0, 0, 0, 0.6), 0 0 20px rgba(59, 130, 246, 0.12);
+}
+
+.icon-backend:hover .placeholder-card {
+  border-color: rgba(16, 185, 129, 0.25);
+  box-shadow: 0 15px 45px rgba(0, 0, 0, 0.6), 0 0 20px rgba(16, 185, 129, 0.12);
+}
+
+.icon-mobile:hover .placeholder-card {
+  border-color: rgba(245, 158, 11, 0.25);
+  box-shadow: 0 15px 45px rgba(0, 0, 0, 0.6), 0 0 20px rgba(245, 158, 11, 0.12);
+}
+
+.icon-firmware:hover .placeholder-card {
+  border-color: rgba(236, 72, 153, 0.25);
+  box-shadow: 0 15px 45px rgba(0, 0, 0, 0.6), 0 0 20px rgba(236, 72, 153, 0.12);
+}
+
+/* Specific Gradient Variables for Icons */
+.icon-arch {
+  --bg-gradient: linear-gradient(135deg, var(--grad-1-start), var(--grad-1-end));
+}
+
+.icon-backend {
+  --bg-gradient: linear-gradient(135deg, var(--grad-2-start), var(--grad-2-end));
+}
+
+.icon-mobile {
+  --bg-gradient: linear-gradient(135deg, var(--grad-3-start), var(--grad-3-end));
+}
+
+.icon-firmware {
+  --bg-gradient: linear-gradient(135deg, var(--grad-4-start), var(--grad-4-end));
+}
+
+/* SVG Vector Styles */
+.app-icon svg {
+  width: 38.4px;
+  height: 38.4px;
+  z-index: 2;
+  stroke: url(#gradient-active); /* fallback or handled via inline stroke styling */
+}
+
+/* About Me Circle Image Avatar */
+.about-me-icon-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 26.4px; /* Sleek rounded square matching the parent inner border */
+  z-index: 2;
+}
+
+/* Fret.io Circle Image Avatar */
+.fret-icon-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 26.4px; /* Sleek rounded square matching the parent inner border */
+  z-index: 2;
+}
+
+/* Kyoto Music Circle Image Avatar */
+.kyoto-icon-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 26.4px; /* Sleek rounded square matching the parent inner border */
+  z-index: 2;
+}
+
+/* Global Blur: Smooth focus blur for background text/heading on hover */
+.workshop-heading,
+.intro-container {
+  transition: filter 0.5s cubic-bezier(0.25, 1, 0.5, 1), 
+              opacity 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+body:has(.app-icon:hover) .workshop-heading,
+body:has(.app-icon:hover) .intro-container {
+  filter: blur(8px);
+  opacity: 0.03; /* Fade them out almost completely to provide stage for hover project description */
+  pointer-events: none;
+}
+
+/* Intro Text Styling */
+.intro-container {
+  max-width: 480px;
+}
+
+.intro-text {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.8rem;
+  line-height: 1.6;
+  letter-spacing: -0.01em;
+  color: var(--text-muted);
+  max-width: 440px;
+  margin: 0 auto;
+  opacity: 0.8;
+}
+
+/* Hover Reveal Info Details */
+.hover-info {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  width: 336px;
+  margin-top: 1.5rem;
+  transform: translate3d(-50%, 20px, 0);
+  opacity: 0;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  transition: opacity 0.5s cubic-bezier(0.25, 1, 0.5, 1),
+              transform 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+  z-index: 100;
+}
+
+/* Invisible bridge to prevent hover loss when cursor moves across the gap */
+.hover-info::before {
+  content: '';
+  position: absolute;
+  top: -2.5rem;
+  left: 0;
+  width: 100%;
+  height: 2.5rem;
+  background: transparent;
+  z-index: -1;
+}
+
+.app-icon:hover .hover-info {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translate3d(-50%, 0, 0);
+}
+
+.hover-info .hover-title {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.62rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 0.35rem;
+  letter-spacing: -0.02em;
+  white-space: nowrap;
+}
+
+.hover-info .hover-desc {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.96rem;
+  line-height: 1.5;
+  color: var(--text-muted);
+  margin-bottom: 1rem;
+  max-width: 288px;
+}
+
+.hover-info .hover-button {
+  display: inline-block;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--button-text);
+  background: var(--button-bg);
+  padding: 8px 18px;
+  border-radius: 9999px;
+  text-decoration: none;
+  box-shadow: 0 4px 15px var(--button-shadow);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.5s ease, color 0.5s ease;
+}
+
+.hover-info .hover-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px var(--button-shadow);
+}
+
+/* Responsive Media Queries */
+@media (min-width: 640px) {
+  .workshop-heading {
+    font-size: 2.88rem;
+    margin-bottom: 2.3rem;
+  }
+
+  .app-icon {
+    width: 108px;
+    height: 108px;
+  }
+  
+  .app-icon svg {
+    width: 45.6px;
+    height: 45.6px;
+  }
+  
+  .icon-row {
+    gap: 4.5rem; /* Spacious gap for tablet */
+  }
+  
+  .intro-text {
+    font-size: 0.85rem;
+  }
+
+  .hover-info {
+    width: 384px;
+    margin-top: 2rem;
+  }
+  
+  .hover-info .hover-title {
+    font-size: 1.98rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .hover-info .hover-desc {
+    font-size: 1.02rem;
+    max-width: 336px;
+    margin-bottom: 1.25rem;
+  }
+  
+  .hover-info .hover-button {
+    font-size: 0.96rem;
+    padding: 9px 22px;
+  }
+
+  .gallery-card {
+    width: 320px;
+    height: 220px;
+    flex: 0 0 320px;
+    margin: 0 -35px;
+    padding: 12px;
+    border-radius: 22px;
+  }
+  
+  .gallery-card-img {
+    border-radius: 14px;
+  }
+}
+
+/* Majestic spatial gaps on desktop screens */
+@media (min-width: 768px) {
+  .icon-row {
+    gap: 5.5rem; /* Spread icons further apart for breathing room */
+  }
+}
+
+/* --- Expanding Interactive Footer Styles --- */
+.expanding-footer {
+  position: fixed;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 72px;
+  height: 38px;
+  border-radius: 19px;
+  background: var(--footer-bg);
+  border: 1px solid var(--footer-border);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  cursor: pointer;
+  z-index: 1; /* secure beneath cards zone when collapsed */
+  transition: width 0.5s cubic-bezier(0.25, 1, 0.5, 1),
+              height 0.5s cubic-bezier(0.25, 1, 0.5, 1),
+              border-radius 0.5s cubic-bezier(0.25, 1, 0.5, 1),
+              background-color 0.5s ease,
+              border-color 0.5s ease,
+              box-shadow 0.5s ease;
+}
+
+/* Footer hover expansion */
+.expanding-footer:hover {
+  width: 340px;
+  height: 165px;
+  border-radius: 36px;
+  background: var(--footer-expanded-bg);
+  border-color: var(--card-border);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4), inset 0 1px 1px var(--card-line);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  z-index: 1000; /* raise to top layer when active */
+}
+
+/* Trigger: Three simple dots */
+.footer-trigger {
+  display: flex;
+  gap: 6px;
+  opacity: 1;
+  transition: opacity 0.3s ease;
+  position: absolute;
+}
+
+.expanding-footer:hover .footer-trigger {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.footer-trigger .dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--text-muted);
+  opacity: 0.7;
+}
+
+/* Expanded Content Panel */
+.footer-content {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem 1rem 1rem 1rem;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease 0.15s; /* Stagger fade-in */
+  position: absolute;
+  inset: 0;
+}
+
+.expanding-footer:hover .footer-content {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Social Row Layout */
+.social-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1.5rem;
+  width: 100%;
+}
+
+.social-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-decoration: none;
+  gap: 6px;
+  width: 80px;
+}
+
+.social-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: transform 0.2s ease, filter 0.2s ease;
+  color: #ffffff;
+}
+
+.social-item:hover .social-icon {
+  transform: scale(1.08);
+}
+
+/* Colors from reference image */
+.social-icon.reach-out {
+  background: #0084ff; /* Blue circular button */
+  box-shadow: 0 4px 12px rgba(0, 132, 255, 0.3);
+}
+
+.social-icon.whatsapp {
+  background: #25d366; /* Green circular button */
+  box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3);
+}
+
+.social-icon.instagram {
+  background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%,#d6249f 60%,#285AEB 90%); /* Sunset brand gradient */
+  box-shadow: 0 4px 12px rgba(214, 36, 159, 0.3);
+}
+
+.social-icon svg {
+  width: 18px;
+  height: 18px;
+}
+
+.social-label {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+.social-item:hover .social-label {
+  color: var(--text-primary);
+}
+
+/* Copyright Text */
+.footer-copyright {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.65rem;
+  color: var(--copyright-color);
+  letter-spacing: 0.02em;
+  margin-top: auto;
+  transition: color 0.5s ease;
+}
+
+/* Responsive Desktop Layout for About Me Pop-Out */
+@media (min-width: 768px) {
+  /* Desktop 3D active transform pop-out positioning */
+  .app-icon:hover .card-aboutme {
+    transform: translate3d(-50%, -130%, -35px) rotateX(15deg) rotateY(-10deg) rotateZ(3deg) scale(1.25);
+  }
+}
+
+/* --- Showcase Page Styles (Fret.io & Project Pages) --- */
+.showcase-container {
+  width: 100%;
+  max-width: 600px;
+  padding: 4rem 2rem 6rem 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 10;
+}
+
+/* Smooth 0.7s slide-up modal overlay styles */
+.project-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(6, 6, 9, 0.6); /* semi-transparent dark background */
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  z-index: 3000;
+  overflow-y: auto;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  box-sizing: border-box;
+  
+  /* Hidden state by default */
+  transform: translateY(100vh);
+  opacity: 0;
+  pointer-events: none;
+  
+  /* Buttery transition ease-out */
+  transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.7s ease;
+}
+
+/* Light theme backdrop override */
+body.light-theme .project-modal {
+  background-color: rgba(247, 247, 250, 0.6);
+}
+
+/* Active State Triggered via JS Handshake */
+.project-modal.active {
+  transform: translateY(0);
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Horizontal Gallery viewport and horizontal overlapping scroll deck */
+.gallery-scroll-viewport {
+  width: 100%;
+  max-width: 450px; /* exactly fits 3 overlapping cards (168px each with -35px margins) */
+  overflow: hidden;
+  margin: 0 auto 1.5rem auto;
+  position: relative;
+}
+
+.gallery-scroll {
+  display: flex;
+  overflow-x: auto;
+  padding: 25px 30px; /* padding for vertical pop offsets */
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0;
+  width: 100%;
+  box-sizing: border-box;
+  scrollbar-width: none; /* Hide scrollbar for Firefox */
+  -ms-overflow-style: none;  /* Hide scrollbar for IE/Edge */
+}
+
+.gallery-scroll::-webkit-scrollbar {
+  display: none; /* Hide scrollbar for Chrome/Safari/Opera */
+}
+
+/* Overlapping physical cards style */
+.gallery-scroll img {
+  flex: 0 0 auto;
+  width: 168px; /* exactly 40% smaller (originally 280px) */
+  height: auto;
+  object-fit: contain;
+  margin-right: -35px; /* scaled fanned overlapping horizontal margins */
+  background: #FAF9F5; /* Warm off-white polaroid frame */
+  border: 6px solid #FAF9F5; /* cleaner border framing for smaller cards */
+  border-radius: 12px; /* proportional border radius */
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.16), 0 2px 8px rgba(0, 0, 0, 0.06);
+  box-sizing: border-box;
+  transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1), margin-right 0.4s ease, box-shadow 0.4s ease, z-index 0.4s ease;
+  cursor: pointer;
+  position: relative;
+}
+
+/* Alternating fanning tilt rotations */
+.gallery-scroll img:nth-child(even) {
+  transform: rotate(4deg);
+}
+
+.gallery-scroll img:nth-child(odd) {
+  transform: rotate(-4deg);
+}
+
+/* Straighten, expand gap, and pop card to top on hover */
+.gallery-scroll img:hover {
+  transform: translateY(-15px) rotate(0deg) scale(1.05);
+  z-index: 10;
+  margin-right: 0; /* open up dynamic gaps on hover */
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+}
+
+/* Keep the adjacent items visible */
+.gallery-scroll img:hover + img {
+  transform: translate3d(12px, 0, 0) rotate(4deg); /* push the next card slightly to prevent coverage */
+}
+
+/* Scroll indicator representation */
+.gallery-progress-track {
+  width: 100px;
+  height: 3px;
+  background: var(--border-color);
+  margin: 1rem auto 3rem auto;
+  border-radius: 9999px;
+  position: relative;
+  transition: background-color 0.5s ease;
+}
+
+.gallery-progress-bar {
+  width: 30px;
+  height: 100%;
+  background: var(--text-primary);
+  border-radius: 9999px;
+  position: absolute;
+  left: 35%; /* represent static position for skeletal indicator */
+  transition: background-color 0.5s ease;
+}
+
+/* Showcase Header Container */
+.showcase-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  margin-top: 1rem;
+  gap: 1.5rem;
+}
+
+.showcase-header-left {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.showcase-icon {
+  width: 58px;
+  height: 58px;
+  border-radius: 18px;
+  object-fit: cover;
+  border: 1px solid var(--border-color);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  transition: border-color 0.5s ease;
+}
+
+.showcase-title {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: -0.02em;
+  transition: color 0.5s ease;
+}
+
+.showcase-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--text-primary);
+  background: transparent;
+  border: 1px solid var(--border-color);
+  padding: 9px 20px;
+  border-radius: 9999px;
+  text-decoration: none;
+  transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1), border-color 0.5s ease, color 0.5s ease;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.showcase-button:hover {
+  background: var(--text-primary);
+  color: var(--bg-color);
+  border-color: var(--text-primary);
+  transform: translateY(-1.5px);
+}
+
+.showcase-button svg {
+  width: 14px;
+  height: 14px;
+  stroke: currentColor;
+  fill: none;
+}
+
+/* Showcase Description */
+.showcase-desc {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.88rem;
+  line-height: 1.65;
+  color: var(--text-muted);
+  margin-top: 1.8rem;
+  text-align: left;
+  width: 100%;
+  opacity: 0.9;
+  transition: color 0.5s ease;
+}
+
+/* Tech pills tag grid */
+.tech-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-top: 1.8rem;
+  width: 100%;
+}
+
+.tech-pill {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: nowrap;
+  padding: 6px 12px;
+  border-radius: 999px;
+  width: fit-content;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: var(--text-primary);
+  background: var(--footer-bg);
+  border: 1px solid var(--border-color);
+  transition: all 0.3s ease;
+}
+
+.tech-pill img,
+.tech-pill svg {
+  width: 24px !important;
+  height: 24px !important;
+  min-width: 24px;
+  object-fit: contain;
+  flex-shrink: 0;
+  display: block;
+  margin: 0;
+}
+
+body.light-theme .tech-pill {
+  background: rgba(0, 0, 0, 0.02);
+}
+
+/* Back navigation button */
+.back-button {
+  position: fixed;
+  top: 2rem;
+  right: 2rem;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: var(--footer-bg);
+  border: 1px solid var(--footer-border);
+  color: var(--text-primary);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  z-index: 2000;
+  transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+  text-decoration: none;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.back-button:hover {
+  transform: scale(1.06);
+  background: var(--card-header-bg);
+}
+
+.back-button svg {
+  width: 18px;
+  height: 18px;
+  stroke: currentColor;
+  fill: none;
+}
+
+/* Massive Bottom Showcase Video Demo Layout */
+.massive-video-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 4rem;
+  padding: 0;
+  box-sizing: border-box;
+  overflow: visible;
+}
+
+.massive-showcase-video {
+  height: 80vh; /* bumped by ~25% from 65vh */
+  max-height: 750px; /* bumped from 600px */
+  width: auto;
+  display: block;
+  margin: 0 auto;
+  object-fit: contain;
+  border-radius: 24px;
+  border: 1px solid var(--border-color);
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.4);
+  background: #000;
+  transition: border-color 0.5s ease, box-shadow 0.5s ease;
+}
+
+body.light-theme .massive-showcase-video {
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.15);
+}
+
+/* --- Showcase Q&A Interview Sections & Tool Cards --- */
+
+.qna-container {
+  width: 100%;
+  margin-top: 4.5rem;
+  padding-top: 3.5rem;
+  border-top: 1px dashed var(--border-color);
+  display: flex;
+  flex-direction: column;
+  gap: 3.5rem; /* Spacious gap between Q&A units */
+  box-sizing: border-box;
+}
+
+.qna-section {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem; /* Gap between Question and Answer rows */
+}
+
+.qna-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.qna-avatar {
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+  object-fit: cover;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  border: 1px solid var(--border-color);
+  transition: transform 0.3s ease, border-color 0.5s ease;
+}
+
+.qna-avatar.app-logo {
+  border-radius: 8px; /* App icon rounded rectangle matching Bleep */
+}
+
+.qna-avatar.profile-pic {
+  border-radius: 50%; /* Circle avatar for human profile */
+}
+
+.qna-row:hover .qna-avatar {
+  transform: scale(1.05);
+}
+
+.qna-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.qna-content h4 {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0;
+  line-height: 1.4;
+  letter-spacing: -0.01em;
+  transition: color 0.5s ease;
+}
+
+.qna-content p {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.92rem;
+  font-weight: 400;
+  color: var(--text-primary);
+  opacity: 0.95;
+  line-height: 1.6;
+  margin: 0;
+  transition: color 0.5s ease;
+}
+
+/* Tool Cards Stack Styles */
+.tool-cards-list {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-top: 2rem;
+  box-sizing: border-box;
+}
+
+.tool-card {
+  display: flex;
+  align-items: center;
+  gap: 1.1rem;
+  background: var(--footer-bg);
+  border: 1px solid var(--border-color);
+  padding: 14px 20px;
+  border-radius: 16px;
+  width: 100%;
+  box-sizing: border-box;
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+              border-color 0.3s ease,
+              background-color 0.3s ease,
+              box-shadow 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+}
+
+.tool-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--text-primary);
+  background: var(--card-header-bg);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+body.light-theme .tool-card {
+  background: rgba(0, 0, 0, 0.02);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.01);
+}
+
+body.light-theme .tool-card:hover {
+  background: rgba(0, 0, 0, 0.035);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.03);
+}
+
+.tool-card-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--card-header-bg);
+  border: 1px solid var(--border-color);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-shrink: 0;
+  transition: border-color 0.5s ease, background-color 0.5s ease;
+}
+
+.tool-card-icon img,
+.tool-card-icon svg {
+  width: 24px !important;
+  height: 24px !important;
+  min-width: 24px;
+  object-fit: contain;
+  flex-shrink: 0;
+  display: block;
+  margin: 0;
+}
+
+.tool-card-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.tool-card-name {
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  transition: color 0.5s ease;
+}
+
+.tool-card-desc {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  opacity: 0.8;
+  transition: color 0.5s ease;
+}
+
+body.light-theme .tool-card-desc {
+  opacity: 0.65;
+}
+
+/* Kyoto Music Specific Gallery Adjustments (50% Larger Desktop Screens) */
+#kyoto-modal .gallery-scroll-viewport {
+  max-width: 560px; /* wider viewport for desktop dashboard cards */
+}
+
+#kyoto-modal .gallery-scroll img {
+  width: 252px; /* exactly 50% larger than Fret's 168px cards */
+  margin-right: -52px; /* proportionally adjusted negative overlap margin */
+}
+
+#kyoto-modal .gallery-scroll img:hover {
+  transform: translateY(-15px) rotate(0deg) scale(1.05);
+  margin-right: 0;
+}
+
+/* Brand Inversion for high contrast logos in Dark Mode */
+.brand-invert {
+  filter: brightness(0) invert(1);
+}
+
+body.light-theme .brand-invert {
+  filter: none;
+}
+
+/* Nuclear CSS Fix: Enforce strict constraints on tech pills and tool cards icons */
+.project-modal .tech-pill img,
+.project-modal .tech-pill svg,
+.project-modal .tool-card img,
+.project-modal .tool-card svg {
+    width: 24px !important;
+    height: 24px !important;
+    max-width: 24px !important;
+    max-height: 24px !important;
+    min-width: 24px !important;
+    object-fit: contain !important;
+    flex-shrink: 0 !important;
+    display: block !important;
+    margin: 0 !important;
+}
+
+
+/* Specific showcase gallery overrides for Kyoto Music Modal (50% scaled down screenshots) */
+#kyoto-modal .gallery-scroll-viewport {
+  max-width: 650px; /* Proportional 50% scale down to preserve the 3-card viewport window (1300px * 0.5 = 650px) */
+}
+
+#kyoto-modal .gallery-scroll img {
+  width: 242px; /* 50% smaller card width (485px * 0.5 = 242.5px) */
+  margin-right: -50px; /* Proportional horizontal overlap margin (-100px * 0.5 = -50px) */
+}

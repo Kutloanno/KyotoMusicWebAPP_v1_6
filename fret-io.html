@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fret.io Showcase | Kutloano</title>
+  <meta name="description" content="Dedicated showcase page for Fret.io - interactive scale analysis and chord mapping android application.">
+  
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="src/style.css">
+  <!-- Custom Logic (lightweight load animations & theme toggle sync) -->
+  <script defer src="src/main.js"></script>
+</head>
+<body>
+
+  <!-- Sleek Minimalist Theme Toggle Button -->
+  <button class="theme-toggle" id="theme-toggle" aria-label="Toggle Theme">
+    <svg class="sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="4"/>
+      <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>
+    </svg>
+    <svg class="moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>
+    </svg>
+  </button>
+
+  <!-- Circular Go Back Home Button in Top-Right -->
+  <a href="index.html" class="back-button" aria-label="Go back home">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <line x1="18" y1="6" x2="6" y2="18"></line>
+      <line x1="6" y1="6" x2="18" y2="18"></line>
+    </svg>
+  </a>
+
+  <!-- Subtle Dotted Grid Background -->
+  <div class="dotted-background"></div>
+  <div class="radial-overlay"></div>
+
+  <!-- Showcase Centered Layout Wrapper -->
+  <main class="showcase-container project-modal">
+
+    <!-- Top Horizontally Scrolling Gallery -->
+    <section class="gallery-scroll-viewport" aria-label="Fret.io Screenshot Gallery">
+      <div class="gallery-scroll">
+        <img src="assests/fret-screen1.jpg" alt="Fret.io Android Application Screenshot 1">
+        <img src="assests/fret-screen2.jpg" alt="Fret.io Android Application Screenshot 2">
+        <img src="assests/fret-screen1.jpg" alt="Fret.io Chord Analyzer Interface" style="filter: hue-rotate(30deg);">
+        <img src="assests/fret-screen2.jpg" alt="Fret.io Fretboard Speedrun Game" style="filter: hue-rotate(60deg);">
+        <img src="assests/fret-screen1.jpg" alt="Fret.io Theory Arcade mode" style="filter: hue-rotate(90deg);">
+        <img src="assests/fret-screen2.jpg" alt="Fret.io Scale Analysis tool" style="filter: hue-rotate(120deg);">
+        <img src="assests/fret-screen1.jpg" alt="Fret.io Practice Session UI" style="filter: hue-rotate(150deg);">
+      </div>
+    </section>
+
+    <!-- Skeletal Scroll Indicator / Progress Track -->
+    <div class="gallery-progress-track">
+      <div class="gallery-progress-bar"></div>
+    </div>
+
+    <!-- Project Header Block -->
+    <header class="showcase-header">
+      <div class="showcase-header-left">
+        <!-- App Icon -->
+        <img src="assests/fret-icon.png" alt="Fret.io App Icon" class="showcase-icon">
+        <h2 class="showcase-title">Fret.io</h2>
+      </div>
+      <!-- Pill shaped outline project launch button -->
+      <a href="https://github.com/your-username/fret-io" target="_blank" rel="noopener noreferrer" class="showcase-button">
+        <span>View Source</span>
+        <!-- GitHub SVG Link icon -->
+        <svg viewBox="0 0 24 24" style="fill: currentColor; stroke: none; width: 14px; height: 14px;">
+          <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/>
+        </svg>
+      </a>
+    </header>
+
+    <!-- App Description Text -->
+    <article class="showcase-desc">
+      <p>
+        Fret.io is an interactive, low-latency utility designed specifically for modern stringed instrumentalists. Built to decode complex fingerings, map out alternative modal scales, and provide dynamic chord visualization, the platform helps musicians explore system topologies of the fretboard directly on their Android devices. Focused on high-performance rendering and a minimal cognitive load user interface.
+      </p>
+    </article>
+
+    <!-- Tech Stack Pills container -->
+    <footer class="tech-container">
+      <span class="tech-pill">
+        <img src="https://cdn.simpleicons.org/kotlin/7F52FF" alt="Kotlin logo">
+        <span>Kotlin</span>
+      </span>
+      <span class="tech-pill">
+        <img src="https://cdn.simpleicons.org/jetpackcompose/4285F4" alt="Jetpack Compose logo">
+        <span>Jetpack Compose</span>
+      </span>
+      <span class="tech-pill">
+        <img src="https://cdn.simpleicons.org/android/3DDC84" alt="Android logo">
+        <span>Android SDK</span>
+      </span>
+      <span class="tech-pill">
+        <img src="https://cdn.simpleicons.org/android/3DDC84" alt="Android logo">
+        <span>AudioTrack API</span>
+      </span>
+      <span class="tech-pill">
+        <img src="https://cdn.simpleicons.org/android/3DDC84" alt="Android logo">
+        <span>AudioRecord API</span>
+      </span>
+      <span class="tech-pill">
+        <img src="https://cdn.simpleicons.org/android/3DDC84" alt="Android logo">
+        <span>YIN Pitch Detection</span>
+      </span>
+    </footer>
+
+    <!-- Massive Bottom Showcase Video Demo -->
+    <section class="massive-video-container">
+      <video class="massive-showcase-video" autoplay loop muted playsinline>
+        <source src="assests/Fret.io hand.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+    </section>
+
+    <!-- Interview Q&A Sections -->
+    <div class="qna-container">
+      <!-- Section 1: What is it? -->
+      <div class="qna-section">
+        <div class="qna-row question">
+          <img src="assests/fret-icon.png" alt="Fret.io App Icon" class="qna-avatar app-logo">
+          <div class="qna-content">
+            <h4>What's Fret.io and what's so cool about it?</h4>
+          </div>
+        </div>
+        <div class="qna-row answer">
+          <img src="assests/me-icon-transparent.jpg" alt="About Me Profile Icon" class="qna-avatar profile-pic">
+          <div class="qna-content">
+            <p>Fret.io is a native Android utility for stringed instrumentalists. It sits somewhere between a real-time analyzer and a digital practice room.</p>
+            <p>I wanted a tool that didn't just spit out static tabs, but actually decoded complex fingerings and mapped out modal scales interactively. It's focused heavily on high-performance rendering and keeping cognitive load to an absolute minimum while you're holding an instrument.</p>
+            <p>Everything runs locally on the device to ensure zero-latency feedback. No servers, no lag. Just you, the fretboard, and immediate pitch detection.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 2: Under the Hood -->
+      <div class="qna-section">
+        <div class="qna-row question">
+          <img src="assests/fret-icon.png" alt="Fret.io App Icon" class="qna-avatar app-logo">
+          <div class="qna-content">
+            <h4>What's under Fret.io's hood? Which technologies were used and why?</h4>
+          </div>
+        </div>
+        <div class="qna-row answer">
+          <img src="assests/me-icon-transparent.jpg" alt="About Me Profile Icon" class="qna-avatar profile-pic">
+          <div class="qna-content">
+            <p>It’s built entirely in Kotlin. The UI is driven by Jetpack Compose for that crisp, declarative state management. For the real-time audio processing, I had to drop down into the native Android SDK to interface directly with the device's hardware.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Vertical Tool Stack -->
+    <div class="tool-cards-list">
+      <!-- Card 1: Kotlin -->
+      <div class="tool-card">
+        <div class="tool-card-icon">
+          <img src="https://cdn.simpleicons.org/kotlin/7F52FF" alt="Kotlin logo">
+        </div>
+        <div class="tool-card-info">
+          <span class="tool-card-name">Kotlin</span>
+          <span class="tool-card-desc">Primary programming language</span>
+        </div>
+      </div>
+
+      <!-- Card 2: Jetpack Compose -->
+      <div class="tool-card">
+        <div class="tool-card-icon">
+          <img src="https://cdn.simpleicons.org/jetpackcompose/4285F4" alt="Jetpack Compose logo">
+        </div>
+        <div class="tool-card-info">
+          <span class="tool-card-name">Jetpack Compose</span>
+          <span class="tool-card-desc">Declarative UI framework</span>
+        </div>
+      </div>
+
+      <!-- Card 3: Android SDK -->
+      <div class="tool-card">
+        <div class="tool-card-icon">
+          <img src="https://cdn.simpleicons.org/android/3DDC84" alt="Android logo">
+        </div>
+        <div class="tool-card-info">
+          <span class="tool-card-name">Android SDK</span>
+          <span class="tool-card-desc">Native mobile engine</span>
+        </div>
+      </div>
+
+      <!-- Card 4: AudioTrack API -->
+      <div class="tool-card">
+        <div class="tool-card-icon">
+          <img src="https://cdn.simpleicons.org/android/3DDC84" alt="Android logo">
+        </div>
+        <div class="tool-card-info">
+          <span class="tool-card-name">AudioTrack API</span>
+          <span class="tool-card-desc">Real-time waveform & sound synthesis</span>
+        </div>
+      </div>
+
+      <!-- Card 5: AudioRecord API -->
+      <div class="tool-card">
+        <div class="tool-card-icon">
+          <img src="https://cdn.simpleicons.org/android/3DDC84" alt="Android logo">
+        </div>
+        <div class="tool-card-info">
+          <span class="tool-card-name">AudioRecord API</span>
+          <span class="tool-card-desc">Low-latency microphone capture</span>
+        </div>
+      </div>
+
+      <!-- Card 6: YIN Pitch Detection -->
+      <div class="tool-card">
+        <div class="tool-card-icon">
+          <img src="https://cdn.simpleicons.org/android/3DDC84" alt="Android logo">
+        </div>
+        <div class="tool-card-info">
+          <span class="tool-card-name">YIN Pitch Detection</span>
+          <span class="tool-card-desc">Core frequency tracking algorithm</span>
+        </div>
+      </div>
+    </div>
+  </main>
+
+</body>
+</html>
