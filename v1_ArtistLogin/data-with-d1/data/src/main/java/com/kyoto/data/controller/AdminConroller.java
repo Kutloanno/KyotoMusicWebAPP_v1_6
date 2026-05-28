@@ -20,7 +20,7 @@ public class AdminConroller {
     private D1Service d1Service;
 
     @Autowired
-    private R2Service musicService; // Inject R2 Service for file cleanup
+    private R2Service musicService;
 
     @GetMapping("/adminLogin")
     public String adminLoginPage(@RequestParam(required = false) String error, Model model) {
@@ -36,15 +36,12 @@ public class AdminConroller {
                         HttpSession session,
                         Model model) {
 
-        // Query matches the ADMIN table schema
         String sql = "SELECT * FROM ADMIN WHERE Name = ? AND Password = ?";
         D1Response response = d1Service.executeQueryWithParams(sql, List.of(username, password));
         List<Map<String, Object>> results = d1Service.getResults(response);
 
         if (!results.isEmpty()) {
             String adminId = results.get(0).get("AdminID").toString();
-
-            // SECURITY FIX: Store in secure server session, not the URL
             session.setAttribute("adminId", adminId);
             return "redirect:/adminDashboard";
         } else {
@@ -55,16 +52,10 @@ public class AdminConroller {
 
     @GetMapping("/adminDashboard")
     public String adminDashboard(HttpSession session, Model model) {
-        // SECURITY FIX: Pull from session
         String adminId = (String) session.getAttribute("adminId");
 
-        // 1. Fetch Admin Info
         var admin = d1Service.getResults(d1Service.executeQueryWithParams("SELECT Name FROM ADMIN WHERE AdminID = ?", List.of(adminId)));
-
-        // 2. Fetch Stats: Total PlayCount from SONG table
         var stats = d1Service.getResults(d1Service.executeQuery("SELECT SUM(PlayCount) as TotalStreams, COUNT(*) as SongCount FROM SONG"));
-
-        // 3. Fetch Management Lists
         var songs = d1Service.getResults(d1Service.executeQuery("SELECT * FROM SONG"));
         var artists = d1Service.getResults(d1Service.executeQuery("SELECT * FROM ARTIST"));
         var listeners = d1Service.getResults(d1Service.executeQuery("SELECT * FROM LISTENER"));
@@ -90,18 +81,15 @@ public class AdminConroller {
 
     @PostMapping("/admin/deleteSong")
     public String deleteSong(@RequestParam String songId) {
-        // Get file keys from DB before deleting record
         String sql = "SELECT AudioFileURL, CoverArtURL FROM SONG WHERE SongID = ?";
         var results = d1Service.getResults(d1Service.executeQueryWithParams(sql, List.of(songId)));
 
         if (!results.isEmpty()) {
             Map<String, Object> song = results.get(0);
-            // Delete from R2
             musicService.deleteSong((String) song.get("AudioFileURL"));
             musicService.deleteSong((String) song.get("CoverArtURL"));
         }
 
-        // Delete database links
         d1Service.executeUpdateWithParams("DELETE FROM PLAYLIST_SONG WHERE SongID = ?", List.of(songId));
         d1Service.executeUpdateWithParams("DELETE FROM ALBUM_SONG WHERE SongID = ?", List.of(songId));
         d1Service.executeUpdateWithParams("DELETE FROM SONG WHERE SongID = ?", List.of(songId));
@@ -118,7 +106,6 @@ public class AdminConroller {
             d1Service.executeUpdateWithParams("DELETE FROM PLAYLIST_SONG WHERE SongID = ?", List.of(song.get("SongID")));
         }
 
-        // Clear DB
         d1Service.executeUpdateWithParams("DELETE FROM ALBUM WHERE ArtistID = ?", List.of(artistId));
         d1Service.executeUpdateWithParams("DELETE FROM SONG WHERE ArtistID = ?", List.of(artistId));
         d1Service.executeUpdateWithParams("DELETE FROM ARTIST WHERE ArtistID = ?", List.of(artistId));
@@ -128,7 +115,6 @@ public class AdminConroller {
 
     @PostMapping("/admin/deleteListener")
     public String deleteListener(@RequestParam String listenerId) {
-        // Delete playlist links first
         d1Service.executeUpdateWithParams("DELETE FROM PLAYLIST_SONG WHERE PlaylistID IN (SELECT PlaylistID FROM PLAYLIST WHERE ListenerID = ?)", List.of(listenerId));
         d1Service.executeUpdateWithParams("DELETE FROM PLAYLIST WHERE ListenerID = ?", List.of(listenerId));
         d1Service.executeUpdateWithParams("DELETE FROM LISTENER WHERE ListenerID = ?", List.of(listenerId));
@@ -145,7 +131,6 @@ public class AdminConroller {
 
         String adminId = (String) session.getAttribute("adminId");
 
-        // Enforces mapping the required username standard directly to the ListenerID column
         String sql = "INSERT INTO LISTENER (ListenerID, Name, Password, isPremium, AdminID, Gender) VALUES (?, ?, ?, ?, ?, ?)";
         d1Service.executeUpdateWithParams(sql, List.of(username, name, password, 0, adminId, gender));
 
@@ -169,7 +154,6 @@ public class AdminConroller {
         return "redirect:/adminDashboard";
     }
 
-    // SECURITY FIX: Properly clears the session
     @GetMapping("/adminLogout")
     public String logout(HttpSession session) {
         session.invalidate();

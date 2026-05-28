@@ -26,13 +26,8 @@ public class EcommerceController {
     @Autowired
     private EmailService emailService;
 
-    // Grab the Paystack key from your application.properties / Render environment variables
     @Value("${paystack.public.key:}")
     private String paystackPublicKey;
-
-    // ─────────────────────────────────────────────────────────────────────────
-    // ARTIST STORE ENDPOINTS
-    // ─────────────────────────────────────────────────────────────────────────
 
     @GetMapping("/artist/store")
     public String artistStore(@RequestParam String artistId, Model model) {
@@ -79,9 +74,7 @@ public class EcommerceController {
         return "redirect:/artist/store?artistId=" + artistId + "&success=Product+removed";
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
-    // ARTIST EVENTS ENDPOINTS
-    // ─────────────────────────────────────────────────────────────────────────
+
 
     @GetMapping("/artist/events")
     public String artistEvents(@RequestParam String artistId, Model model) {
@@ -135,9 +128,7 @@ public class EcommerceController {
         return "redirect:/artist/events?artistId=" + artistId + "&success=Event+cancelled";
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
-    // LISTENER / USER STORE & EVENTS VIEW
-    // ─────────────────────────────────────────────────────────────────────────
+
 
     @GetMapping("/store")
     public String userStore(@RequestParam String listenerId, @RequestParam(required = false) String category, Model model) {
@@ -186,9 +177,7 @@ public class EcommerceController {
         return "redirect:/events?listenerId=" + listenerId + "&error=Ticket+not+found+or+unauthorized.";
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
-    // UNIFIED SHOPPING CART ENDPOINTS (PRODUCTS + TICKETS)
-    // ─────────────────────────────────────────────────────────────────────────
+
 
     @PostMapping("/cart/add")
     public String addToCart(@RequestParam String productId, @RequestParam String listenerId) {
@@ -207,10 +196,8 @@ public class EcommerceController {
 
     @PostMapping("/cart/remove")
     public String removeFromCart(@RequestParam String cartItemId, @RequestParam String listenerId) {
-        // Find the exact cart item and delete it from the Cloudflare database
         d1Service.executeUpdateWithParams("DELETE FROM CART_ITEM WHERE CartItemID = ?", List.of(cartItemId));
 
-        // Refresh the cart page automatically
         return "redirect:/cart?listenerId=" + listenerId + "&success=Item+removed";
     }
 
@@ -280,7 +267,6 @@ public class EcommerceController {
         String itemSummary = itemList.toString();
         if(itemSummary.endsWith(", ")) itemSummary = itemSummary.substring(0, itemSummary.length() - 2);
 
-        // Convert final total to smallest currency unit (cents) for Paystack
         long paystackAmountInCents = Math.round(finalTotal * 100);
 
         model.addAttribute("listenerId", listenerId);
@@ -289,18 +275,15 @@ public class EcommerceController {
         model.addAttribute("feeTotal", String.format("%.2f", feeTotal));
         model.addAttribute("finalTotal", String.format("%.2f", finalTotal));
 
-        // Pass Paystack details to the frontend
         model.addAttribute("paystackPublicKey", paystackPublicKey);
         model.addAttribute("paystackAmount", paystackAmountInCents);
 
         return "cart-checkout";
     }
 
-    // Notice we added @RequestParam String paystackReference to grab the success ID!
     @PostMapping("/cart/processPayment")
     public String processCartPayment(@RequestParam String listenerId, @RequestParam String email, @RequestParam(required = false) String paystackReference) {
 
-        // 1. Fetch & Verify Merch Stock
         String pSql = "SELECT c.Quantity as CartQty, p.ProductID, p.Name, p.Price, p.Stock, a.Email AS ArtistEmail FROM CART_ITEM c JOIN PRODUCT p ON c.ProductID = p.ProductID JOIN ARTIST a ON p.ArtistID = a.ArtistID WHERE c.ListenerID = ?";
         List<Map<String, Object>> pItems = d1Service.getResults(d1Service.executeQueryWithParams(pSql, List.of(listenerId)));
         for(Map<String, Object> item : pItems) {
@@ -309,7 +292,6 @@ public class EcommerceController {
             if (stock < qty) return "redirect:/cart?listenerId=" + listenerId + "&error=Not+enough+stock+for+" + item.get("Name");
         }
 
-        // 2. Fetch & Verify Ticket Stock
         String tSql = "SELECT c.Quantity as CartQty, e.EventID, e.Title AS Name, e.TicketPrice AS Price, (e.TotalTickets - e.TicketsSold) AS Stock, a.Email AS ArtistEmail FROM CART_ITEM c JOIN EVENT e ON c.EventID = e.EventID JOIN ARTIST a ON e.ArtistID = a.ArtistID WHERE c.ListenerID = ?";
         List<Map<String, Object>> tItems = d1Service.getResults(d1Service.executeQueryWithParams(tSql, List.of(listenerId)));
         for(Map<String, Object> item : tItems) {
@@ -322,12 +304,10 @@ public class EcommerceController {
         double subtotal = 0;
         StringBuilder receiptItems = new StringBuilder();
 
-        // Optional: Append the Paystack Reference to the receipt if it exists
         if (paystackReference != null && !paystackReference.isEmpty()) {
             receiptItems.append("Payment Ref: ").append(paystackReference).append("\n\n");
         }
 
-        // 3. Process Merch
         for(Map<String, Object> item : pItems) {
             String productId = (String) item.get("ProductID");
             int qty = ((Number) item.get("CartQty")).intValue();
@@ -345,7 +325,6 @@ public class EcommerceController {
             if (artistEmail != null && !artistEmail.trim().isEmpty()) { try { emailService.sendArtistNotification(artistEmail, name + " (x" + qty + ")", itemTotal); } catch (Exception ignored) {} }
         }
 
-        // 4. Process Tickets
         for(Map<String, Object> item : tItems) {
             String eventId = (String) item.get("EventID");
             int qty = ((Number) item.get("CartQty")).intValue();
@@ -365,7 +344,6 @@ public class EcommerceController {
             if (artistEmail != null && !artistEmail.trim().isEmpty()) { try { emailService.sendArtistTicketNotification(artistEmail, name, qty, itemTotal); } catch (Exception ignored) {} }
         }
 
-        // 5. Finalize Math & Email
         double feeTotal = 0;
         if (!pItems.isEmpty()) feeTotal += 5.00;
         if (!tItems.isEmpty()) feeTotal += 2.50;

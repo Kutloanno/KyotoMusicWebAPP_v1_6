@@ -73,26 +73,21 @@ public class ListinerController {
         return "redirect:/userDashBoard?listenerId=" + listenerId;
     }
 
-    // --- UPDATED SAFETY CHECK: ADD TO PLAYLIST ---
     @PostMapping("/addToPlaylist")
     public String addToPlaylist(@RequestParam String playlistId, @RequestParam String songId, @RequestParam String listenerId) {
         try {
-            // 1. SAFETY CHECK: Is the song already in this playlist?
             String checkSql = "SELECT * FROM PLAYLIST_SONG WHERE PlaylistID = ? AND SongID = ?";
             D1Response checkRes = d1Service.executeQueryWithParams(checkSql, List.of(playlistId, songId));
             List<Map<String, Object>> existing = d1Service.getResults(checkRes);
 
             if (!existing.isEmpty()) {
-                // It's already there! Redirect back with an error message so it doesn't crash.
                 return "redirect:/userDashBoard?listenerId=" + listenerId + "&error=Song+is+already+in+this+playlist";
             }
 
-            // 2. Find next position for the new song
             String countSql = "SELECT COUNT(*) as count FROM PLAYLIST_SONG WHERE PlaylistID = ?";
             List<Map<String, Object>> res = d1Service.getResults(d1Service.executeQueryWithParams(countSql, List.of(playlistId)));
             int pos = res.isEmpty() ? 1 : ((Number) res.get(0).get("count")).intValue() + 1;
 
-            // 3. Insert the song safely
             String sql = "INSERT INTO PLAYLIST_SONG (PlaylistID, SongID, Position) VALUES (?, ?, ?)";
             d1Service.executeUpdateWithParams(sql, List.of(playlistId, songId, pos));
 
@@ -131,7 +126,6 @@ public class ListinerController {
         }
     }
 
-    // --- UPDATED VIEW PLAYLIST METHOD (SQL FIXED) ---
     @GetMapping("/viewPlaylist")
     public String viewPlaylist(@RequestParam String playlistId, @RequestParam String listenerId, Model model) {
 

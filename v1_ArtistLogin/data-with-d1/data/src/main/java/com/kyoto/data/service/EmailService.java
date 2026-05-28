@@ -11,7 +11,7 @@ public class EmailService {
     @Autowired
     private JavaMailSender mailSender;
 
-    // --- STORE EMAILS (SINGLE ITEM - Legacy/Fallback) ---
+
     public void sendOrderConfirmation(String toEmail, String orderId, String productName, double total) {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setFrom("your.kyoto.email@gmail.com");
@@ -32,7 +32,7 @@ public class EmailService {
         mailSender.send(message);
     }
 
-    // --- CART EMAILS (MULTI-ITEM) ---
+
     public void sendCartOrderConfirmation(String toEmail, String orderId, String itemsList, double total) {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setFrom("your.kyoto.email@gmail.com");
@@ -43,7 +43,7 @@ public class EmailService {
         mailSender.send(message);
     }
 
-    // --- EVENT TICKET EMAILS ---
+
     public void sendTicketConfirmation(String toEmail, String orderId, String eventTitle, int quantity, double total, String ticketCode) {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setFrom("your.kyoto.email@gmail.com");

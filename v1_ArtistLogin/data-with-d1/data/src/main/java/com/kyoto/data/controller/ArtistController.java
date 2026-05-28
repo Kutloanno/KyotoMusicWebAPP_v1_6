@@ -83,7 +83,6 @@ public class ArtistController {
         return "artistdashboard";
     }
 
-    // UPDATED SIGNUP METHOD (CAPTURES EMAIL)
     @PostMapping("/artistsignup")
     public String artistSignup(@RequestParam String name,
                                @RequestParam String email,

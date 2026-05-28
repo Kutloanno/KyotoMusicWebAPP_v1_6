@@ -1,7 +1,7 @@
 package com.kyoto.data.controller;
 
 import com.kyoto.data.service.R2Service;
-import com.kyoto.data.service.D1Service; // NEW IMPORTS
+import com.kyoto.data.service.D1Service;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -12,21 +12,20 @@ import org.springframework.web.bind.annotation.*;
 import software.amazon.awssdk.core.ResponseInputStream;
 import software.amazon.awssdk.services.s3.model.GetObjectResponse;
 
-import java.util.List; // NEW IMPORT for SQL params
+import java.util.List;
 
 @Controller
 public class MediaStreamController {
 
     private final R2Service musicService;
-    private final D1Service d1Service; // NEW FIELD
+    private final D1Service d1Service;
 
-    // Updated Constructor to include D1Service
     public MediaStreamController(R2Service musicService, D1Service d1Service) {
         this.musicService = musicService;
         this.d1Service = d1Service;
     }
 
-    @GetMapping("/stream/{key:.+}") // Added :.+ to handle filenames with dots
+    @GetMapping("/stream/{key:.+}")
     @ResponseBody
     public ResponseEntity<Resource> streamAudio(@PathVariable String key) {
         return handleStreamAudio(key);
@@ -44,13 +43,8 @@ public class MediaStreamController {
         return handleDownloadAudio(key);
     }
 
-    // ============================================================
-    // REUSABLE METHODS - UPDATED WITH DB COUNTERS
-    // ============================================================
-
     public ResponseEntity<Resource> handleStreamAudio(String key) {
         try {
-            // --- UPDATING PLAY COUNT ---
             String sql = "UPDATE SONG SET PlayCount = PlayCount + 1 WHERE AudioFileURL = ?";
             d1Service.executeUpdateWithParams(sql, List.of(key));
 
@@ -70,7 +64,6 @@ public class MediaStreamController {
 
     public ResponseEntity<Resource> handleDownloadAudio(String key) {
         try {
-            // --- UPDATING DOWNLOAD COUNT ---
             String sql = "UPDATE SONG SET DownloadCount = DownloadCount + 1 WHERE AudioFileURL = ?";
             d1Service.executeUpdateWithParams(sql, List.of(key));
 
@@ -87,9 +80,6 @@ public class MediaStreamController {
             return ResponseEntity.notFound().build();
         }
     }
-
-    // Keep your other methods (handleStreamImage, deleteFile, detectImageContentType)
-    // exactly as they were below...
 
     public ResponseEntity<Resource> handleStreamImage(String key) {
         try {

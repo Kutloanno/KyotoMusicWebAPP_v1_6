@@ -20,7 +20,6 @@ import java.security.cert.X509Certificate;
 @Configuration
 public class R2Config {
 
-    // These pull from our application.properties
     @Value("${r2.access-key}")
     private String ACCESS_KEY;
 
@@ -32,12 +31,10 @@ public class R2Config {
 
     @Bean
     public S3Client s3Client() {
-        // Kill SSL checks to avoid certificate headaches
         disableSslVerification();
 
         return S3Client.builder()
                 .endpointOverride(URI.create(ENDPOINT))
-                // R2 likes "auto", but the SDK sometimes needs a valid string like "us-east-1"
                 .region(Region.of("auto"))
                 .serviceConfiguration(
                         S3Configuration.builder()

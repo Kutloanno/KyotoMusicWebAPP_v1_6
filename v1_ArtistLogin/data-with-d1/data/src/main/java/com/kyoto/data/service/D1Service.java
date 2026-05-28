@@ -22,37 +22,22 @@ public class D1Service {
 
     private static final String D1_API_URL = "https://api.cloudflare.com/client/v4/accounts/%s/d1/database/%s/query";
 
-    /**
-     * Execute a SELECT query and return results
-     */
     public D1Response executeQuery(String sql) {
         return executeSql(sql);
     }
 
-    /**
-     * Execute a query with parameters (for security/SQL injection prevention)
-     */
     public D1Response executeQueryWithParams(String sql, List<Object> params) {
         return executeSqlWithParams(sql, params);
     }
 
-    /**
-     * Execute an INSERT, UPDATE, or DELETE query
-     */
     public D1Response executeUpdate(String sql) {
         return executeSql(sql);
     }
 
-    /**
-     * Execute an UPDATE with parameters
-     */
     public D1Response executeUpdateWithParams(String sql, List<Object> params) {
         return executeSqlWithParams(sql, params);
     }
 
-    /**
-     * Execute raw SQL query
-     */
     private D1Response executeSql(String sql) {
         String url = String.format(D1_API_URL, d1Config.getAccountId(), d1Config.getDatabaseId());
 
@@ -73,9 +58,6 @@ public class D1Service {
         }
     }
 
-    /**
-     * Execute SQL with parameters (prevents SQL injection)
-     */
     private D1Response executeSqlWithParams(String sql, List<Object> params) {
         String url = String.format(D1_API_URL, d1Config.getAccountId(), d1Config.getDatabaseId());
 
@@ -97,9 +79,6 @@ public class D1Service {
         }
     }
 
-    /**
-     * Helper method to get results as List of Maps
-     */
     public List<Map<String, Object>> getResults(D1Response response) {
         if (response != null && response.isSuccess() && response.getResult() != null && !response.getResult().isEmpty()) {
             return response.getResult().get(0).getResults();
@@ -107,11 +86,7 @@ public class D1Service {
         return List.of();
     }
 
-    /**
-     * Execute multiple SQL statements in a batch
-     */
     public D1Response executeBatch(List<String> sqlStatements) {
-        // D1 supports batch operations - you can send multiple SQL statements
         String combinedSql = String.join("; ", sqlStatements);
         return executeSql(combinedSql);
     }

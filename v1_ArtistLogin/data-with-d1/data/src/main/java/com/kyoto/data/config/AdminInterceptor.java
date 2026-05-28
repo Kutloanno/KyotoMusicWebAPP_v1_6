@@ -13,12 +13,11 @@ public class AdminInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         HttpSession session = request.getSession(false);
 
-        // If there is no session, or the session doesn't contain an adminId, kick them out
         if (session == null || session.getAttribute("adminId") == null) {
             response.sendRedirect("/adminLogin?error=unauthorized");
-            return false; // Stop the page from loading
+            return false;
         }
 
-        return true; // Let them through!
+        return true;
     }
 }

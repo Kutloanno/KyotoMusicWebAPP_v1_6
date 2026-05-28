@@ -16,10 +16,6 @@ public class D1Controller {
     @Autowired
     private D1Service d1Service;
 
-    /**
-     * Example: Get all records from a table
-     * GET /api/d1/query?table=users
-     */
     @GetMapping("/query")
     public ResponseEntity<?> queryTable(@RequestParam String table) {
         try {
@@ -37,11 +33,6 @@ public class D1Controller {
         }
     }
 
-    /**
-     * Example: Execute custom SQL query
-     * POST /api/d1/execute
-     * Body: { "sql": "SELECT * FROM users WHERE id = 1" }
-     */
     @PostMapping("/execute")
     public ResponseEntity<?> executeQuery(@RequestBody Map<String, String> request) {
         try {
@@ -63,11 +54,6 @@ public class D1Controller {
         }
     }
 
-    /**
-     * Example: Insert data
-     * POST /api/d1/insert
-     * Body: { "table": "users", "name": "John", "email": "john@example.com" }
-     */
     @PostMapping("/insert")
     public ResponseEntity<?> insertRecord(@RequestBody Map<String, Object> request) {
         try {
@@ -104,11 +90,6 @@ public class D1Controller {
         }
     }
 
-    /**
-     * Example: Update data
-     * PUT /api/d1/update
-     * Body: { "table": "users", "id": 1, "name": "Jane Doe" }
-     */
     @PutMapping("/update")
     public ResponseEntity<?> updateRecord(@RequestBody Map<String, Object> request) {
         try {
@@ -145,10 +126,6 @@ public class D1Controller {
         }
     }
 
-    /**
-     * Example: Delete data
-     * DELETE /api/d1/delete?table=users&id=1
-     */
     @DeleteMapping("/delete")
     public ResponseEntity<?> deleteRecord(@RequestParam String table, @RequestParam Long id) {
         try {
@@ -168,10 +145,6 @@ public class D1Controller {
         }
     }
 
-    /**
-     * Test connection to D1
-     * GET /api/d1/test
-     */
     @GetMapping("/test")
     public ResponseEntity<?> testConnection() {
         try {
